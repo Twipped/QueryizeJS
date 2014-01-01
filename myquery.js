@@ -67,7 +67,7 @@ module.exports = function () {
 		return modifier ? [modifier, '(', key, ')'].join() : key;
 	}
 
-	function where(clause, value, operator, modifier) {
+	function where (clause, value, operator, modifier) {
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
@@ -103,7 +103,7 @@ module.exports = function () {
 		return this;
 	}
 
-	function processWhereCondition(field, value, operator, modifier) {
+	function processWhereCondition (field, value, operator, modifier) {
 		if (!operator) operator = '=';
 
 		if (isArray(field)) {
@@ -135,7 +135,7 @@ module.exports = function () {
 		return [field, operator, createBinding(value, modifier)].join(' ');
 	}
 
-	function processWhereObject(clause, operator, modifier) {
+	function processWhereObject (clause, operator, modifier) {
 		clause = Object.keys(clause).map(function (field) {
 			return processWhereCondition(field, clause[field], operator, modifier);
 		});
@@ -151,6 +151,25 @@ module.exports = function () {
 
 	function whereBetween (field, from, to, modifier) {
 		where([field, 'BETWEEN', createBinding(from, modifier), 'AND', createBinding(to, modifier)].join(' '));
+
+		return this;
+	}
+
+	function set (clause, value, modifier) {
+
+		if (typeof clause === 'object') {
+			Object.keys(clause).forEach(function (field) {
+				set(field, clause[field], modifier);
+			});
+			return this;
+		}
+
+		// if we received a value, create a set clause
+		if (value !== undefined) {
+			clause = [clause, '=', createBinding(value, modifier)].join(' ');
+		}
+
+		attributes.set.push(clause);
 
 		return this;
 	}
@@ -214,7 +233,17 @@ module.exports = function () {
 			return this;
 		},
 
-		whereBetween: whereBetween
+		whereBetween: whereBetween,
+
+		set: set,
+
+		returns: function () {
+			var args = flatten([].slice.call(arguments));
+
+			attributes.returnColumns = args;
+
+			return this;
+		}
 
 
 	};
