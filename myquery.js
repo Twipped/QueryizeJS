@@ -174,6 +174,96 @@ module.exports = function () {
 		return this;
 	}
 
+
+	function join (clause, options) {
+
+		if (typeof clause === 'object') {
+
+			if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+			if (!clause.table) throw new Error('You must define a table to join against');
+
+		} else if (typeof options === 'object') {
+
+			clause = Object.create(options, {table: clause});
+
+		} else if (typeof clause === 'string' && !clause.search(joinTest)) {
+
+			clause = 'INNER JOIN ' + clause;
+
+		}
+
+		if (typeof clause === 'object') {
+
+			var stack = [];
+
+			stack.push(clause.type || 'INNER');
+			stack.push('JOIN');
+			stack.push(clause.table);
+			if (clause.alias) stack.push(clause.alias);
+
+			if (clause.using) {
+				stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(',') : clause.using) + ')' );
+
+			} else if (clause.on) {
+				stack.push( 'ON (' + processJoinOns(clause.on, clause.onBoolean || 'AND') + ')' );
+
+			}
+
+			clause = stack.join(' ');
+		}
+
+		attributes.joins.push(clause);
+
+		return this;
+	}
+
+	function processJoinOns(ons, onBoolean) {
+
+		if (typeof ons === 'string') {
+			return ons;
+		}
+
+		if (isArray(ons)) {
+			ons = ons.map(processJoinOns);
+		}
+
+		if (typeof ons === 'object') {
+			var not = false;
+			ons = Object.keys(ons).map(function (field) {
+				var value = ons[field];
+
+				// if the object contains a 'not' key, all subsequent keys parsed will be negations.
+				if (field === 'not' && value === true) {
+					not = true;
+				}
+
+				// if value is an array, perform an IN() on the values
+				if (isArray(value)) {
+					return [field, not ? 'NOT IN' : 'IN', '(', value.join(','), ')'].join(' ');
+
+				// if value is an object, verify if it's a data object, and if so create a binding for the value
+				} else if (typeof value === 'object' && value.data !== undefined) {
+					return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
+
+				// if value is a string or a number, process as if a normal pairing of columns
+				} else if (typeof value === 'string' || typeof value === 'number') {
+					return [field, not ? '!=' : '=', value].join(' ');
+
+				}
+
+				// we don't know how to handle the value
+				throw new Error('Encountered unexpected value while parsing a JOIN ON condition');
+			});
+		}
+
+		//remove any undefined or empty string values
+		ons = ons.filter(function (d) { return d; });
+
+		return ons.join(' '+onBoolean+' ');
+	}
+
+	var joinTest = /^(.*)?(JOIN) /i;
+
 	var queryObj = {
 		createBinding: createBinding,
 
@@ -241,6 +331,80 @@ module.exports = function () {
 			var args = flatten([].slice.call(arguments));
 
 			attributes.returnColumns = args;
+
+			return this;
+		},
+
+		join: join,
+
+		innerJoin: function (clause, options) {
+
+			if (typeof clause === 'object') {
+
+				if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+				if (!clause.table) throw new Error('You must define a table to join against');
+
+			} else if (typeof options === 'object') {
+
+				clause = Object.create(options, {table: clause});
+
+			}
+
+			if (typeof clause === 'object') {
+				clause.type = 'INNER';
+			} else {
+				clause = clause.search(joinTest) ? clause.replace(joinTest, 'INNER JOIN') : 'INNER JOIN ' + clause;
+			}
+
+			join(clause);
+
+			return this;
+		},
+
+		leftJoin: function (clause, options) {
+
+			if (typeof clause === 'object') {
+
+				if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+				if (!clause.table) throw new Error('You must define a table to join against');
+
+			} else if (typeof options === 'object') {
+
+				clause = Object.create(options, {table: clause});
+
+			}
+
+			if (typeof clause === 'object') {
+				clause.type = 'LEFT';
+			} else {
+				clause = clause.search(joinTest) ? clause.replace(joinTest, 'LEFT JOIN') : 'LEFT JOIN ' + clause;
+			}
+
+			join(clause);
+
+			return this;
+		},
+
+		rightJoin: function (clause, options) {
+
+			if (typeof clause === 'object') {
+
+				if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+				if (!clause.table) throw new Error('You must define a table to join against');
+
+			} else if (typeof options === 'object') {
+
+				clause = Object.create(options, {table: clause});
+
+			}
+
+			if (typeof clause === 'object') {
+				clause.type = 'RIGHT';
+			} else {
+				clause = clause.search(joinTest) ? clause.replace(joinTest, 'RIGHT JOIN') : 'RIGHT JOIN ' + clause;
+			}
+
+			join(clause);
 
 			return this;
 		}
