@@ -300,6 +300,23 @@ module.exports = function () {
 			return this;
 		},
 
+		comparisonMethod: function (condition) {
+			switch (condition) {
+			case true:
+			case 'and':
+			case 'AND':
+			case 'yes':
+				attributes.whereBoolean = 'AND'; break;
+
+			case false:
+			case 'or':
+			case 'OR':
+			case 'no':
+				attributes.whereBoolean = 'OR'; break;
+			}
+			return this;
+		},
+
 		where: where,
 
 		whereLike: function (field, value, modifier) {
