@@ -1,19 +1,23 @@
 
 module.exports = function () {
 
-	var dataBindings = {},
+	var debugEnabled = false;
+
+	var dataBindings = {};
 
 	var attributes = {
+		database: false,
 		tableName: false,
 		tableAlias: false,
 		where: [],
-		whereBoolean: 'AND',
+		whereBoolean: ' AND ',
 		set: [],
-		returnColumns: ['*'],
+		columns: ['*'],
 		joins: [],
 		orderBy: false,
 		groupBy: false,
 		distinct: false,
+		limit: false,
 		builder: false
 	};
 
@@ -27,13 +31,24 @@ module.exports = function () {
 
 	var isArray = Array.isArray;
 
-	function flatten(input) {
+	function isDefined(value) {
+		return value !== undefined && value !== null;
+	}
+
+	function isValidPrimative(value) {
+		return typeof value !== 'string' &&
+			typeof value !== 'boolean' &&
+			typeof value !== 'number' &&
+			!(value instanceof Date);
+	}
+
+	function flatten(input, includingObjects) {
 		var result = [];
 
 		function descend(level) {
 			if (isArray(level)) {
 				level.forEach(descend);
-			} else if (typeof level === 'object') {
+			} else if (typeof level === 'object' && includingObjects) {
 				Object.keys(level).forEach(function (key) {
 					descend(level[key]);
 				});
@@ -45,6 +60,40 @@ module.exports = function () {
 		descend(input);
 
 		return result;
+	}
+
+	function convertNamedParameters (query) {
+		var data = [];
+
+		query = query.replace(/({{\w*}})/g, function (match, name) {
+			if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+
+			data.push(dataBindings[name]);
+			
+			return '?';
+		});
+
+		return {
+			query: query,
+			data: data
+		};
+	}
+
+	function insertBinding (key, data) {
+		if (typeof data === 'object') {
+			// if we've got a date, convert it into a mysql ready datestamp
+			if (data instanceof Date) {
+				data = data.toISOString().slice(0, 19).replace('T', ' ');
+			} else {
+				throw new TypeError('Received unparsable object as field value.');
+			}
+		}
+
+		if (key.substr(0,2) !== '{{') key = '{{' + key + '}}';
+
+		dataBindings[key] = data;
+
+		return this;
 	}
 
 	function createBinding (data, modifier) {
@@ -62,16 +111,16 @@ module.exports = function () {
 
 		var key = '{{' + uniqueId('binding') + '}}';
 
-		dataBindings[key] = data;
+		insertBinding(key, data);
 
-		return modifier ? [modifier, '(', key, ')'].join() : key;
+		return modifier ? [modifier, '(', key, ')'].join('') : key;
 	}
 
 	function where (clause, value, operator, modifier) {
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
-		if (value !== undefined) {
+		if (isDefined(value)) {
 			clause = processWhereCondition(clause, value, operator, modifier);
 
 		// if there was no value, check to see if we got an object based where definition
@@ -136,9 +185,19 @@ module.exports = function () {
 	}
 
 	function processWhereObject (clause, operator, modifier) {
+		if (!operator) operator = '=';
+
+		var not = false;
 		clause = Object.keys(clause).map(function (field) {
+			// if the object contains a 'not' key, all subsequent keys parsed will be negations.
+			if (field === 'not' && clause[field] === true) {
+				not = true;
+				if (operator === '=') operator = '!=';
+				return undefined;
+			}
+
 			return processWhereCondition(field, clause[field], operator, modifier);
-		});
+		}).filter(function (d) { return d;});
 
 		if (clause.length === 1) {
 			return clause[0];
@@ -165,7 +224,10 @@ module.exports = function () {
 		}
 
 		// if we received a value, create a set clause
-		if (value !== undefined) {
+		if (isDefined(value)) {
+			if (isValidPrimative(value)) {
+				throw new TypeError('Unknown data type in set clause');
+			}
 			clause = [clause, '=', createBinding(value, modifier)].join(' ');
 		}
 
@@ -242,7 +304,7 @@ module.exports = function () {
 					return [field, not ? 'NOT IN' : 'IN', '(', value.join(','), ')'].join(' ');
 
 				// if value is an object, verify if it's a data object, and if so create a binding for the value
-				} else if (typeof value === 'object' && value.data !== undefined) {
+				} else if (typeof value === 'object' && isDefined(value.data)) {
 					return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
 
 				// if value is a string or a number, process as if a normal pairing of columns
@@ -264,13 +326,19 @@ module.exports = function () {
 
 	var joinTest = /^(.*)?(JOIN) /i;
 
-	var queryObj = {
-		createBinding: createBinding,
+	var queryize = {
 
-		insertBinding: function (key, data) {
-			dataBindings[key] = (key.substr(0,2) === '{{' ? data : '{{' + data + '}}');
+		debug: function (enable) {
+			if (isDefined(enable)) enable = true;
+
+			debugEnabled = enable;
+
 			return this;
 		},
+
+		createBinding: createBinding,
+
+		insertBinding: insertBinding,
 
 		select: function () {
 			attributes.builder = buildSelect;
@@ -279,6 +347,22 @@ module.exports = function () {
 
 		deleet: function () {
 			attributes.builder = buildDelete;
+			return this;
+		},
+
+		deleteFrom: function (tablename, alias) {
+			attributes.builder = buildDelete;
+
+			if (isArray(tablename)) {
+				if (alias) {
+					this.from(tablename.shift(), alias);
+					tablename.unshift(alias);
+				}
+				this.columns(tablename);
+			} else if (tablename) {
+				this.from(tablename, alias);
+			}
+
 			return this;
 		},
 
@@ -292,11 +376,46 @@ module.exports = function () {
 			return this;
 		},
 
-		from: function (tablename, alias) {
+		table: function (tablename, alias) {
 			attributes.tableName = tablename;
-			if (alias !== undefined) {
+			if (isDefined(alias)) {
 				attributes.alias = alias;
 			}
+			return this;
+		},
+
+		database: function (database, tablename, alias) {
+			attributes.database = database;
+			if (tablename) {
+				attributes.tableName = tablename;
+			}
+			if (alias) {
+				attributes.alias = alias;
+			}
+			return this;
+		},
+
+		columns: function () {
+			var args = flatten([].slice.call(arguments));
+
+			args = args.map(function (column) {
+				if (typeof column === 'string') {
+					return column;
+				}
+
+				if (typeof column === 'number' || column instanceof Date) {
+					return createBinding(column);
+				}
+
+				if (typeof column === 'object' && isDefined(column.data)) {
+					return createBinding(column.data, column.modifier);
+				}
+
+				throw new TypeError('Unknown column type');
+			});
+
+			attributes.columns = args;
+
 			return this;
 		},
 
@@ -306,13 +425,13 @@ module.exports = function () {
 			case 'and':
 			case 'AND':
 			case 'yes':
-				attributes.whereBoolean = 'AND'; break;
+				attributes.whereBoolean = ' AND '; break;
 
 			case false:
 			case 'or':
 			case 'OR':
 			case 'no':
-				attributes.whereBoolean = 'OR'; break;
+				attributes.whereBoolean = ' OR '; break;
 			}
 			return this;
 		},
@@ -329,12 +448,17 @@ module.exports = function () {
 			return this;
 		},
 
+		whereNotLike: function (field, value, modifier) {
+			where(field, value, 'NOT LIKE', modifier);
+			return this;
+		},
+
 		whereInRange: function (field, from, to, modifier) {
-			if (from !== undefined && to !== undefined) {
+			if (isDefined(from) && isDefined(to)) {
 				whereBetween(field, from, to, modifier);
-			} else if (from !== undefined) {
+			} else if (isDefined(from)) {
 				where(field, from, '>=', modifier);
-			} else if (to !== undefined) {
+			} else if (isDefined(to)) {
 				where(field, to, '<=', modifier);
 			}
 			return this;
@@ -343,14 +467,6 @@ module.exports = function () {
 		whereBetween: whereBetween,
 
 		set: set,
-
-		returns: function () {
-			var args = flatten([].slice.call(arguments));
-
-			attributes.returnColumns = args;
-
-			return this;
-		},
 
 		join: join,
 
@@ -424,29 +540,165 @@ module.exports = function () {
 			join(clause);
 
 			return this;
-		}
+		},
 
+		orderBy: function () {
+			var args = flatten([].slice.call(arguments));
+
+			attributes.orderBy = args;
+
+			return this;
+		},
+
+		groupBy: function () {
+			var args = flatten([].slice.call(arguments));
+
+			attributes.orderBy = args;
+
+			return this;
+		},
+
+		distinct: function (on) {
+			attributes.distinct = isDefined(on) ? true : on;
+			return this;
+		},
+
+		limit: function (max, offset) {
+			if (isDefined(max)) max = 0;
+			if (isDefined(offset)) offset = 0;
+
+			attributes.limit = max ? ['LIMIT ',Number(offset), ', ', Number(max)].join() : false;
+
+			return this;
+		},
+
+		compile: function () {
+			if (!attributes.builder) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
+			if (!attributes.tableName) throw new Error('No table name has been defined');
+
+			var query = attributes.builder();
+
+			return convertNamedParameters(query);
+		}
 
 	};
 
-	function buildSelect() {
+	queryize.into = queryize.table;
+	queryize.intoDatabase = queryize.database;
+	queryize.from = queryize.table;
+	queryize.fromDatabase = queryize.database;
 
+
+	function buildTableName () {
+		var q = [];
+		
+		if (attributes.database) {
+			q.push('`' + attributes.database + '`.');
+		}
+		
+		q.push('`' + attributes.tableName + '`');
+		
+		if (attributes.alias) {
+			q.push(' ' + attributes.alias);
+		}
+
+		return q.join('');
+	}
+
+	function buildSelect() {
+		var columns = attributes.columns.join(', ');
+		if (attributes.distinct) columns = 'DISTINCT ' + columns;
+
+		var q = ['SELECT', columns, 'FROM', buildTableName()];
+
+		q = q.concat(attributes.joins);
+
+		if (attributes.where.length) {
+			q.push('WHERE');
+			q.push(attributes.where.join(attributes.whereBoolean));
+		}
+
+		if (attributes.groupBy.length) {
+			q.push('GROUP BY');
+			q.push(attributes.groupBy.join(', '));
+		}
+
+		if (attributes.orderBy.length) {
+			q.push('GROUP BY');
+			q.push(attributes.orderBy.join(', '));
+		}
+
+		if (attributes.limit) {
+			q.push(attributes.limit);
+		}
+
+		q = q.join(' ');
+
+		return q;
 	}
 
 	function buildUpdate() {
+		var q = ['UPDATE', buildTableName()];
 
+		if (!attributes.set.length) {
+			throw new Error('No values to insert have been defined');
+		}
+
+		q.push('SET');
+		q.push(attributes.set.join(', '));
+
+		if (attributes.where.length) {
+			q.push('WHERE');
+			q.push(attributes.where.join(attributes.whereBoolean));
+		}
+
+		q = q.join(' ');
+
+		return q;
 	}
 
 	function buildInsert() {
+		var q = ['INSERT INTO', buildTableName()];
 
+		if (!attributes.set.length) {
+			throw new Error('No values to insert have been defined');
+		}
+
+		q.push('SET');
+		q.push(attributes.set.join(', '));
+
+		q = q.join(' ');
+
+		return q;
 	}
 
 	function buildDelete() {
+		var q = ['DELETE'];
 
+		if (attributes.columns.length) {
+			var columns = attributes.columns.join(', ');
+			if (columns && columns !== '*') q.push(columns);
+		}
+
+		q.push('FROM');
+		q.push(buildTableName());
+
+		q = q.concat(attributes.joins);
+
+		if (!attributes.where.length) {
+			throw new Error('No where clauses have been defined for the delete query.');
+		}
+		
+		q.push('WHERE');
+		q.push(attributes.where.join(attributes.whereBoolean));
+
+		q = q.join(' ');
+
+		return q;
 	}
 
 
 	
-	return queryObj;
+	return queryize;
 
 };
