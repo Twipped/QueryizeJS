@@ -803,6 +803,20 @@ var queryize = function (baseAttributes) {
 			var query = builders[attributes.builder]();
 
 			return convertNamedParameters(query);
+		},
+
+		run: function (connection, options, callback) {
+			var q = this.compile;
+			if (typeof options === 'function') {
+				callback = options;
+				options = {};
+			} else if (typeof options !== 'object') {
+				options = {};
+			}
+			options.sql = q.query;
+			options.values = q.data;
+			
+			return connection.query(options, callback);
 		}
 
 	};
