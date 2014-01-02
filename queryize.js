@@ -404,6 +404,127 @@ var queryize = function (baseAttributes) {
 		return ons.join(' '+onBoolean+' ');
 	}
 
+
+	function buildTableName () {
+		var q = [];
+		
+		if (attributes.database) {
+			q.push('`' + attributes.database + '`.');
+		}
+		
+		q.push('`' + attributes.tableName + '`');
+		
+		if (attributes.alias) {
+			q.push(' ' + attributes.alias);
+		}
+
+		return q.join('');
+	}
+
+
+	var builders = {
+		'select': function buildSelect() {
+			var columns = attributes.columns.join(', ');
+			if (attributes.distinct) columns = 'DISTINCT ' + columns;
+
+			var q = ['SELECT', columns, 'FROM', buildTableName()];
+
+			q = q.concat(attributes.joins);
+
+			if (attributes.where.length) {
+				q.push('WHERE');
+				q.push(attributes.where.join(attributes.whereBoolean));
+			}
+
+			if (attributes.groupBy.length) {
+				q.push('GROUP BY');
+				q.push(attributes.groupBy.join(', '));
+			}
+
+			if (attributes.orderBy.length) {
+				q.push('GROUP BY');
+				q.push(attributes.orderBy.join(', '));
+			}
+
+			if (attributes.limit) {
+				q.push(attributes.limit);
+			}
+
+			q = q.join(' ');
+
+			return q;
+		},
+
+		'update': function buildUpdate() {
+			var q = ['UPDATE', buildTableName()];
+
+			if (!attributes.set.length) {
+				throw new Error('No values to insert have been defined');
+			}
+
+			q = q.concat(attributes.joins);
+
+			q.push('SET');
+			q.push(attributes.set.join(', '));
+
+			if (!attributes.where.length) {
+				throw new Error('No where clauses have been defined for the delete query.');
+			}
+
+			q.push('WHERE');
+			q.push(attributes.where.join(attributes.whereBoolean));
+
+			q = q.join(' ');
+
+			return q;
+		},
+
+		'insert': function buildInsert() {
+			var q = ['INSERT INTO', buildTableName()];
+
+			if (!attributes.set.length) {
+				throw new Error('No values to insert have been defined');
+			}
+
+			q.push('SET');
+			q.push(attributes.set.join(', '));
+
+			q = q.join(' ');
+
+			return q;
+		},
+
+		'delete': function buildDelete() {
+			var q = ['DELETE'];
+
+			if (attributes.columns.length) {
+				var columns = attributes.columns.join(', ');
+				if (columns && columns !== '*') q.push(columns);
+			}
+
+			q.push('FROM');
+			q.push(buildTableName());
+
+			q = q.concat(attributes.joins);
+
+			if (!attributes.where.length) {
+				throw new Error('No where clauses have been defined for the delete query.');
+			}
+			
+			q.push('WHERE');
+			q.push(attributes.where.join(attributes.whereBoolean));
+
+			q = q.join(' ');
+
+			return q;
+		}
+
+	};
+
+/************************************************************************************************************************/
+
+
+
 	var queryObject = {
 
 		_isQueryizeObject: true,
@@ -422,7 +543,10 @@ var queryize = function (baseAttributes) {
 		},
 
 		export: function () {
-			return attributes;
+			// the easiest way to make sure all the arrays are copied instead of passed by reference
+			// is to serialize and deserialize the entire attributes object. Yes it's lazy, but it works perfectly
+			var json = JSON.stringify(attributes);
+			return JSON.parse(json);
 		},
 
 		createBinding: createBinding,
@@ -430,20 +554,15 @@ var queryize = function (baseAttributes) {
 		insertBinding: insertBinding,
 
 		select: function () {
-			attributes.builder = buildSelect;
+			attributes.builder = 'select';
 			if (arguments.length) {
 				this.columns([].slice.call(arguments));
 			}
 			return this;
 		},
 
-		deleet: function () {
-			attributes.builder = buildDelete;
-			return this;
-		},
-
-		deleteFrom: function (tablename, alias) {
-			attributes.builder = buildDelete;
+		deleet: function (tablename, alias) {
+			attributes.builder = 'delete';
 
 			if (isArray(tablename)) {
 				if (alias) {
@@ -459,15 +578,18 @@ var queryize = function (baseAttributes) {
 		},
 
 		insert: function () {
-			attributes.builder = buildInsert;
+			attributes.builder = 'insert';
+			if (arguments.length) {
+				this.set([].slice.call(arguments));
+			}
 			return this;
 		},
 
 		update: function (tablename, alias) {
+			attributes.builder = 'update';
 			if (tablename) {
 				this.table(tablename, alias);
 			}
-			attributes.builder = buildUpdate;
 			return this;
 		},
 
@@ -675,10 +797,10 @@ var queryize = function (baseAttributes) {
 		},
 
 		compile: function () {
-			if (!attributes.builder) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
+			if (!attributes.builder || !builders[attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
 			if (!attributes.tableName) throw new Error('No table name has been defined');
 
-			var query = attributes.builder();
+			var query = builders[attributes.builder]();
 
 			return convertNamedParameters(query);
 		}
@@ -689,121 +811,7 @@ var queryize = function (baseAttributes) {
 	queryObject.intoDatabase = queryObject.database;
 	queryObject.from = queryObject.table;
 	queryObject.fromDatabase = queryObject.database;
-
-
-	function buildTableName () {
-		var q = [];
-		
-		if (attributes.database) {
-			q.push('`' + attributes.database + '`.');
-		}
-		
-		q.push('`' + attributes.tableName + '`');
-		
-		if (attributes.alias) {
-			q.push(' ' + attributes.alias);
-		}
-
-		return q.join('');
-	}
-
-	function buildSelect() {
-		var columns = attributes.columns.join(', ');
-		if (attributes.distinct) columns = 'DISTINCT ' + columns;
-
-		var q = ['SELECT', columns, 'FROM', buildTableName()];
-
-		q = q.concat(attributes.joins);
-
-		if (attributes.where.length) {
-			q.push('WHERE');
-			q.push(attributes.where.join(attributes.whereBoolean));
-		}
-
-		if (attributes.groupBy.length) {
-			q.push('GROUP BY');
-			q.push(attributes.groupBy.join(', '));
-		}
-
-		if (attributes.orderBy.length) {
-			q.push('GROUP BY');
-			q.push(attributes.orderBy.join(', '));
-		}
-
-		if (attributes.limit) {
-			q.push(attributes.limit);
-		}
-
-		q = q.join(' ');
-
-		return q;
-	}
-
-	function buildUpdate() {
-		var q = ['UPDATE', buildTableName()];
-
-		if (!attributes.set.length) {
-			throw new Error('No values to insert have been defined');
-		}
-
-		q = q.concat(attributes.joins);
-
-		q.push('SET');
-		q.push(attributes.set.join(', '));
-
-		if (!attributes.where.length) {
-			throw new Error('No where clauses have been defined for the delete query.');
-		}
-
-		q.push('WHERE');
-		q.push(attributes.where.join(attributes.whereBoolean));
-
-		q = q.join(' ');
-
-		return q;
-	}
-
-	function buildInsert() {
-		var q = ['INSERT INTO', buildTableName()];
-
-		if (!attributes.set.length) {
-			throw new Error('No values to insert have been defined');
-		}
-
-		q.push('SET');
-		q.push(attributes.set.join(', '));
-
-		q = q.join(' ');
-
-		return q;
-	}
-
-	function buildDelete() {
-		var q = ['DELETE'];
-
-		if (attributes.columns.length) {
-			var columns = attributes.columns.join(', ');
-			if (columns && columns !== '*') q.push(columns);
-		}
-
-		q.push('FROM');
-		q.push(buildTableName());
-
-		q = q.concat(attributes.joins);
-
-		if (!attributes.where.length) {
-			throw new Error('No where clauses have been defined for the delete query.');
-		}
-		
-		q.push('WHERE');
-		q.push(attributes.where.join(attributes.whereBoolean));
-
-		q = q.join(' ');
-
-		return q;
-	}
-
-
+	queryObject.deleteFrom = queryObject.deleet;
 	
 	return queryObject;
 
