@@ -188,7 +188,7 @@ var queryize = function (baseAttributes) {
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
-		if (isDefined(value)) {
+		if (value !== undefined) {
 			clause = processWhereCondition(clause, value, operator, modifier);
 
 		// if there was no value, check to see if we got an object based where definition
@@ -751,10 +751,12 @@ var queryize = function (baseAttributes) {
 		q.push('SET');
 		q.push(attributes.set.join(', '));
 
-		if (attributes.where.length) {
-			q.push('WHERE');
-			q.push(attributes.where.join(attributes.whereBoolean));
+		if (!attributes.where.length) {
+			throw new Error('No where clauses have been defined for the delete query.');
 		}
+
+		q.push('WHERE');
+		q.push(attributes.where.join(attributes.whereBoolean));
 
 		q = q.join(' ');
 
@@ -808,5 +810,35 @@ var queryize = function (baseAttributes) {
 };
 
 queryize.useBoundParameters = true;
+
+queryize.select = function () {
+	var q = queryize();
+	q.select.apply(q, arguments);
+	return q;
+};
+
+queryize.update = function () {
+	var q = queryize();
+	q.update.apply(q, arguments);
+	return q;
+};
+
+queryize.insert = function () {
+	var q = queryize();
+	q.insert.apply(q, arguments);
+	return q;
+};
+
+queryize.deleet = function () {
+	var q = queryize();
+	q.deleet.apply(q, arguments);
+	return q;
+};
+
+queryize.deleteFrom = function () {
+	var q = queryize();
+	q.deleteFrom.apply(q, arguments);
+	return q;
+};
 
 module.exports = queryize;

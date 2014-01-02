@@ -448,9 +448,10 @@ exports['update with name+options join on object'] = function (test) {
 	
 	q.join('passwords', {alias: 'p', on: {'p.userid':'u.id'}});
 	q.set({'u.active':true, 'p.hash': 'fakehashdata'});
+	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
-		query: 'UPDATE `users` u JOIN passwords p ON (p.userid = u.id) SET u.active = TRUE, p.hash = ?',
+		query: 'UPDATE `users` u JOIN passwords p ON (p.userid = u.id) SET u.active = TRUE, p.hash = ? WHERE name = NULL',
 		data: ['fakehashdata']
 	});
 

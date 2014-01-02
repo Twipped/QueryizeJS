@@ -185,7 +185,7 @@ exports['select with double 2 item object where clause'] = function (test) {
 exports['select with object where clause and operator'] = function (test) {
 	var q = queryize().select().from('users');
 
-	q.where({id:1}, null, '>');
+	q.where({id:1}, undefined, '>');
 		
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',
