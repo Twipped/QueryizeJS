@@ -98,3 +98,16 @@ exports['insert with a boolean value'] = function (test) {
 
 	test.done();
 };
+
+exports['set throws an error if no parameters provided'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	test.throws(function () {
+		q.set();
+	});
+
+	test.done();
+};
+
+
+

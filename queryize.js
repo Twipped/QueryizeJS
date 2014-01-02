@@ -1,7 +1,9 @@
 
-module.exports = function () {
+var queryize = function () {
 
 	var debugEnabled = false;
+
+	var useBoundParameters = queryize.useBoundParameters;
 
 	var dataBindings = {};
 
@@ -36,10 +38,11 @@ module.exports = function () {
 	}
 
 	function isValidPrimative(value) {
-		return typeof value !== 'string' &&
-			typeof value !== 'boolean' &&
-			typeof value !== 'number' &&
-			!(value instanceof Date);
+		return typeof value === 'string' ||
+			typeof value === 'boolean' ||
+			typeof value === 'number' ||
+			value === null ||
+			(value instanceof Date);
 	}
 
 	function flatten(input, includingObjects) {
@@ -65,18 +68,59 @@ module.exports = function () {
 	function convertNamedParameters (query) {
 		var data = [];
 
-		query = query.replace(/({{\w*}})/g, function (match, name) {
-			if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+		if (useBoundParameters) {
+			query = query.replace(/({{\w*}})/g, function (match, name) {
+				if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-			data.push(dataBindings[name]);
-			
-			return '?';
-		});
+				data.push(dataBindings[name]);
+
+				return '?';
+			});
+		} else {
+			query = query.replace(/({{\w*}})/g, function (match, name) {
+				if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+
+				return escapeValue(dataBindings[name]);
+			});
+		}
 
 		return {
 			query: query,
 			data: data
 		};
+	}
+
+	function escapeValue(value) {
+		if (value === undefined || value === null) {
+			return 'NULL';
+		}
+
+		switch (typeof value) {
+			case 'boolean': return (value) ? 'true' : 'false';
+			case 'number': return value+'';
+		}
+
+		if (value instanceof Date) {
+			value = data.toISOString().slice(0, 19).replace('T', ' ');
+		}
+
+		if (typeof value === 'object') {
+			throw new TypeError('Cannot escape object');
+		}
+
+		value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
+			switch(s) {
+				case "\0": return "\\0";
+				case "\n": return "\\n";
+				case "\r": return "\\r";
+				case "\b": return "\\b";
+				case "\t": return "\\t";
+				case "\x1a": return "\\Z";
+				default: return "\\"+s;
+			}
+		});
+
+		return "'"+value+"'";
 	}
 
 	function insertBinding (key, data) {
@@ -99,6 +143,7 @@ module.exports = function () {
 	function createBinding (data, modifier) {
 		if (data === true) return 'TRUE';
 		if (data === false) return 'FALSE';
+		if (data === null) return 'NULL';
 
 		if (typeof data === 'object') {
 			// if we've got a date, convert it into a mysql ready datestamp
@@ -117,6 +162,8 @@ module.exports = function () {
 	}
 
 	function where (clause, value, operator, modifier) {
+
+		if (!isDefined(clause)) throw new Error('You must define a where clause.');
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
@@ -216,6 +263,8 @@ module.exports = function () {
 
 	function set (clause, value, modifier) {
 
+		if (!isDefined(clause)) throw new Error('You must define a field to set.');
+
 		if (typeof clause === 'object') {
 			Object.keys(clause).forEach(function (field) {
 				set(field, clause[field], modifier);
@@ -225,7 +274,7 @@ module.exports = function () {
 
 		// if we received a value, create a set clause
 		if (isDefined(value)) {
-			if (isValidPrimative(value)) {
+			if (!isValidPrimative(value)) {
 				throw new TypeError('Unknown data type in set clause');
 			}
 			clause = [clause, '=', createBinding(value, modifier)].join(' ');
@@ -237,7 +286,10 @@ module.exports = function () {
 	}
 
 
+	var joinTest = /^(?:.*)(JOIN) /i;
+
 	function join (clause, options) {
+		if (!isDefined(clause)) throw new Error('You must define a table to join against.');
 
 		if (typeof clause === 'object') {
 
@@ -246,11 +298,13 @@ module.exports = function () {
 
 		} else if (typeof options === 'object') {
 
-			clause = Object.create(options, {table: clause});
+			options = Object.create(options);
+			options.table = clause;
+			clause = options;
 
-		} else if (typeof clause === 'string' && !clause.search(joinTest)) {
+		} else if (typeof clause === 'string' && clause.search(joinTest) < 0) {
 
-			clause = 'INNER JOIN ' + clause;
+			clause = 'JOIN ' + clause;
 
 		}
 
@@ -258,13 +312,13 @@ module.exports = function () {
 
 			var stack = [];
 
-			stack.push(clause.type || 'INNER');
+			if (clause.type) stack.push(clause.type);
 			stack.push('JOIN');
 			stack.push(clause.table);
 			if (clause.alias) stack.push(clause.alias);
 
 			if (clause.using) {
-				stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(',') : clause.using) + ')' );
+				stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(', ') : clause.using) + ')' );
 
 			} else if (clause.on) {
 				stack.push( 'ON (' + processJoinOns(clause.on, clause.onBoolean || 'AND') + ')' );
@@ -286,10 +340,10 @@ module.exports = function () {
 		}
 
 		if (isArray(ons)) {
-			ons = ons.map(processJoinOns);
+			ons = ons.map(function (d) { return processJoinOns(d); });
 		}
 
-		if (typeof ons === 'object') {
+		if (typeof ons === 'object' && !isArray(ons)) {
 			var not = false;
 			ons = Object.keys(ons).map(function (field) {
 				var value = ons[field];
@@ -297,24 +351,29 @@ module.exports = function () {
 				// if the object contains a 'not' key, all subsequent keys parsed will be negations.
 				if (field === 'not' && value === true) {
 					not = true;
+					return undefined;
 				}
 
 				// if value is an array, perform an IN() on the values
 				if (isArray(value)) {
-					return [field, not ? 'NOT IN' : 'IN', '(', value.join(','), ')'].join(' ');
-
-				// if value is an object, verify if it's a data object, and if so create a binding for the value
-				} else if (typeof value === 'object' && isDefined(value.data)) {
-					return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
+					value = value.map(function (d) {return createBinding(d); });
+					return [field, not ? 'NOT IN' : 'IN', '(', value.join(', '), ')'].join(' ');
 
 				// if value is a string or a number, process as if a normal pairing of columns
-				} else if (typeof value === 'string' || typeof value === 'number') {
+				} else if (typeof value === 'string') {
 					return [field, not ? '!=' : '=', value].join(' ');
 
+				// finally, process the value as if it were an actual value for binding
+				} else if (isValidPrimative(value)) {
+					return [field, not ? '!=' : '=', createBinding(value)].join(' ');
+
+				// if value is an object, verify if it's a data object, and if so create a binding for the value
+				} else if (typeof value === 'object' && value.data !== undefined) {
+					return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
 				}
 
 				// we don't know how to handle the value
-				throw new Error('Encountered unexpected value while parsing a JOIN ON condition');
+				throw new Error('Encountered unexpected value while parsing a JOIN ON condition for ' + field);
 			});
 		}
 
@@ -324,9 +383,7 @@ module.exports = function () {
 		return ons.join(' '+onBoolean+' ');
 	}
 
-	var joinTest = /^(.*)?(JOIN) /i;
-
-	var queryize = {
+	var queryObject = {
 
 		debug: function (enable) {
 			if (isDefined(enable)) enable = true;
@@ -336,12 +393,20 @@ module.exports = function () {
 			return this;
 		},
 
+		useBoundParameters: function (on) {
+			useBoundParameters = isDefined(on) ? on : true;
+			return this;
+		},
+
 		createBinding: createBinding,
 
 		insertBinding: insertBinding,
 
 		select: function () {
 			attributes.builder = buildSelect;
+			if (arguments.length) {
+				this.columns([].slice.call(arguments));
+			}
 			return this;
 		},
 
@@ -371,7 +436,10 @@ module.exports = function () {
 			return this;
 		},
 
-		update: function () {
+		update: function (tablename, alias) {
+			if (tablename) {
+				this.table(tablename, alias);
+			}
 			attributes.builder = buildUpdate;
 			return this;
 		},
@@ -411,6 +479,7 @@ module.exports = function () {
 					return createBinding(column.data, column.modifier);
 				}
 
+				console.log(column);
 				throw new TypeError('Unknown column type');
 			});
 
@@ -479,14 +548,16 @@ module.exports = function () {
 
 			} else if (typeof options === 'object') {
 
-				clause = Object.create(options, {table: clause});
+				options = Object.create(options);
+				options.table = clause;
+				clause = options;
 
 			}
 
 			if (typeof clause === 'object') {
 				clause.type = 'INNER';
 			} else {
-				clause = clause.search(joinTest) ? clause.replace(joinTest, 'INNER JOIN') : 'INNER JOIN ' + clause;
+				clause = clause.search(joinTest) > -1 ? clause.replace(joinTest, 'INNER JOIN ') : 'INNER JOIN ' + clause;
 			}
 
 			join(clause);
@@ -503,14 +574,16 @@ module.exports = function () {
 
 			} else if (typeof options === 'object') {
 
-				clause = Object.create(options, {table: clause});
+				options = Object.create(options);
+				options.table = clause;
+				clause = options;
 
 			}
 
 			if (typeof clause === 'object') {
 				clause.type = 'LEFT';
 			} else {
-				clause = clause.search(joinTest) ? clause.replace(joinTest, 'LEFT JOIN') : 'LEFT JOIN ' + clause;
+				clause = clause.search(joinTest) > -1 ? clause.replace(joinTest, 'LEFT JOIN ') : 'LEFT JOIN ' + clause;
 			}
 
 			join(clause);
@@ -527,14 +600,16 @@ module.exports = function () {
 
 			} else if (typeof options === 'object') {
 
-				clause = Object.create(options, {table: clause});
+				options = Object.create(options);
+				options.table = clause;
+				clause = options;
 
 			}
 
 			if (typeof clause === 'object') {
 				clause.type = 'RIGHT';
 			} else {
-				clause = clause.search(joinTest) ? clause.replace(joinTest, 'RIGHT JOIN') : 'RIGHT JOIN ' + clause;
+				clause = clause.search(joinTest) > -1 ? clause.replace(joinTest, 'RIGHT JOIN ') : 'RIGHT JOIN ' + clause;
 			}
 
 			join(clause);
@@ -583,10 +658,10 @@ module.exports = function () {
 
 	};
 
-	queryize.into = queryize.table;
-	queryize.intoDatabase = queryize.database;
-	queryize.from = queryize.table;
-	queryize.fromDatabase = queryize.database;
+	queryObject.into = queryObject.table;
+	queryObject.intoDatabase = queryObject.database;
+	queryObject.from = queryObject.table;
+	queryObject.fromDatabase = queryObject.database;
 
 
 	function buildTableName () {
@@ -644,6 +719,8 @@ module.exports = function () {
 			throw new Error('No values to insert have been defined');
 		}
 
+		q = q.concat(attributes.joins);
+
 		q.push('SET');
 		q.push(attributes.set.join(', '));
 
@@ -699,6 +776,10 @@ module.exports = function () {
 
 
 	
-	return queryize;
+	return queryObject;
 
 };
+
+queryize.useBoundParameters = true;
+
+module.exports = queryize;

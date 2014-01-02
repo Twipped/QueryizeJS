@@ -1,6 +1,16 @@
 
 var queryize = require('../queryize');
 
+exports['where throws an error if no parameters provided'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	test.throws(function () {
+		q.where();
+	});
+
+	test.done();
+};
+
 exports['select with string where clause'] = function (test) {
 	var q = queryize().select().from('users');
 
