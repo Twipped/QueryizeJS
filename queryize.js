@@ -1,5 +1,5 @@
 
-var queryize = function () {
+var queryize = function (baseAttributes) {
 
 	var debugEnabled = false;
 
@@ -23,6 +23,8 @@ var queryize = function () {
 		builder: false
 	};
 
+	if (baseAttributes) extend(attributes, baseAttributes._isQueryizeObject ? baseAttributes.export() : baseAttributes);
+
 	// creates a string that is unique to this runtime session
 	// (based on lo-dash.uniqueId)
 	var idCounter = 0;
@@ -45,6 +47,7 @@ var queryize = function () {
 			(value instanceof Date);
 	}
 
+	// flattens a nested array into a single level array
 	function flatten(input, includingObjects) {
 		var result = [];
 
@@ -63,6 +66,24 @@ var queryize = function () {
 		descend(input);
 
 		return result;
+	}
+
+	// extends the first argument object with the members of all other argument objects
+	// (based on lo-dash.assign)
+	function extend(object) {
+		if (!object) {
+			return object;
+		}
+
+		for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
+			var iterable = arguments[argsIndex];
+			if (iterable) {
+				for (var key in iterable) {
+					object[key] = iterable[key];
+				}
+			}
+		}
+		return object;
 	}
 
 	function convertNamedParameters (query) {
@@ -385,6 +406,8 @@ var queryize = function () {
 
 	var queryObject = {
 
+		_isQueryizeObject: true,
+
 		debug: function (enable) {
 			if (isDefined(enable)) enable = true;
 
@@ -396,6 +419,10 @@ var queryize = function () {
 		useBoundParameters: function (on) {
 			useBoundParameters = isDefined(on) ? on : true;
 			return this;
+		},
+
+		export: function () {
+			return attributes;
 		},
 
 		createBinding: createBinding,

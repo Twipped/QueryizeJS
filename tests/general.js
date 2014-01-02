@@ -25,3 +25,16 @@ exports['compile without table throws error'] = function (test) {
 
 	test.done();
 };
+
+exports['basic select, copied'] = function (test) {
+	var a = queryize().select().from('users', 'u');
+
+	var b = queryize(a);
+		
+	test.deepEqual(b.compile(), {
+		query: 'SELECT * FROM `users` u',
+		data: []
+	});
+
+	test.done();
+};
