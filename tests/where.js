@@ -1,11 +1,16 @@
 
 var queryize = require('../queryize');
 
-exports['where throws an error if no parameters provided'] = function (test) {
-	var q = queryize().select().from('users', 'u');
+exports['where without parameters erases the where clauses'] = function (test) {
+	var q = queryize().select().from('users');
 	
-	test.throws(function () {
-		q.where();
+	q.where('id = 1');
+	q.where();
+	q.where('id = 20');
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 20',
+		data: []
 	});
 
 	test.done();
@@ -185,7 +190,7 @@ exports['select with double 2 item object where clause'] = function (test) {
 exports['select with object where clause and operator'] = function (test) {
 	var q = queryize().select().from('users');
 
-	q.where({id:1}, undefined, '>');
+	q.where({id:1}, '>');
 		
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',

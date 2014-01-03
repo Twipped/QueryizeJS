@@ -65,6 +65,20 @@ exports['basic update with object to set'] = function (test) {
 	test.done();
 };
 
+exports['basic update with object to set + modifier'] = function (test) {
+	var q = queryize().update().table('users', 'u');
+	
+	q.set({name: 'bob'}, 'UPPER');
+	q.where('name', null);
+
+	test.deepEqual(q.compile(), {
+		query: 'UPDATE `users` u SET name = UPPER(?) WHERE name = NULL',
+		data: ['bob']
+	});
+
+	test.done();
+};
+
 exports['update with set value of object throws error'] = function (test) {
 	var q = queryize().update().table('users', 'u');
 	
