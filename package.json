@@ -4,7 +4,8 @@
   "description": "A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.",
   "main": "queryize.js",
   "scripts": {
-    "test": "nodeunit tests"
+    "test": "nodeunit tests",
+    "docs": "node makedocs"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,7 @@
   },
   "homepage": "https://github.com/ChiperSoft/QueryizeJS",
   "devDependencies": {
-    "nodeunit": "~0.8.2"
+    "nodeunit": "~0.8.2",
+    "docdown": "git://github.com/ChiperSoft/docdown.git#master"
   }
 }

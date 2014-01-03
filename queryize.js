@@ -17,11 +17,12 @@ function _uniqueId(prefix) {
  * and provides the methods to manipulate that query.
  *
  * @name queryize
+ * @typedef queryize
  * @constructor
- * @param  {query|Object} [baseAttributes] An existing query object to duplicate.
+ * @param  {query|Object} [original] An existing query object to duplicate.
  * @return {query} Returns a `query` instance.
  */
-var queryize = function (baseAttributes) {
+var queryize = function (original) {
 
 	var debugEnabled = false;
 
@@ -45,7 +46,7 @@ var queryize = function (baseAttributes) {
 		builder: false
 	};
 
-	if (baseAttributes) extend(attributes, baseAttributes._isQueryizeObject ? baseAttributes.export() : baseAttributes);
+	if (original) extend(attributes, original._isQueryizeObject ? original.export() : original);
 
 	var isArray = Array.isArray;
 
@@ -208,6 +209,8 @@ var queryize = function (baseAttributes) {
 	/**
 	 * Stores the passed `value` under a data binding with the `key` name.
 	 * This allows for explicit usage of bindings within query strings.
+	 *
+	 * @memberOf query
 	 * @param  {string} key  The binding name to store the value under
 	 * @param  {*} value The data to be stored
 	 * @returns {query} Exports `this` for chaining
@@ -1297,7 +1300,7 @@ var queryize = function (baseAttributes) {
 
 /************************************************************************************************************************/
 
-	
+
 	/**
 	 * @typedef query
 	 * @type {Object}
