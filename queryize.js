@@ -831,7 +831,7 @@ var queryize = function (original) {
 	function groupBy (columns) {
 		var args = flatten([].slice.call(arguments));
 
-		attributes.orderBy = args;
+		attributes.groupBy = args;
 
 		return this;
 	}
@@ -1165,7 +1165,7 @@ var queryize = function (original) {
 			}
 
 			if (attributes.orderBy.length) {
-				q.push('GROUP BY');
+				q.push('ORDER BY');
 				q.push(attributes.orderBy.join(', '));
 			}
 
@@ -1281,13 +1281,13 @@ var queryize = function (original) {
 	 * @return {nodeMysqlQuery} Returns the result of `connection.query()`, see node-mysql documentation for details
 	 */
 	function run (connection, options, callback) {
-		var q = this.compile;
+		var q = this.compile();
 
 		if (debugEnabled) console.log(q);
 
 		if (typeof options === 'function') {
 			callback = options;
-			options = {};
+			return connection.query(q.query, q.data, callback);
 		} else if (typeof options !== 'object') {
 			options = {};
 		}
