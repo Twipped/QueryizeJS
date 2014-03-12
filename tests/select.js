@@ -114,3 +114,29 @@ exports['select with object where clause'] = function (test) {
 
 	test.done();
 };
+
+exports['select with orderBy'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.orderBy('name');
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` ORDER BY name',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['select with groupBy'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.groupBy('name');
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` GROUP BY name',
+		data: []
+	});
+
+	test.done();
+};
