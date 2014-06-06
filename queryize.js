@@ -1280,7 +1280,7 @@ var queryize = function (original) {
 	 * @param  {runCallback} [callback] Callback function to be invoked when the query completes.
 	 * @return {nodeMysqlQuery} Returns the result of `connection.query()`, see node-mysql documentation for details
 	 */
-	function run (connection, options, callback) {
+	function exec (connection, options, callback) {
 		var q = this.compile();
 
 		if (debugEnabled) console.log(q);
@@ -1373,7 +1373,8 @@ var queryize = function (original) {
 		distinct: distinct,
 		limit: limit,
 		compile: compile,
-		run: run
+		run: exec,
+		exec: exec
 
 	};
 

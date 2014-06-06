@@ -48,7 +48,7 @@
 * [`query.leftJoin`](#queryleftjoin)
 * [`query.rightJoin`](#queryrightjoin)
 * [`query.compile`](#querycompile)
-* [`query.run`](#queryrunconnection--options-callback)
+* [`query.exec`](#queryexecconnection--options-callback)
 * [`query.debug`](#querydebugenable)
 * [`query.useBoundParameters`](#queryuseboundparametersenable)
 
@@ -83,7 +83,7 @@ Creates a `query` object which encapsulates the state of the query to be generat
 <!-- div -->
 
 ### <a id="queryizeselect"></a>`queryize.select`
-<a href="#queryizeselect">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1395 "View in source") [&#x24C9;][1]
+<a href="#queryizeselect">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1396 "View in source") [&#x24C9;][1]
 
 *(Unknown)*: Shortcut for creating a new select query
 
@@ -97,7 +97,7 @@ See `query.select()` for details.
 <!-- div -->
 
 ### <a id="queryizeupdate"></a>`queryize.update`
-<a href="#queryizeupdate">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1410 "View in source") [&#x24C9;][1]
+<a href="#queryizeupdate">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1411 "View in source") [&#x24C9;][1]
 
 *(Unknown)*: Shortcut for creating a new update query
 
@@ -111,7 +111,7 @@ See `query.update()` for details.
 <!-- div -->
 
 ### <a id="queryizeinsert"></a>`queryize.insert`
-<a href="#queryizeinsert">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1425 "View in source") [&#x24C9;][1]
+<a href="#queryizeinsert">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1426 "View in source") [&#x24C9;][1]
 
 *(Unknown)*: Shortcut for creating a new insert query
 
@@ -125,7 +125,7 @@ See `query.insert()` for details.
 <!-- div -->
 
 ### <a id="queryizedeletefrom"></a>`queryize.deleteFrom`
-<a href="#queryizedeletefrom">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1441 "View in source") [&#x24C9;][1]
+<a href="#queryizedeletefrom">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1442 "View in source") [&#x24C9;][1]
 
 *(Unknown)*: Shortcut for creating a new delete query
 
@@ -843,8 +843,8 @@ null
 
 <!-- div -->
 
-### <a id="queryrunconnection--options-callback"></a>`query.run(connection [, options, callback])`
-<a href="#queryrunconnection--options-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1283 "View in source") [&#x24C9;][1]
+### <a id="queryexecconnection--options-callback"></a>`query.exec(connection [, options, callback])`
+<a href="#queryexecconnection--options-callback">#</a> [&#x24C8;](https://github.com/ChiperSoft/QueryizeJS/blob/master/queryize.js#L1283 "View in source") [&#x24C9;][1]
 
 null
 
