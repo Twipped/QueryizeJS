@@ -1294,7 +1294,12 @@ var queryize = function (original) {
 		options.sql = q.query;
 		options.values = q.data;
 		
-		return connection.query(options, callback);
+		// run as a prepared query if the connection supports it
+		if (typeof connection.execute === 'function') {
+			return connection.execute(options, callback);
+		} else {
+			return connection.query(options, callback);
+		}
 	}
 
 
