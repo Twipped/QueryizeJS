@@ -211,8 +211,9 @@ var queryize = function (original) {
 	 * This allows for explicit usage of bindings within query strings.
 	 *
 	 * @memberOf query
+	 * @category Data
 	 * @param  {string} key  The binding name to store the value under
-	 * @param  {*} value The data to be stored
+	 * @param  {mixed} value The data to be stored
 	 * @returns {query} Exports `this` for chaining
 	 */
 	function insertBinding (key, value) {
@@ -243,7 +244,8 @@ var queryize = function (original) {
 	 * If a `modifier` function name is provided, the returned binding will be wrapped with that MySQL function.
 	 *
 	 * @memberOf query
-	 * @param  {*} value The data to be stored
+	 * @category Data
+	 * @param  {mixed} value The data to be stored
 	 * @param  {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
 	 * @returns {query} Exports `this` for chaining
 	 * @example
@@ -283,7 +285,7 @@ var queryize = function (original) {
 	 * in as arguments.  See `query.columns()` for more details.
 	 *
 	 * @memberOf query
-	 * @category Creation
+	 * @category Action
 	 * @param {...*} [arguments] All arguments received are passed to a `query.columns()` call
 	 * @returns {query} Exports `this` for chaining
 	 */
@@ -302,7 +304,7 @@ var queryize = function (original) {
 	 *
 	 * @alias deleet
 	 * @memberOf query
-	 * @category Creation
+	 * @category Action
 	 * @param  {string|Array<string>} [tablename] Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.
 	 * @param  {string} [alias] An alias to use for the table
 	 * @returns {query} Exports `this` for chaining
@@ -327,7 +329,7 @@ var queryize = function (original) {
 	 * Marks the query as being an INSERT statement
 	 *
 	 * @memberOf query
-	 * @category Creation
+	 * @category Action
 	 * @param {...*} [arguments] All arguments received are passed to a `query.set()` call
 	 * @returns {query} Exports `this` for chaining
 	 */
@@ -343,7 +345,7 @@ var queryize = function (original) {
 	 * Marks the query as being an UPDATE statement
 	 *
 	 * @memberOf query
-	 * @category Creation
+	 * @category Action
 	 * @param  {string} [tablename] Table to update
 	 * @param  {string} [alias] An alias to use for the table
 	 * @returns {query} Exports `this` for chaining
@@ -360,7 +362,7 @@ var queryize = function (original) {
 	 * Defines the table that the query should be performed on
 	 *
 	 * @memberOf query
-	 * @category Creation
+	 * @category Sourcing
 	 * @alias into
 	 * @alias from
 	 * @param  {string} tablename
@@ -383,7 +385,7 @@ var queryize = function (original) {
 	 * currently in use.
 	 *
 	 * @memberOf query
-	 * @category Creation
+	 * @category Sourcing
 	 * @param  {string} dbname
 	 * @param  {string} [tablename]
 	 * @param  {string} [alias] An alias to use for the table
@@ -413,6 +415,7 @@ var queryize = function (original) {
 	 * By default, all queries have `*` for SELECTs and nothing for DELETEs
 	 *
 	 * @memberOf query
+	 * @category Sourcing
 	 * @param {string|Array<string>} columns
 	 * @param {...string} column2
 	 * @returns {query} Exports `this` for chaining
@@ -491,33 +494,38 @@ var queryize = function (original) {
 	 * @memberOf query
 	 * @category Reduction
 	 *
-	 * @signature `query.where()`
+	 * @signature query.where()
 	 * @returns {query} Exports `this` for chaining
+	 * @example
 	 *
-	 * @signature `query.where(clause)`
+	 * //removes all existing where clauses
+	 * query.where()
+	 *
+	 * @signature query.where(clause)
 	 * @param {string} clause A pre-written WHERE statement for direct insertion into the query
 	 * @returns {query} Exports `this` for chaining
+	 * @example
 	 *
-	 * @signature `query.where(field, value, [operator], [modifier])`
+	 * query.where('password IS NOT NULL')
+	 * // WHERE password IS NOT NULL
+	 *
+	 * @signature query.where(clauses)
+	 * @param {Array<string>} clause Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.
+	 * @returns {query} Exports `this` for chaining
+	 * @example
+	 * query.where(['account.balance > 0', 'account.gratis IS TRUE'])
+	 * // WHERE account.balance > 0 OR account.gratis IS TRUE
+	 *
+	 * query.where(['AND', 'client.active IS TRUE', 'client.paidthru < NOW()'])
+	 * // WHERE client.active IS TRUE AND client.paidthru < NOW()
+	 *
+	 * @signature query.where(field, value, [operator], [modifier])
 	 * @param {string|Array<string>} field The table field(s) to match against
 	 * @param {string|Array<string>} value The value(s) to match with (if more than one, performs an OR comparison of each)
 	 * @param {string} [operator='='] The operator to use when performing the comparison (e.g. =, !=, >, LIKE, IS NOT, etc)
 	 * @param {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
 	 * @returns {query} Exports `this` for chaining
-	 *
-	 * @signature `query.where(pairs, [operator], [modifier])`
-	 * @param {Object} pairs Collection of field/value pairs to match against
-	 * @param {string} [operator='='] The operator to use when performing the comparison (e.g. =, !=, >, LIKE, IS NOT, etc)
-	 * @param {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
-	 * @returns {query} Exports `this` for chaining
-	 *
 	 * @example
-	 *
-	 * query.where()
-	 * //removes all existing where clauses
-	 *
-	 * query.where('password IS NOT NULL')
-	 * // WHERE password IS NOT NULL
 	 *
 	 * query.where('age', 21, '<')
 	 * // WHERE age < ?
@@ -527,11 +535,13 @@ var queryize = function (original) {
 	 * // WHERE created >= DATE(?)
 	 * // Data: ['2014-01-01 00:00:00']
 	 *
-	 * query.where(['account.balance > 0', 'account.gratis IS TRUE'])
-	 * // WHERE account.balance > 0 OR account.gratis IS TRUE
+	 * @signature query.where(pairs, [operator], [modifier])
+	 * @param {Object} pairs Collection of field/value pairs to match against
+	 * @param {string} [operator='='] The operator to use when performing the comparison (e.g. =, !=, >, LIKE, IS NOT, etc)
+	 * @param {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
+	 * @returns {query} Exports `this` for chaining
 	 *
-	 * query.where(['AND', 'client.active IS TRUE', 'client.paidthru < NOW()'])
-	 * // WHERE client.active IS TRUE AND client.paidthru < NOW()
+	 * @example
 	 *
 	 * query.where({studio:'Paramount', franchise: 'Star Trek' });
 	 * // WHERE studio = ? AND franchise = ?
@@ -798,7 +808,7 @@ var queryize = function (original) {
 	 * Calling multiple times will replace the previous sort order with the new values.
 	 *
 	 * @memberOf query
-	 * @category Select
+	 * @category Selection
 	 * @param {...string|Array<string>} columns Column names can be in any format allowed in a MySQL statement.
 	 * @returns {query} Exports `this` for chaining
 	 * @example
@@ -821,7 +831,7 @@ var queryize = function (original) {
 	 * Calling multiple times will replace the previous grouping rules with the new values.
 	 *
 	 * @memberOf query
-	 * @category Select
+	 * @category Selection
 	 * @param {...string|Array<string>} columns Column names can be in any format allowed in a MySQL statement.
 	 * @returns {query} Exports `this` for chaining
 	 * @example
@@ -840,7 +850,7 @@ var queryize = function (original) {
 	 * Defines if a SELECT statement should return distinct results only
 	 *
 	 * @memberOf query
-	 * @category Select
+	 * @category Selection
 	 * @param  {boolean} on
 	 * @returns {query} Exports `this` for chaining
 	 */
@@ -853,7 +863,7 @@ var queryize = function (original) {
 	 * Defines the maximum results the query should return, and the starting offset of the first row within a set.
 	 *
 	 * @memberOf query
-	 * @category Select
+	 * @category Selection
 	 * @param  {number} max Total results to return
 	 * @param  {number} [offset] Starting offset of first row within the results
 	 * @returns {query} Exports `this` for chaining
@@ -871,17 +881,18 @@ var queryize = function (original) {
 	 * Defines what data to set the specified columns to during INSERT and UPDATE queries
 	 *
 	 * @memberOf query
+	 * @category Insertion & Replacement
 	 *
-	 * @signature `query.set(statement)`
+	 * @signature query.set(statement)
 	 * @param {string} statement A fully written set condition
 	 * @returns {query} Exports `this` for chaining
 	 *
-	 * @signature `query.set(column, value, [modifier])`
+	 * @signature query.set(column, value, [modifier])
 	 * @param {string} column
 	 * @param {string|number} value
 	 * @returns {query} Exports `this` for chaining
 	 *
-	 * @signature `query.set(data, [modifier])`
+	 * @signature query.set(data, [modifier])
 	 * @param {Object} data A plain object collection of column/value pairs
 	 * @param {string} modifier [description]
 	 * @returns {query} Exports `this` for chaining
@@ -905,7 +916,7 @@ var queryize = function (original) {
 
 		if (typeof clause === 'object') {
 			Object.keys(clause).forEach(function (field) {
-				set(field, clause[field], value /*modifier*/);
+				set(field, clause[field], value);
 			});
 			return this;
 		}
@@ -932,17 +943,18 @@ var queryize = function (original) {
 	 * Queryize will append any missing JOIN command at the beginning of a statement
 	 *
 	 * @memberOf query
+	 * @category Inclusion
 	 *
-	 * @signature `query.join(statement)`
+	 * @signature query.join(statement)
 	 * @param  {string} statement  Fully formed join statement
 	 * @returns {query} Exports `this` for chaining
 	 *
-	 * @signature `query.join(tablename, options)
+	 * @signature query.join(tablename, options)
 	 * @param {string} tablename
 	 * @param {Object} options Plain object containing options for the join
 	 * @returns {query} Exports `this` for chaining
 	 *
-	 * @signature `query.join(options)
+	 * @signature query.join(options)
 	 * @param {Object} options Plain object containing options for the join
 	 * @returns {query} Exports `this` for chaining
 	 *
@@ -1026,28 +1038,40 @@ var queryize = function (original) {
 	 *
 	 * @name innerJoin
 	 * @memberOf query
+	 * @category Inclusion
 	 * @returns {query} Exports `this` for chaining
 	 */
+	function innerJoin() {
+		// See _makeJoiner Function
+	}
 
 	/**
-	 * Shortcut for creating an LEFT JOIN
+	 * Shortcut for creating a LEFT JOIN
 	 *
 	 * See `query.join()` for argument details
 	 *
 	 * @name leftJoin
 	 * @memberOf query
+	 * @category Inclusion
 	 * @returns {query} Exports `this` for chaining
 	 */
+	function leftJoin() {
+		// See _makeJoiner Function
+	}
 
 	/**
-	 * Shortcut for creating an RIGHT JOIN
+	 * Shortcut for creating a RIGHT JOIN
 	 *
 	 * See `query.join()` for argument details
 	 *
 	 * @name rightJoin
 	 * @memberOf query
+	 * @category Inclusion
 	 * @returns {query} Exports `this` for chaining
 	 */
+	function rightJoin() {
+		// See _makeJoiner Function
+	}
 
 	function _makeJoiner(type) {
 		return function (clause, options) {
@@ -1247,6 +1271,7 @@ var queryize = function (original) {
 	/**
 	 * Compiles the final MySQL query
 	 * @memberOf query
+	 * @category Evaluation
 	 * @return {compiledQuery} Object containing the query string and data array
 	 */
 	function compile () {
@@ -1275,6 +1300,8 @@ var queryize = function (original) {
 	/**
 	 * Compiles the MySQL query and runs it using the given `connection` object from node-mysql or node-mysql2
 	 * @memberOf query
+	 * @category Evaluation
+	 * @alias run
 	 * @param  {Object}   connection node-mysql connection object
 	 * @param  {Object}   [options]  Options object to be passed to `connection.query` with the query string and data mixed in.
 	 * @param  {runCallback} [callback] Callback function to be invoked when the query completes.
