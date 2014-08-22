@@ -1,0 +1,2892 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>Untitled Document</title>
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<style>
+
+			.sidenav {
+				padding-top: 50px;
+			}
+
+			.nav > li > a {
+				padding: 2px 15px;
+			}
+
+			.category {
+				margin-top: 5px;
+			}
+
+			.nav > li.category > a {
+				color: #666;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				background: none;
+			}
+
+			.category > ul a {
+				background: #fbfbfb;
+				
+			}
+
+			.pieces .private, .nav .private {
+				display: none;
+			}
+
+			.signature .list-group strong {
+				margin-right: 20px;
+			}
+
+			.signature .list-group em, .signature u {
+				margin-left: 20px;
+			}
+
+			.codeview .panel-heading {
+				font-size: 11px;
+				padding: 5px;
+				cursor: pointer;
+			}
+
+			pre.panel-body, pre.panel-body.prettyprint  {
+				padding: 8px;
+				border: none;
+				font-size: 11px;
+				margin-bottom: 0;
+				background-color: #fbfbfb;
+				
+			}
+
+
+			pre.panel-body:before, pre.panel-body:after {
+				content: '';
+			}
+
+			.kwd {font-weight: bold;}
+
+			.nav-list {
+				padding-left: 15px;
+				padding-right: 15px;
+				margin-bottom: 0;
+			}
+
+			.nav-list > li > a,
+			.nav-list .nav-header {
+				margin-left: -15px;
+				margin-right: -15px;
+				text-shadow: 0 1px 0 rgba(255, 255, 255, .5);
+			}
+
+			.nav-list > li > a {
+				padding: 3px 15px;
+			}
+
+			.nav-list > .active > a,
+			.nav-list > .active > a:hover,
+			.nav-list > .active > a:focus {
+				color: white;
+				text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
+				background-color: #08c;
+			}
+
+			.nav-list [class^="icon-"],
+			.nav-list [class*=" icon-"] {
+				margin-right: 2px;
+			}
+
+			.nav-list .divider {
+				*width: 100%;
+				height: 1px;
+				margin: ((1.428571429 / 2) - 1) 1px; // 8px 1px
+				*margin: -5px 0 5px;
+				overflow: hidden;
+				background-color: #428bca;
+				border-bottom: 1px solid white;
+			}
+
+			.nav-header {
+				display: block;
+				padding: 3px 15px;
+				font-size: 11px;
+				font-weight: bold;
+				line-height: 1.428571429;
+				color: #999;
+				text-shadow: 0 1px 0 rgba(255,255,255,.5);
+				text-transform: uppercase;
+			}
+
+			.nav > .nav-header > a:hover {
+				background: none;
+			}
+
+			// Space them out when they follow another list item (link)
+/*			.nav li + .nav-header {
+				margin-top: 9px;
+			}*/
+
+		</style>
+	</head>
+	
+	<body>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-3 sidenav">
+					<ul class="nav nav-list">
+					
+						
+						<li class="private "><a href="#function_uniqueId">_uniqueId</a></li>
+						
+						<li class=" "><a href="#functionqueryize">queryize</a></li>
+						
+						<li class="private "><a href="#functionflatten">flatten</a></li>
+						
+						<li class="private "><a href="#functionextend">extend</a></li>
+						
+						<li class="private "><a href="#function_convertNamedParameters">_convertNamedParameters</a></li>
+						
+						<li class="private "><a href="#function_escapeValue">_escapeValue</a></li>
+						
+						<li class="private "><a href="#function_processWhereCondition">_processWhereCondition</a></li>
+						
+						<li class="private "><a href="#function_processWhereObject">_processWhereObject</a></li>
+						
+						
+					
+					
+						<li class="nav-header"><a>query</a></li>
+						<li><ul class="nav ">
+						
+							<li class="private "><a href="#functionqueryexport">query.export</a></li>
+						
+						
+								<li class="category"><a>Data</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionqueryinsertBinding">query.insertBinding</a></li>
+							
+										<li class=" "><a href="#functionquerycreateBinding">query.createBinding</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Action</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionqueryselect">query.select</a></li>
+							
+										<li class=" "><a href="#functionquerydeleteFrom">query.deleteFrom</a></li>
+							
+										<li class=" alias"><a href="#functionquerydeleteFrom">query.deleet</a></li>
+							
+										<li class=" "><a href="#functionqueryinsert">query.insert</a></li>
+							
+										<li class=" "><a href="#functionqueryupdate">query.update</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Sourcing</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionquerytable">query.table</a></li>
+							
+										<li class=" alias"><a href="#functionquerytable">query.into</a></li>
+							
+										<li class=" alias"><a href="#functionquerytable">query.from</a></li>
+							
+										<li class=" "><a href="#functionquerydatabase">query.database</a></li>
+							
+										<li class=" "><a href="#functionquerycolumns">query.columns</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Reduction</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionquerycomparisonMethod">query.comparisonMethod</a></li>
+							
+										<li class=" "><a href="#functionquerywhere">query.where</a></li>
+							
+										<li class=" "><a href="#functionquerywhereBetween">query.whereBetween</a></li>
+							
+										<li class=" "><a href="#functionquerywhereLike">query.whereLike</a></li>
+							
+										<li class=" "><a href="#functionquerywhereNot">query.whereNot</a></li>
+							
+										<li class=" "><a href="#functionquerywhereNotLike">query.whereNotLike</a></li>
+							
+										<li class=" "><a href="#functionquerywhereInRange">query.whereInRange</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Selection</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionqueryorderBy">query.orderBy</a></li>
+							
+										<li class=" "><a href="#functionquerygroupBy">query.groupBy</a></li>
+							
+										<li class=" "><a href="#functionquerydistinct">query.distinct</a></li>
+							
+										<li class=" "><a href="#functionquerylimit">query.limit</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Insertion &amp; Replacement</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionqueryset">query.set</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Inclusion</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionqueryjoin">query.join</a></li>
+							
+										<li class=" "><a href="#functionqueryinnerJoin">query.innerJoin</a></li>
+							
+										<li class=" "><a href="#functionqueryleftJoin">query.leftJoin</a></li>
+							
+										<li class=" "><a href="#functionqueryrightJoin">query.rightJoin</a></li>
+							
+									</ul>
+								</li>
+						
+								<li class="category"><a>Evaluation</a>
+									<ul class="nav subnav">
+							
+										<li class=" "><a href="#functionquerycompile">query.compile</a></li>
+							
+										<li class=" "><a href="#functionqueryexec">query.exec</a></li>
+							
+										<li class=" alias"><a href="#functionqueryexec">query.run</a></li>
+							
+									</ul>
+								</li>
+						
+						</ul></li>
+					
+						<li class="nav-header"><a>queryize</a></li>
+						<li><ul class="nav ">
+						
+							<li class=" "><a href="#methodqueryizeselect">queryize.select</a></li>
+						
+							<li class=" "><a href="#methodqueryizeupdate">queryize.update</a></li>
+						
+							<li class=" "><a href="#methodqueryizeinsert">queryize.insert</a></li>
+						
+							<li class=" "><a href="#methodqueryizedeleteFrom">queryize.deleteFrom</a></li>
+						
+							<li class=" alias"><a href="#methodqueryizedeleteFrom">queryize.deleet</a></li>
+						
+						
+						</ul></li>
+					
+					</ul>
+				</div>
+				<div class="col-md-9 pieces">
+				
+					<div class="piece private " id="function_uniqueId">
+						<div class="page-header"><h2>_uniqueId <small>function</small></h2></div>
+					
+						<p>creates a string that is unique to this runtime session</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined._uniqueId([prefix])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>prefix</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#function_uniqueId .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function _uniqueId(prefix) {
+  var id = (++idCounter).toString(16);
+  return prefix ? prefix + id : id;
+}</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryize">
+						<div class="page-header"><h2>queryize <small>function</small></h2></div>
+					
+						<p>Creates a <code>query</code> object which encapsulates the state of the query to be generated<br />and provides the methods to manipulate that query.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined.queryize([original])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>original</strong> query, Object
+									<em>Optional </em>
+									<br>An existing query object to duplicate.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryize .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">var queryize = function (original) {
+
+  var debugEnabled = false;
+
+  var useBoundParameters = queryize.useBoundParameters;
+
+  var dataBindings = {};
+
+  var attributes = {
+    database: false,
+    tableName: false,
+    tableAlias: false,
+    where: [],
+    whereBoolean: ' AND ',
+    set: [],
+    columns: ['*'],
+    joins: [],
+    orderBy: false,
+    groupBy: false,
+    distinct: false,
+    limit: false,
+    builder: false
+  };
+
+  if (original) extend(attributes, original._isQueryizeObject ? original.export() : original);
+
+  var isArray = Array.isArray;
+
+  function isDefined(value) {
+    return value !== undefined && value !== null;
+  }
+
+  function isValidPrimative(value) {
+    return typeof value === 'string' ||
+      typeof value === 'boolean' ||
+      typeof value === 'number' ||
+      value === null ||
+      (value instanceof Date);
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="functionflatten">
+						<div class="page-header"><h2>flatten <small>function</small></h2></div>
+					
+						<p>Flattens a nested array into a single level array</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined.flatten(input, [includingObjects])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>input</strong> Array
+									
+									<br>The top level array to flatten
+								</li>
+							
+								<li class="list-group-item">
+									<strong>includingObjects</strong> boolean
+									<em>Optional  (Default: false)</em>
+									<br>If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{Array}</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionflatten .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function flatten(input, includingObjects) {
+    var result = [];
+
+    function descend(level) {
+      if (isArray(level)) {
+        level.forEach(descend);
+      } else if (typeof level === 'object' && includingObjects) {
+        Object.keys(level).forEach(function (key) {
+          descend(level[key]);
+        });
+      } else {
+        result.push(level);
+      }
+    }
+
+    descend(input);
+
+    return result;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="functionextend">
+						<div class="page-header"><h2>extend <small>function</small></h2></div>
+					
+						<p>Extends the first argument object with the members of all other argument objects</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined.extend(object, [source])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>object</strong> Object
+									
+									<br>The destination object.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>source</strong> ...Object
+									<em>Optional </em>
+									<br>The source objects.
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{Object} The now extended destination object</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionextend .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function extend(object) {
+    if (!object) {
+      return object;
+    }
+
+    for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
+      var iterable = arguments[argsIndex];
+      if (iterable) {
+        for (var key in iterable) {
+          object[key] = iterable[key];
+        }
+      }
+    }
+    return object;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="function_convertNamedParameters">
+						<div class="page-header"><h2>_convertNamedParameters <small>function</small></h2></div>
+					
+						<p>Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array<br />If useBoundParameters is turned off, it replaces the placeholders with their escaped values.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined._convertNamedParameters(queryString)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>queryString</strong> string
+									
+									<br>The query string to be processed
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{compiledQuery} The processed query</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#function_convertNamedParameters .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function _convertNamedParameters (queryString) {
+    var data = [];
+
+    if (useBoundParameters) {
+      queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
+        if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+
+        data.push(dataBindings[name]);
+
+        return '?';
+      });
+    } else {
+      queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
+        if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+
+        return _escapeValue(dataBindings[name]);
+      });
+    }
+
+    return {
+      query: queryString,
+      data: data
+    };
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="function_escapeValue">
+						<div class="page-header"><h2>_escapeValue <small>function</small></h2></div>
+					
+						<p>Escapes a value for use in a MySQL query without SQL injection</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined._escapeValue(value)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> *
+									
+									<br>The value to be escaped
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{string|number} The escaped value ready to be used in a query.</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#function_escapeValue .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function _escapeValue(value) {
+    if (value === undefined || value === null) {
+      return 'NULL';
+    }
+
+    switch (typeof value) {
+      case 'boolean': return (value) ? 'true' : 'false';
+      case 'number': return value+'';
+    }
+
+    if (value instanceof Date) {
+      value = data.toISOString().slice(0, 19).replace('T', ' ');
+    }
+
+    if (typeof value === 'object') {
+      throw new TypeError('Cannot escape object');
+    }
+
+    value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
+      switch(s) {
+        case "\0": return "\\0";
+        case "\n": return "\\n";
+        case "\r": return "\\r";
+        case "\b": return "\\b";
+        case "\t": return "\\t";
+        case "\x1a": return "\\Z";
+        default: return "\\"+s;
+      }
+    });
+
+    return "'"+value+"'";
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="functionqueryexport">
+						<div class="page-header"><h2>query.export <small>function</small></h2></div>
+					
+						<p>Copies the attribute data for the query object and returns the copy</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.export()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{Object}</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryexport .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function exportAttributes () {
+    // the easiest way to make sure all the arrays are copied instead of passed by reference
+    // is to serialize and deserialize the entire attributes object. Yes it's lazy, but it works perfectly
+    var json = JSON.stringify(attributes);
+    return JSON.parse(json);
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryinsertBinding">
+						<div class="page-header"><h2>query.insertBinding <small>function</small></h2></div>
+					
+						<p>Stores the passed <code>value</code> under a data binding with the <code>key</code> name.<br />This allows for explicit usage of bindings within query strings.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.insertBinding(key, value)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>key</strong> string
+									
+									<br>The binding name to store the value under
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>The data to be stored
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryinsertBinding .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function insertBinding (key, value) {
+    if (typeof value === 'object') {
+      // if we've got a date, convert it into a mysql ready datestamp
+      if (value instanceof Date) {
+        value = value.toISOString().slice(0, 19).replace('T', ' ');
+      } else {
+        throw new TypeError('Received unparsable object as field value.');
+      }
+    }
+
+    if (key.substr(0,2) !== '{{') key = '{{' + key + '}}';
+
+    dataBindings[key] = value;
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerycreateBinding">
+						<div class="page-header"><h2>query.createBinding <small>function</small></h2></div>
+					
+						<p>Stores the passed <code>data</code> into the data bindings collection and returns a<br />unique string representation of that data for use in the query.</p><p>Data bindings in queryize are represented by a key name surrounded by<br />double brackets.  These values are then converted to question marks after<br />the query is compiled, with the values appended to the data array.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.createBinding(value, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>The data to be stored
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.createBinding('name@example.com');
+// => "{{binding0d}}"
+
+query.createBinding('2013-06-18', 'DATE');
+// => "DATE({{binding4f}})"</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerycreateBinding .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function createBinding (value, modifier) {
+    if (value === true) return 'TRUE';
+    if (value === false) return 'FALSE';
+    if (value === null) return 'NULL';
+
+    if (typeof value === 'object') {
+      // if we've got a date, convert it into a mysql ready datestamp
+      if (value instanceof Date) {
+        value = value.toISOString().slice(0, 19).replace('T', ' ');
+      } else {
+        throw new TypeError('Received unparsable object as field value.');
+      }
+    }
+
+    var key = '{{' + _uniqueId('binding') + '}}';
+
+    insertBinding(key, value);
+
+    return modifier ? [modifier, '(', key, ')'].join('') : key;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryselect">
+						<div class="page-header"><h2>query.select <small>function</small></h2></div>
+					
+						<p>Marks the query as being a SELECT statement.</p><p>One or more columns or an array of columns to select from may be passed<br />in as arguments.  See <code>query.columns()</code> for more details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.select([arguments])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>arguments</strong> ...*
+									<em>Optional </em>
+									<br>All arguments received are passed to a &#x60;query.columns()&#x60; call
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryselect .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function select () {
+    attributes.builder = 'select';
+    if (arguments.length) {
+      this.columns([].slice.call(arguments));
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerydeleteFrom">
+						<div class="page-header"><h2>query.deleteFrom <small>function</small></h2></div>
+					
+						<p>Marks the query as being a DELETE statement</p><p>Supports passing the target table and alias as syntatic sugar.  See <code>query.from()</code> for more details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.deleteFrom([tablename], [alias])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string, Array&lt;string&gt;
+									<em>Optional </em>
+									<br>Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>alias</strong> string
+									<em>Optional </em>
+									<br>An alias to use for the table
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerydeleteFrom .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function deleteFrom (tablename, alias) {
+    attributes.builder = 'delete';
+
+    if (isArray(tablename)) {
+      if (alias) {
+        this.from(tablename.shift(), alias);
+        tablename.unshift(alias);
+      }
+      this.columns(tablename);
+    } else if (tablename) {
+      this.from(tablename, alias);
+    }
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryinsert">
+						<div class="page-header"><h2>query.insert <small>function</small></h2></div>
+					
+						<p>Marks the query as being an INSERT statement</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.insert([arguments])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>arguments</strong> ...*
+									<em>Optional </em>
+									<br>All arguments received are passed to a &#x60;query.set()&#x60; call
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryinsert .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function insert () {
+    attributes.builder = 'insert';
+    if (arguments.length) {
+      this.set([].slice.call(arguments));
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryupdate">
+						<div class="page-header"><h2>query.update <small>function</small></h2></div>
+					
+						<p>Marks the query as being an UPDATE statement</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.update([tablename], [alias])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									<em>Optional </em>
+									<br>Table to update
+								</li>
+							
+								<li class="list-group-item">
+									<strong>alias</strong> string
+									<em>Optional </em>
+									<br>An alias to use for the table
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryupdate .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function update (tablename, alias) {
+    attributes.builder = 'update';
+    if (tablename) {
+      this.table(tablename, alias);
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerytable">
+						<div class="page-header"><h2>query.table <small>function</small></h2></div>
+					
+						<p>Defines the table that the query should be performed on</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.table(tablename, [alias])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>alias</strong> string
+									<em>Optional </em>
+									<br>An alias to use for the table
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerytable .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function table (tablename, alias) {
+    attributes.tableName = tablename;
+    if (isDefined(alias)) {
+      attributes.alias = alias;
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerydatabase">
+						<div class="page-header"><h2>query.database <small>function</small></h2></div>
+					
+						<p>Defines what database that the query should be performed on.</p><p>This is only nessisary if your connection has not defined a database<br />to use, or the query needs to act upon a database other than the one<br />currently in use.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.database(dbname, [tablename], [alias])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>dbname</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>alias</strong> string
+									<em>Optional </em>
+									<br>An alias to use for the table
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerydatabase .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function database (dbname, tablename, alias) {
+    attributes.database = dbname;
+    if (tablename) {
+      attributes.tableName = tablename;
+    }
+    if (alias) {
+      attributes.alias = alias;
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerycolumns">
+						<div class="page-header"><h2>query.columns <small>function</small></h2></div>
+					
+						<p>Defines what columns a SELECT statement should return, or what tables<br />a DELETE statement should delete from.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Column names can be in any format allowed in a MySQL statement.</p><p>Calling multiple times will replace the previous columns with the new set.</p><p>By default, all queries have <code>*</code> for SELECTs and nothing for DELETEs</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.columns(columns, column2)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>columns</strong> string, Array&lt;string&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>column2</strong> ...string
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.columns('users.*', 'passwords.hash as password_hash');
+
+query.columns(['username', 'firstname', 'lastname']);</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerycolumns .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function columns () {
+    var args = flatten([].slice.call(arguments));
+
+    args = args.map(function (column) {
+      if (typeof column === 'string') {
+        return column;
+      }
+
+      if (typeof column === 'number' || column instanceof Date) {
+        return createBinding(column);
+      }
+
+      if (typeof column === 'object' && isDefined(column.data)) {
+        return createBinding(column.data, column.modifier);
+      }
+
+      console.log(column);
+      throw new TypeError('Unknown column type');
+    });
+
+    attributes.columns = args;
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerycomparisonMethod">
+						<div class="page-header"><h2>query.comparisonMethod <small>function</small></h2></div>
+					
+						<p>Controls the boolean operator used to combine multiple WHERE clauses</p><p>By default, Queryize will combine all top level WHERE clauses with AND operators.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.comparisonMethod(condition)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>condition</strong> string
+									
+									<br>&quot;AND&quot; or &quot;OR&quot;
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerycomparisonMethod .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function comparisonMethod (condition) {
+    switch (condition) {
+    case true:
+    case 'and':
+    case 'AND':
+    case 'yes':
+      attributes.whereBoolean = ' AND '; break;
+
+    case false:
+    case 'or':
+    case 'OR':
+    case 'no':
+      attributes.whereBoolean = ' OR '; break;
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhere">
+						<div class="page-header"><h2>query.where <small>function</small></h2></div>
+					
+						<p>Adds one or more WHERE clauses to the query.</p><p>Calling multiple times will append more clauses onto the stack.</p><p>Calling without any arguments will empty the stack.</p><p>If an <code>operator</code> is provided, it will be used for all comparisons derived from this call.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">//removes all existing where clauses
+query.where()</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where(clause)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>clause</strong> string
+									
+									<br>A pre-written WHERE statement for direct insertion into the query
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('password IS NOT NULL')
+// WHERE password IS NOT NULL</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where(clauses)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>clause</strong> Array&lt;string&gt;
+									
+									<br>Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.where(['account.balance > 0', 'account.gratis IS TRUE'])
+// WHERE account.balance > 0 OR account.gratis IS TRUE
+
+query.where(['AND', 'client.active IS TRUE', 'client.paidthru < NOW()'])
+// WHERE client.active IS TRUE AND client.paidthru < NOW()</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where(field, value, [operator], [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;
+									
+									<br>The table field(s) to match against
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, Array&lt;string&gt;
+									
+									<br>The value(s) to match with (if more than one, performs an OR comparison of each)
+								</li>
+							
+								<li class="list-group-item">
+									<strong>operator</strong> string
+									<em>Optional  (Default: &#x27;=&#x27;)</em>
+									<br>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('age', 21, '<')
+// WHERE age < ?
+// Data: [21]
+
+query.where('created', new Date('2014-01-01'), '>=', 'DATE')
+// WHERE created >= DATE(?)
+// Data: ['2014-01-01 00:00:00']</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where(pairs, [operator], [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>pairs</strong> Object
+									
+									<br>Collection of field/value pairs to match against
+								</li>
+							
+								<li class="list-group-item">
+									<strong>operator</strong> string
+									<em>Optional  (Default: &#x27;=&#x27;)</em>
+									<br>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.where({studio:'Paramount', franchise: 'Star Trek' });
+// WHERE studio = ? AND franchise = ?
+// Data: ['Paramount', 'Star Trek']
+
+query.where({'property.ownership': ['Own', 'Rent']})
+// WHERE property.ownership IN (?, ?)
+// Data: ['Own', 'Rent']
+
+query.where({'user.gender':'M, not: true, 'profile.spouse': null})
+// WHERE user.gender = ? AND profile.spouse != NULL
+// Data: ['M']</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhere .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function where (clause, value, operator, modifier) {
+
+    if (!isDefined(clause)) {
+      attributes.where = [];
+      return this;
+    }
+
+    // if a value is defined, then we're performing a field > value comparison
+    // and must parse that first.
+    if (value !== undefined && (typeof clause === 'string' || isArray(clause))) {
+      clause = _processWhereCondition(clause, value, operator, modifier);
+
+    // if there was no value, check to see if we got an object based where definition
+    } else if (typeof clause === 'object' && !isArray(clause)) {
+      modifier = operator;
+      operator = value;
+      clause = _processWhereObject(clause, operator, modifier);
+    }
+
+    // if we've got an array at this point, then we should parse it as if it were
+    // a collection of possible conditions in an OR
+    if (isArray(clause)) {
+      clause = flatten(clause).map(function (c) {
+        switch (typeof c) {
+        case 'string': return c;
+        case 'object': return _processWhereObject(clause, operator, modifier);
+        default:
+          throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
+        }
+      });
+
+      var l = clause.length, subBoolean = ' OR ';
+      if (l === 1) {
+        clause = clause[0];
+      } else if (l > 1) {
+        // if the first value in the array is "AND", reverse our typical boolean.
+        if (clause[0] === 'AND') {
+          subBoolean = 'AND';
+          clause.shift();
+        }
+        clause = '(' + clause.join(subBoolean) + ')';
+      } else {
+        clause = null;
+      }
+    }
+
+    // by now the clause should be a string. if it isn't, then someone gave us an unusable clause
+    if (typeof clause === 'string') {
+      attributes.where.push(clause);
+    } else {
+      throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
+    }
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="function_processWhereCondition">
+						<div class="page-header"><h2>_processWhereCondition <small>function</small></h2></div>
+					
+						<p>Handles basic (field, value) where clauses</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined._processWhereCondition(field, value, [operator], [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, Array&lt;string&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>operator</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#function_processWhereCondition .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function _processWhereCondition (field, value, operator, modifier) {
+    if (!operator) operator = '=';
+
+    if (isArray(field)) {
+      return field.map(function (field) {
+        return _processWhereCondition(field, value, operator, modifier);
+      });
+    }
+
+    // if value is an array, then we need to compare against multiple values
+    if (isArray(value)) {
+      // if the operator is a plain equals, we should perform an IN() instead of multiple ORs
+      if (operator === '=') {
+
+        //process the values into bindings, and join the bindings inside an IN() clause
+        return field + ' IN (' + value.map(function (v) { return createBinding(v, modifier); }).join(',') + ')';
+      } else if (operator === '!=') {
+
+        //process the values into bindings, and join the bindings inside an IN() clause
+        return field + ' NOT IN (' + value.map(function (v) { return createBinding(v, modifier); }).join(',') + ')';
+
+      } else {
+
+        // process each value individually as a single condition and join the values in an OR
+        return value.map(function (value) { return _processWhereCondition(field, value, operator, modifier); });
+
+      }
+    }
+
+    return [field, operator, createBinding(value, modifier)].join(' ');
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece private " id="function_processWhereObject">
+						<div class="page-header"><h2>_processWhereObject <small>function</small></h2></div>
+					
+						<p>Handles object based where clauses</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">undefined._processWhereObject(clause, [operator], [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>clause</strong> Object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>operator</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#function_processWhereObject .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function _processWhereObject (clause, operator, modifier) {
+    if (!operator) operator = '=';
+
+    var not = false;
+    clause = Object.keys(clause).map(function (field) {
+      // if the object contains a 'not' key, all subsequent keys parsed will be negations.
+      if (field === 'not' && clause[field] === true) {
+        not = true;
+        if (operator === '=') operator = '!=';
+        return undefined;
+      }
+
+      return _processWhereCondition(field, clause[field], operator, modifier);
+    });
+
+    clause = flatten(clause).filter(function (d) { return d;});
+
+    if (clause.length === 1) {
+      return clause[0];
+    } else if (clause.length > 1) {
+      return '(' + clause.join(' AND ') + ')';
+    }
+
+    return undefined;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhereBetween">
+						<div class="page-header"><h2>query.whereBetween <small>function</small></h2></div>
+					
+						<p>Adds a where condition for a field between two values.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.whereBetween(field, from, to, modifier)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>from</strong> string, number
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>to</strong> string, number
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhereBetween .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function whereBetween (field, from, to, modifier) {
+    where([field, 'BETWEEN', createBinding(from, modifier), 'AND', createBinding(to, modifier)].join(' '));
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhereLike">
+						<div class="page-header"><h2>query.whereLike <small>function</small></h2></div>
+					
+						<p>Shortcut for performing a LIKE comparison on a field and value</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.whereLike(field, value, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;, Object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, number, Array&lt;string, number&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhereLike .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function whereLike (field, value, modifier) {
+    if (typeof field === 'object') {
+      where(field, 'LIKE', modifier);
+    } else {
+      where(field, value, 'LIKE', modifier);
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhereNot">
+						<div class="page-header"><h2>query.whereNot <small>function</small></h2></div>
+					
+						<p>Shortcut for performing an != comparisoon on a field and value</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.whereNot(field, value, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;, Object
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, number, Array&lt;string, number&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhereNot .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function whereNot (field, value, modifier) {
+    if (typeof field === 'object') {
+      where(field, '!=', modifier);
+    } else {
+      where(field, value, '!=', modifier);
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhereNotLike">
+						<div class="page-header"><h2>query.whereNotLike <small>function</small></h2></div>
+					
+						<p>Shortcut for performing a NOT LIKE comparison on a field and value</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.whereNotLike(field, value, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;, Object
+									
+									<br>[description]
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, number, Array&lt;string, number&gt;
+									
+									<br>[description]
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>[description]
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhereNotLike .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function whereNotLike (field, value, modifier) {
+    if (typeof field === 'object') {
+      where(field, 'NOT LIKE', modifier);
+    } else {
+      where(field, value, 'NOT LIKE', modifier);
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerywhereInRange">
+						<div class="page-header"><h2>query.whereInRange <small>function</small></h2></div>
+					
+						<p>Creates a where condition for if a field fit within a boundry of values.</p><p>Omitting/passing null to the <code>from</code> or <code>to</code> arguments will make the range boundless on that side.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.whereInRange(field, [from], [to], [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>field</strong> string, Array&lt;string&gt;
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>from</strong> string, number, Date
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>to</strong> string, number, Date
+									<em>Optional </em>
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									<em>Optional </em>
+									<br>
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereInRange('profile.income', 18000, 60000)
+// Where profile.income BETWEEN ? AND ?
+// Data: [18000, 60000]
+
+query.whereInRange('age', 21)
+// WHERE age >= ?
+// Data: [21]
+
+query.whereInRange('product.cost', null, 100)
+// WHERE product.cost <= ?
+// Data: [100]</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerywhereInRange .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function whereInRange (field, from, to, modifier) {
+    if (isDefined(from) && isDefined(to)) {
+      whereBetween(field, from, to, modifier);
+    } else if (isDefined(from)) {
+      where(field, from, '>=', modifier);
+    } else if (isDefined(to)) {
+      where(field, to, '<=', modifier);
+    }
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryorderBy">
+						<div class="page-header"><h2>query.orderBy <small>function</small></h2></div>
+					
+						<p>Defines what columns a select statement should use to sort the results.<br />Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous sort order with the new values.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.orderBy(columns)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>columns</strong> ...string, Array&lt;string&gt;
+									
+									<br>Column names can be in any format allowed in a MySQL statement.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.orderBy('category', 'DATE(date_posted) DESC');</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryorderBy .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function orderBy (columns) {
+    var args = flatten([].slice.call(arguments));
+
+    attributes.orderBy = args;
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerygroupBy">
+						<div class="page-header"><h2>query.groupBy <small>function</small></h2></div>
+					
+						<p>Defines what columns and conditions a select statement should group the results under.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous grouping rules with the new values.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.groupBy(columns)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>columns</strong> ...string, Array&lt;string&gt;
+									
+									<br>Column names can be in any format allowed in a MySQL statement.
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.groupBy('id');</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerygroupBy .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function groupBy (columns) {
+    var args = flatten([].slice.call(arguments));
+
+    attributes.groupBy = args;
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerydistinct">
+						<div class="page-header"><h2>query.distinct <small>function</small></h2></div>
+					
+						<p>Defines if a SELECT statement should return distinct results only</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.distinct(on)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>on</strong> boolean
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerydistinct .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function distinct (on) {
+    attributes.distinct = isDefined(on) ? true : on;
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerylimit">
+						<div class="page-header"><h2>query.limit <small>function</small></h2></div>
+					
+						<p>Defines the maximum results the query should return, and the starting offset of the first row within a set.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.limit(max, [offset])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>max</strong> number
+									
+									<br>Total results to return
+								</li>
+							
+								<li class="list-group-item">
+									<strong>offset</strong> number
+									<em>Optional </em>
+									<br>Starting offset of first row within the results
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerylimit .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function limit (max, offset) {
+    if (isDefined(max)) max = 0;
+    if (isDefined(offset)) offset = 0;
+
+    attributes.limit = max ? ['LIMIT ',Number(offset), ', ', Number(max)].join() : false;
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryset">
+						<div class="page-header"><h2>query.set <small>function</small></h2></div>
+					
+						<p>Defines what data to set the specified columns to during INSERT and UPDATE queries</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.set(statement)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>statement</strong> string
+									
+									<br>A fully written set condition
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.set(column, value, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>column</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>value</strong> string, number
+									
+									<br>
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.set(data, [modifier])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>data</strong> Object
+									
+									<br>A plain object collection of column/value pairs
+								</li>
+							
+								<li class="list-group-item">
+									<strong>modifier</strong> string
+									
+									<br>[description]
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('user.lastlogin = NOW()')
+// SET user.lastlogin = NOW()
+
+query.set('address', '9 Pseudopolis Yard')
+// SET address = ?
+// Data: ['9 Pseudopolis Yard']
+
+query.set({firstname: 'Susan', lastname: 'Sto Helet'})
+// SET firstname = ?, lastname = ?
+// DATA: ['Susan', 'Sto Helet']</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryset .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function set (clause, value, modifier) {
+
+    if (!isDefined(clause)) throw new Error('You must define a field to set.');
+
+    if (typeof clause === 'object') {
+      Object.keys(clause).forEach(function (field) {
+        set(field, clause[field], value);
+      });
+      return this;
+    }
+
+    // if we received a value, create a set clause
+    if (isDefined(value)) {
+      if (!isValidPrimative(value)) {
+        throw new TypeError('Unknown data type in set clause');
+      }
+      clause = [clause, '=', createBinding(value, modifier)].join(' ');
+    }
+
+    attributes.set.push(clause);
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryjoin">
+						<div class="page-header"><h2>query.join <small>function</small></h2></div>
+					
+						<p>Adds a table join to the query.</p><p>Queryize will append any missing JOIN command at the beginning of a statement</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.join(statement)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>statement</strong> string
+									
+									<br>Fully formed join statement
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.join(tablename, options)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>tablename</strong> string
+									
+									<br>
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> Object
+									
+									<br>Plain object containing options for the join
+								</li>
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.join(options)</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>options</strong> Object
+									
+									<br>Plain object containing options for the join
+								</li>
+							
+							</ol>
+							
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders o ON o.client_id = c.id')
+query.join('JOIN orders o ON o.client_id = c.id')
+query.join('orders o ON o.client_id = c.id')
+query.join('orders', {alias: 'o', on: 'o.client_id = c.id'})
+query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
+query.join({table: 'orders', alias: 'o', on: {'o.client_id':'c.id'})
+// JOIN orders o ON o.client_id = c.id
+
+query.join('LEFT JOIN orders o ON o.client_id = c.id')
+query.join('orders', {alias: 'o', type: 'LEFT', on: 'o.client_id = c.id'})
+query.join({table: 'orders', alias: 'o', type: 'LEFT' on: {'o.client_id':'c.id'})
+// LEFT JOIN orders o ON o.client_id = c.id
+
+query.join('orders', {using: ['client_id', 'user_id'])
+// JOIN orders USING (client_id, user_id)
+
+query.join('orders', {on: {'o.client_id':'c.id', not:true, o.status: [4,5]})
+// JOIN orders ON o.client_id = c.id AND o.status NOT IN (?,?)
+// Data: [4, 5]
+
+query.join('orders', {on: {'o.client_id':'c.id', not:true, o.condition: {data: 'A'}})
+// JOIN orders ON o.client_id = c.id AND o.status != ?
+// Data: ['A']</code></pre>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining </em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryjoin .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function join (clause, options) {
+    if (!isDefined(clause)) throw new Error('You must define a table to join against.');
+
+    if (typeof clause === 'object') {
+
+      if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+      if (!clause.table) throw new Error('You must define a table to join against');
+
+    } else if (typeof options === 'object') {
+
+      options = Object.create(options);
+      options.table = clause;
+      clause = options;
+
+    } else if (typeof clause === 'string' && clause.search(joinTest) < 0) {
+
+      clause = 'JOIN ' + clause;
+
+    }
+
+    if (typeof clause === 'object') {
+
+      var stack = [];
+
+      if (clause.type) stack.push(clause.type);
+      stack.push('JOIN');
+      stack.push(clause.table);
+      if (clause.alias) stack.push(clause.alias);
+
+      if (clause.using) {
+        stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(', ') : clause.using) + ')' );
+
+      } else if (clause.on) {
+        stack.push( 'ON (' + _processJoinOns(clause.on, clause.onBoolean || 'AND') + ')' );
+
+      }
+
+      clause = stack.join(' ');
+    }
+
+    attributes.joins.push(clause);
+
+    return this;
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryinnerJoin">
+						<div class="page-header"><h2>query.innerJoin <small>function</small></h2></div>
+					
+						<p>Shortcut for creating an INNER JOIN</p><p>See <code>query.join()</code> for argument details</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.innerJoin()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryinnerJoin .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function innerJoin() {
+    // See _makeJoiner Function
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryleftJoin">
+						<div class="page-header"><h2>query.leftJoin <small>function</small></h2></div>
+					
+						<p>Shortcut for creating a LEFT JOIN</p><p>See <code>query.join()</code> for argument details</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.leftJoin()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryleftJoin .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function leftJoin() {
+    // See _makeJoiner Function
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryrightJoin">
+						<div class="page-header"><h2>query.rightJoin <small>function</small></h2></div>
+					
+						<p>Shortcut for creating a RIGHT JOIN</p><p>See <code>query.join()</code> for argument details</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.rightJoin()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+							<div class="panel-footer"><strong>Returns: </strong> <em>{query} Exports &#x60;this&#x60; for chaining</em></div>
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryrightJoin .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function rightJoin() {
+    // See _makeJoiner Function
+  }
+
+  function _makeJoiner(type) {
+    return function (clause, options) {
+
+      if (typeof clause === 'object') {
+
+        if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
+        if (!clause.table) throw new Error('You must define a table to join against');
+
+      } else if (typeof options === 'object') {
+
+        options = Object.create(options);
+        options.table = clause;
+        clause = options;
+
+      }
+
+      if (typeof clause === 'object') {
+        clause.type = type;
+      } else {
+        clause = clause.search(joinTest) > -1 ? clause.replace(joinTest, type+' JOIN ') : type+' JOIN ' + clause;
+      }
+
+      join(clause);
+
+      return this;
+    };
+  }
+
+  function _processJoinOns(ons, onBoolean) {
+
+    if (typeof ons === 'string') {
+      return ons;
+    }
+
+    if (isArray(ons)) {
+      ons = ons.map(function (d) { return _processJoinOns(d); });
+    }
+
+    if (typeof ons === 'object' && !isArray(ons)) {
+      var not = false;
+      ons = Object.keys(ons).map(function (field) {
+        var value = ons[field];
+
+        // if the object contains a 'not' key, all subsequent keys parsed will be negations.
+        if (field === 'not' && value === true) {
+          not = true;
+          return undefined;
+        }
+
+        // if value is an array, perform an IN() on the values
+        if (isArray(value)) {
+          value = value.map(function (d) {return createBinding(d); });
+          return [field, not ? 'NOT IN' : 'IN', '(', value.join(', '), ')'].join(' ');
+
+        // if value is a string or a number, process as if a normal pairing of columns
+        } else if (typeof value === 'string') {
+          return [field, not ? '!=' : '=', value].join(' ');
+
+        // finally, process the value as if it were an actual value for binding
+        } else if (isValidPrimative(value)) {
+          return [field, not ? '!=' : '=', createBinding(value)].join(' ');
+
+        // if value is an object, verify if it's a data object, and if so create a binding for the value
+        } else if (typeof value === 'object' && value.data !== undefined) {
+          return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
+        }
+
+        // we don't know how to handle the value
+        throw new Error('Encountered unexpected value while parsing a JOIN ON condition for ' + field);
+      });
+    }
+
+    //remove any undefined or empty string values
+    ons = ons.filter(function (d) { return d; });
+
+    return ons.join(' '+onBoolean+' ');
+  }
+
+
+  function _buildTableName () {
+    var q = [];
+    
+    if (attributes.database) {
+      q.push('`' + attributes.database + '`.');
+    }
+    
+    q.push('`' + attributes.tableName + '`');
+    
+    if (attributes.alias) {
+      q.push(' ' + attributes.alias);
+    }
+
+    return q.join('');
+  }
+
+
+  var builders = {
+    'select': function buildSelect() {
+      var columns = attributes.columns.join(', ');
+      if (attributes.distinct) columns = 'DISTINCT ' + columns;
+
+      var q = ['SELECT', columns, 'FROM', _buildTableName()];
+
+      q = q.concat(attributes.joins);
+
+      if (attributes.where.length) {
+        q.push('WHERE');
+        q.push(attributes.where.join(attributes.whereBoolean));
+      }
+
+      if (attributes.groupBy.length) {
+        q.push('GROUP BY');
+        q.push(attributes.groupBy.join(', '));
+      }
+
+      if (attributes.orderBy.length) {
+        q.push('ORDER BY');
+        q.push(attributes.orderBy.join(', '));
+      }
+
+      if (attributes.limit) {
+        q.push(attributes.limit);
+      }
+
+      q = q.join(' ');
+
+      return q;
+    },
+
+    'update': function buildUpdate() {
+      var q = ['UPDATE', _buildTableName()];
+
+      if (!attributes.set.length) {
+        throw new Error('No values to insert have been defined');
+      }
+
+      q = q.concat(attributes.joins);
+
+      q.push('SET');
+      q.push(attributes.set.join(', '));
+
+      if (!attributes.where.length) {
+        throw new Error('No where clauses have been defined for the delete query.');
+      }
+
+      q.push('WHERE');
+      q.push(attributes.where.join(attributes.whereBoolean));
+
+      q = q.join(' ');
+
+      return q;
+    },
+
+    'insert': function buildInsert() {
+      var q = ['INSERT INTO', _buildTableName()];
+
+      if (!attributes.set.length) {
+        throw new Error('No values to insert have been defined');
+      }
+
+      q.push('SET');
+      q.push(attributes.set.join(', '));
+
+      q = q.join(' ');
+
+      return q;
+    },
+
+    'delete': function buildDelete() {
+      var q = ['DELETE'];
+
+      if (attributes.columns.length) {
+        var columns = attributes.columns.join(', ');
+        if (columns && columns !== '*') q.push(columns);
+      }
+
+      q.push('FROM');
+      q.push(_buildTableName());
+
+      q = q.concat(attributes.joins);
+
+      if (!attributes.where.length) {
+        throw new Error('No where clauses have been defined for the delete query.');
+      }
+      
+      q.push('WHERE');
+      q.push(attributes.where.join(attributes.whereBoolean));
+
+      q = q.join(' ');
+
+      return q;
+    }
+
+  };</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionquerycompile">
+						<div class="page-header"><h2>query.compile <small>function</small></h2></div>
+					
+						<p>Compiles the final MySQL query</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.compile()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionquerycompile .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function compile () {
+    if (!attributes.builder || !builders[attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
+    if (!attributes.tableName) throw new Error('No table name has been defined');
+
+    var queryString = builders[attributes.builder]();
+
+    return _convertNamedParameters(queryString);
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="functionqueryexec">
+						<div class="page-header"><h2>query.exec <small>function</small></h2></div>
+					
+						<p>Compiles the MySQL query and runs it using the given <code>connection</code> object from node-mysql or node-mysql2</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.exec(connection, [options], [callback])</div></div>
+							<ol class="list-group">
+							
+								<li class="list-group-item">
+									<strong>connection</strong> Object
+									
+									<br>node-mysql connection object
+								</li>
+							
+								<li class="list-group-item">
+									<strong>options</strong> Object
+									<em>Optional </em>
+									<br>Options object to be passed to &#x60;connection.query&#x60; with the query string and data mixed in.
+								</li>
+							
+								<li class="list-group-item">
+									<strong>callback</strong> runCallback
+									<em>Optional </em>
+									<br>Callback function to be invoked when the query completes.
+								</li>
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionqueryexec .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function exec (connection, options, callback) {
+    var q = this.compile();
+
+    if (debugEnabled) console.log(q);
+
+    if (typeof options === 'function') {
+      callback = options;
+      return connection.query(q.query, q.data, callback);
+    } else if (typeof options !== 'object') {
+      options = {};
+    }
+    options.sql = q.query;
+    options.values = q.data;
+    
+    // run as a prepared query if the connection supports it
+    if (typeof connection.execute === 'function') {
+      return connection.execute(options, callback);
+    } else {
+      return connection.query(options, callback);
+    }
+  }</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="methodqueryizeselect">
+						<div class="page-header"><h2>queryize.select <small>method</small></h2></div>
+					
+						<p>Shortcut for creating a new select query</p><p>See <code>query.select()</code> for details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">queryize.queryize.select()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizeselect .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select = function () {
+  var q = queryize();
+  q.select.apply(q, arguments);
+  return q;
+};</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="methodqueryizeupdate">
+						<div class="page-header"><h2>queryize.update <small>method</small></h2></div>
+					
+						<p>Shortcut for creating a new update query</p><p>See <code>query.update()</code> for details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">queryize.queryize.update()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizeupdate .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update = function () {
+  var q = queryize();
+  q.update.apply(q, arguments);
+  return q;
+};</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="methodqueryizeinsert">
+						<div class="page-header"><h2>queryize.insert <small>method</small></h2></div>
+					
+						<p>Shortcut for creating a new insert query</p><p>See <code>query.insert()</code> for details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">queryize.queryize.insert()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizeinsert .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert = function () {
+  var q = queryize();
+  q.insert.apply(q, arguments);
+  return q;
+};</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+					<div class="piece  " id="methodqueryizedeleteFrom">
+						<div class="page-header"><h2>queryize.deleteFrom <small>method</small></h2></div>
+					
+						<p>Shortcut for creating a new delete query</p><p>See <code>query.select()</code> for details.</p>
+
+						<h3>Usage:</h3>
+						
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">queryize.queryize.deleteFrom()</div></div>
+							<ol class="list-group">
+							
+							</ol>
+							
+							
+						</div>
+						
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizedeleteFrom .panel-collapse">
+								<i class="glyphicon glyphicon-plus"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.deleteFrom = function () {
+  var q = queryize();
+  q.deleteFrom.apply(q, arguments);
+  return q;
+};
+
+queryize.deleet = queryize.deleteFrom;
+
+module.exports = queryize;</code></pre>
+							</div>
+						</div>
+					
+					</div>
+				
+				</div>
+			</div>
+		</div>
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+	</body>
+</html>
