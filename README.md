@@ -20,7 +20,9 @@ var select = require('queryize').select;
 var query = select();
 ```
 
-*More documentation forthcoming, until then, have some examples*
+**Visit [queryizejs.com](http://queryizejs.com/) for documentation.**
+
+##Examples
 
 ```js
 var select = require('queryize').select;
