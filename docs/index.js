@@ -30,7 +30,7 @@ parsed.forEach(function (item, index) {
 
 		if (!currentSignature.signature) {
 			currentSignature.signature =
-				(item.ctx.parent + '.' || '') +
+				(item.ctx.parent && item.ctx.parent + '.' || '') +
 				item.ctx.name + '(' +
 				currentSignature.params.map(function (p) {return p.optional ? '['+p.name+']' : p.name;}).join(', ') +
 				')';
@@ -97,9 +97,10 @@ parsed.forEach(function (item, index) {
 			ensureSignature();
 			currentSignature.examples.push(tag.string.trim());
 			break;
-		case 'returns':
+		case 'return':
 			ensureSignature();
-			currentSignature.returns = tag.string;
+			tag.types = tag.types.join(', ');
+			currentSignature.returns = tag;
 			break;
 		}
 	});
@@ -154,6 +155,8 @@ parsed.forEach(function (item, index) {
 		achunk.isAlias = true;
 		category.push(achunk);
 	});
+
+	item.aliases = item.aliases.join(', ');
 });
 
 

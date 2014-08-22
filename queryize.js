@@ -21,6 +21,9 @@ function _uniqueId(prefix) {
  * @constructor
  * @param  {query|Object} [original] An existing query object to duplicate.
  * @return {query} Returns a `query` instance.
+ * @example
+ * var queryize = require('queryize');
+ * var query = queryize();
  */
 var queryize = function (original) {
 
@@ -68,7 +71,7 @@ var queryize = function (original) {
 	 * @private
 	 * @param  {Array} input The top level array to flatten
 	 * @param  {boolean} [includingObjects=false] If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
-	 * @returns {Array}
+	 * @return {Array}
 	 */
 	function flatten(input, includingObjects) {
 		var result = [];
@@ -96,7 +99,7 @@ var queryize = function (original) {
 	 * @private
 	 * @param {Object} object The destination object.
 	 * @param {...Object} [source] The source objects.
-	 * @returns {Object} The now extended destination object
+	 * @return {Object} The now extended destination object
 	 */
 	function extend(object) {
 		if (!object) {
@@ -126,7 +129,7 @@ var queryize = function (original) {
 	 * If useBoundParameters is turned off, it replaces the placeholders with their escaped values.
 	 * @private
 	 * @param  {string} queryString The query string to be processed
-	 * @returns {compiledQuery} The processed query
+	 * @return {compiledQuery} The processed query
 	 */
 	function _convertNamedParameters (queryString) {
 		var data = [];
@@ -157,7 +160,7 @@ var queryize = function (original) {
 	 * Escapes a value for use in a MySQL query without SQL injection
 	 * @private
 	 * @param  {*} value The value to be escaped
-	 * @returns {string|number} The escaped value ready to be used in a query.
+	 * @return {string|number} The escaped value ready to be used in a query.
 	 */
 	function _escapeValue(value) {
 		if (value === undefined || value === null) {
@@ -197,7 +200,7 @@ var queryize = function (original) {
 	 * @private
 	 * @name export
 	 * @memberOf query
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function exportAttributes () {
 		// the easiest way to make sure all the arrays are copied instead of passed by reference
@@ -214,7 +217,7 @@ var queryize = function (original) {
 	 * @category Data
 	 * @param  {string} key  The binding name to store the value under
 	 * @param  {mixed} value The data to be stored
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function insertBinding (key, value) {
 		if (typeof value === 'object') {
@@ -247,7 +250,7 @@ var queryize = function (original) {
 	 * @category Data
 	 * @param  {mixed} value The data to be stored
 	 * @param  {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
 	 *
 	 * query.createBinding('name@example.com');
@@ -286,8 +289,14 @@ var queryize = function (original) {
 	 *
 	 * @memberOf query
 	 * @category Action
-	 * @param {...*} [arguments] All arguments received are passed to a `query.columns()` call
-	 * @returns {query} Exports `this` for chaining
+	 * @param {string|Array<string>} [columns] All arguments received are passed to a `query.columns()` call
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * var q = queryize()
+	 *   .select('name')
+	 *   .from('users')
+	 *   .where('user.id', 128)
+	 *   .compile()
 	 */
 	function select () {
 		attributes.builder = 'select';
@@ -307,7 +316,19 @@ var queryize = function (original) {
 	 * @category Action
 	 * @param  {string|Array<string>} [tablename] Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.
 	 * @param  {string} [alias] An alias to use for the table
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * var q = queryize()
+     *   .deleteFrom('users')
+     *   .where({'u.id':1})
+     *   .compile();
+     *
+     * @example
+     * var q = queryize()
+     *   .from('logs')
+     *   .whereInRange('dts', null, '2014-06-01')
+     *   .deleet()
+     *   .compile()
 	 */
 	function deleteFrom (tablename, alias) {
 		attributes.builder = 'delete';
@@ -330,8 +351,15 @@ var queryize = function (original) {
 	 *
 	 * @memberOf query
 	 * @category Action
-	 * @param {...*} [arguments] All arguments received are passed to a `query.set()` call
-	 * @returns {query} Exports `this` for chaining
+	 * @param {mixed} [arguments] All arguments received are passed to a `query.set()` call
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * queryize()
+	 *   .insert({name: 'joe'})
+	 *   .into('users')
+	 *   .exec(mysqlConnection, function (result) {
+	 *     var id = result.insertId;
+	 *   })
 	 */
 	function insert () {
 		attributes.builder = 'insert';
@@ -348,7 +376,13 @@ var queryize = function (original) {
 	 * @category Action
 	 * @param  {string} [tablename] Table to update
 	 * @param  {string} [alias] An alias to use for the table
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * queryize()
+	 *   .update('users')
+	 *   .set('name', 'bob')
+	 *   .where('id', 234)
+	 *   .exec(mysqlConnection) //fire and forget
 	 */
 	function update (tablename, alias) {
 		attributes.builder = 'update';
@@ -359,7 +393,8 @@ var queryize = function (original) {
 	}
 
 	/**
-	 * Defines the table that the query should be performed on
+	 * Defines the table that the query should be performed on.
+	 * Can be called directly but is better called via the syntactically correct aliases.
 	 *
 	 * @memberOf query
 	 * @category Sourcing
@@ -367,7 +402,22 @@ var queryize = function (original) {
 	 * @alias from
 	 * @param  {string} tablename
 	 * @param  {string} [alias] An alias to use for the table
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * queryize.update()
+	 *   .table('users')
+	 *   .set('name', 'bob')
+	 *   .where('id', 234)
+	 *   .exec(mysqlConnection) //fire and forget
+	 * @example
+	 * var q = queryize.select()
+	 *   .from('users')
+	 *   .compile()
+	 * @example
+	 * queryize.insert()
+	 *   .into('orders')
+	 *   .set(order)
+	 *   .exec(mysqlConnection) //fire and forget
 	 */
 	function table (tablename, alias) {
 		attributes.tableName = tablename;
@@ -380,7 +430,7 @@ var queryize = function (original) {
 	/**
 	 * Defines what database that the query should be performed on.
 	 *
-	 * This is only nessisary if your connection has not defined a database
+	 * This is only necessary if your connection has not defined a database
 	 * to use, or the query needs to act upon a database other than the one
 	 * currently in use.
 	 *
@@ -389,7 +439,7 @@ var queryize = function (original) {
 	 * @param  {string} dbname
 	 * @param  {string} [tablename]
 	 * @param  {string} [alias] An alias to use for the table
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function database (dbname, tablename, alias) {
 		attributes.database = dbname;
@@ -418,11 +468,15 @@ var queryize = function (original) {
 	 * @category Sourcing
 	 * @param {string|Array<string>} columns
 	 * @param {...string} column2
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
 	 *
-	 * query.columns('users.*', 'passwords.hash as password_hash');
+	 * var query = queryize.select()
+	 *   .columns('users.*', 'passwords.hash as password_hash')
+	 *   .from('users')
+	 *   .join('passwords', {'users.id':'passwords.user_id'})
 	 *
+	 * @example
 	 * query.columns(['username', 'firstname', 'lastname']);
 	 *
 	 */
@@ -459,7 +513,7 @@ var queryize = function (original) {
 	 * @memberOf query
 	 * @category Reduction
 	 * @param  {string} condition "AND" or "OR"
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function comparisonMethod (condition) {
 		switch (condition) {
@@ -495,7 +549,7 @@ var queryize = function (original) {
 	 * @category Reduction
 	 *
 	 * @signature query.where()
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
 	 *
 	 * //removes all existing where clauses
@@ -503,7 +557,7 @@ var queryize = function (original) {
 	 *
 	 * @signature query.where(clause)
 	 * @param {string} clause A pre-written WHERE statement for direct insertion into the query
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
 	 *
 	 * query.where('password IS NOT NULL')
@@ -511,11 +565,13 @@ var queryize = function (original) {
 	 *
 	 * @signature query.where(clauses)
 	 * @param {Array<string>} clause Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 *
 	 * @example
 	 * query.where(['account.balance > 0', 'account.gratis IS TRUE'])
 	 * // WHERE account.balance > 0 OR account.gratis IS TRUE
 	 *
+	 * @example
 	 * query.where(['AND', 'client.active IS TRUE', 'client.paidthru < NOW()'])
 	 * // WHERE client.active IS TRUE AND client.paidthru < NOW()
 	 *
@@ -524,13 +580,13 @@ var queryize = function (original) {
 	 * @param {string|Array<string>} value The value(s) to match with (if more than one, performs an OR comparison of each)
 	 * @param {string} [operator='='] The operator to use when performing the comparison (e.g. =, !=, >, LIKE, IS NOT, etc)
 	 * @param {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
-	 *
 	 * query.where('age', 21, '<')
 	 * // WHERE age < ?
 	 * // Data: [21]
 	 *
+	 * @example
 	 * query.where('created', new Date('2014-01-01'), '>=', 'DATE')
 	 * // WHERE created >= DATE(?)
 	 * // Data: ['2014-01-01 00:00:00']
@@ -539,18 +595,19 @@ var queryize = function (original) {
 	 * @param {Object} pairs Collection of field/value pairs to match against
 	 * @param {string} [operator='='] The operator to use when performing the comparison (e.g. =, !=, >, LIKE, IS NOT, etc)
 	 * @param {string} [modifier] A MySQL function to wrap the binding in when it is inserted into SQL.
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 *
 	 * @example
-	 *
 	 * query.where({studio:'Paramount', franchise: 'Star Trek' });
 	 * // WHERE studio = ? AND franchise = ?
 	 * // Data: ['Paramount', 'Star Trek']
 	 *
+	 * @example
 	 * query.where({'property.ownership': ['Own', 'Rent']})
 	 * // WHERE property.ownership IN (?, ?)
 	 * // Data: ['Own', 'Rent']
 	 *
+	 * @example
 	 * query.where({'user.gender':'M, not: true, 'profile.spouse': null})
 	 * // WHERE user.gender = ? AND profile.spouse != NULL
 	 * // Data: ['M']
@@ -620,7 +677,7 @@ var queryize = function (original) {
 	 * @param  {string|Array<string>} value
 	 * @param  {string} [operator]
 	 * @param  {string} [modifier]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function _processWhereCondition (field, value, operator, modifier) {
 		if (!operator) operator = '=';
@@ -661,7 +718,7 @@ var queryize = function (original) {
 	 * @param  {Object} clause
 	 * @param  {string} [operator]
 	 * @param  {string} [modifier]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function _processWhereObject (clause, operator, modifier) {
 		if (!operator) operator = '=';
@@ -698,7 +755,11 @@ var queryize = function (original) {
 	 * @param  {string|number} from
 	 * @param  {string|number} to
 	 * @param  {string} modifier
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * query.whereBetween('profile.income', 18000, 60000)
+	 * // Where profile.income BETWEEN ? AND ?
+	 * // Data: [18000, 60000]
 	 */
 	function whereBetween (field, from, to, modifier) {
 		where([field, 'BETWEEN', createBinding(from, modifier), 'AND', createBinding(to, modifier)].join(' '));
@@ -714,7 +775,11 @@ var queryize = function (original) {
 	 * @param  {string|Array<string>|Object} field
 	 * @param  {string|number|Array<string|number>} value
 	 * @param  {string} [modifier]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * queryize.select()
+	 *   .from('users')
+	 *   .whereLike('email', '%gmail.com')
 	 */
 	function whereLike (field, value, modifier) {
 		if (typeof field === 'object') {
@@ -733,7 +798,11 @@ var queryize = function (original) {
 	 * @param  {string|Array<string>|Object} field
 	 * @param  {string|number|Array<string|number>} value
 	 * @param  {string} [modifier]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * queryize.select()
+	 *   .from('users')
+	 *   .whereNot('type', 'Admin')
 	 */
 	function whereNot (field, value, modifier) {
 		if (typeof field === 'object') {
@@ -752,7 +821,7 @@ var queryize = function (original) {
 	 * @param  {string|Array<string>|Object} field    [description]
 	 * @param  {string|number|Array<string|number>} value    [description]
 	 * @param  {string} [modifier] [description]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function whereNotLike (field, value, modifier) {
 		if (typeof field === 'object') {
@@ -774,17 +843,18 @@ var queryize = function (original) {
 	 * @param  {string|number|Date} [from]
 	 * @param  {string|number|Date} [to]
 	 * @param  {string} [modifier]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
-	 *
 	 * query.whereInRange('profile.income', 18000, 60000)
 	 * // Where profile.income BETWEEN ? AND ?
 	 * // Data: [18000, 60000]
 	 *
+	 * @example
 	 * query.whereInRange('age', 21)
 	 * // WHERE age >= ?
 	 * // Data: [21]
 	 *
+	 * @example
 	 * query.whereInRange('product.cost', null, 100)
 	 * // WHERE product.cost <= ?
 	 * // Data: [100]
@@ -810,9 +880,8 @@ var queryize = function (original) {
 	 * @memberOf query
 	 * @category Selection
 	 * @param {...string|Array<string>} columns Column names can be in any format allowed in a MySQL statement.
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 * @example
-	 *
 	 * query.orderBy('category', 'DATE(date_posted) DESC');
 	 */
 	function orderBy (columns) {
@@ -832,11 +901,10 @@ var queryize = function (original) {
 	 *
 	 * @memberOf query
 	 * @category Selection
-	 * @param {...string|Array<string>} columns Column names can be in any format allowed in a MySQL statement.
-	 * @returns {query} Exports `this` for chaining
+	 * @param {string...|Array<string>} columns Column names can be in any format allowed in a MySQL statement.
+	 * @return {query} Exports `this` for chaining
 	 * @example
-	 *
-	 * query.groupBy('id');
+	 * query.groupBy('user.id', 'DATE(dts)');
 	 */
 	function groupBy (columns) {
 		var args = flatten([].slice.call(arguments));
@@ -851,11 +919,11 @@ var queryize = function (original) {
 	 *
 	 * @memberOf query
 	 * @category Selection
-	 * @param  {boolean} on
-	 * @returns {query} Exports `this` for chaining
+	 * @param  {boolean} enable
+	 * @return {query} Exports `this` for chaining
 	 */
-	function distinct (on) {
-		attributes.distinct = isDefined(on) ? true : on;
+	function distinct (enable) {
+		attributes.distinct = isDefined(enable) ? true : enable;
 		return this;
 	}
 
@@ -866,7 +934,7 @@ var queryize = function (original) {
 	 * @category Selection
 	 * @param  {number} max Total results to return
 	 * @param  {number} [offset] Starting offset of first row within the results
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function limit (max, offset) {
 		if (isDefined(max)) max = 0;
@@ -885,27 +953,28 @@ var queryize = function (original) {
 	 *
 	 * @signature query.set(statement)
 	 * @param {string} statement A fully written set condition
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 *
 	 * @signature query.set(column, value, [modifier])
 	 * @param {string} column
 	 * @param {string|number} value
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 *
 	 * @signature query.set(data, [modifier])
 	 * @param {Object} data A plain object collection of column/value pairs
 	 * @param {string} modifier [description]
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 *
 	 * @example
-	 *
 	 * query.set('user.lastlogin = NOW()')
 	 * // SET user.lastlogin = NOW()
 	 *
+	 * @example
 	 * query.set('address', '9 Pseudopolis Yard')
 	 * // SET address = ?
 	 * // Data: ['9 Pseudopolis Yard']
 	 *
+	 * @example
 	 * query.set({firstname: 'Susan', lastname: 'Sto Helet'})
 	 * // SET firstname = ?, lastname = ?
 	 * // DATA: ['Susan', 'Sto Helet']
@@ -947,39 +1016,46 @@ var queryize = function (original) {
 	 *
 	 * @signature query.join(statement)
 	 * @param  {string} statement  Fully formed join statement
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
+	 * @example
+	 * query.join('orders o ON o.client_id = c.id')
+	 * query.join('JOIN orders o ON o.client_id = c.id')
+	 * query.join('LEFT JOIN orders o ON o.client_id = c.id')
 	 *
 	 * @signature query.join(tablename, options)
 	 * @param {string} tablename
 	 * @param {Object} options Plain object containing options for the join
-	 * @returns {query} Exports `this` for chaining
-	 *
-	 * @signature query.join(options)
-	 * @param {Object} options Plain object containing options for the join
-	 * @returns {query} Exports `this` for chaining
-	 *
+	 * @return {query} Exports `this` for chaining
 	 * @example
-	 *
-	 * query.join('orders o ON o.client_id = c.id')
-	 * query.join('JOIN orders o ON o.client_id = c.id')
-	 * query.join('orders o ON o.client_id = c.id')
 	 * query.join('orders', {alias: 'o', on: 'o.client_id = c.id'})
 	 * query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
-	 * query.join({table: 'orders', alias: 'o', on: {'o.client_id':'c.id'})
 	 * // JOIN orders o ON o.client_id = c.id
 	 *
-	 * query.join('LEFT JOIN orders o ON o.client_id = c.id')
-	 * query.join('orders', {alias: 'o', type: 'LEFT', on: 'o.client_id = c.id'})
-	 * query.join({table: 'orders', alias: 'o', type: 'LEFT' on: {'o.client_id':'c.id'})
-	 * // LEFT JOIN orders o ON o.client_id = c.id
-	 *
-	 * query.join('orders', {using: ['client_id', 'user_id'])
-	 * // JOIN orders USING (client_id, user_id)
-	 *
+	 * @example
 	 * query.join('orders', {on: {'o.client_id':'c.id', not:true, o.status: [4,5]})
 	 * // JOIN orders ON o.client_id = c.id AND o.status NOT IN (?,?)
 	 * // Data: [4, 5]
 	 *
+	 * @example
+	 * query.join('orders', {on: {'o.client_id':'c.id', not:true, o.condition: {data: 'A'}})
+	 * // JOIN orders ON o.client_id = c.id AND o.status != ?
+	 * // Data: ['A']
+	 *
+	 * @example
+	 * query.join('orders', {alias: 'o', type: 'LEFT', on: 'o.client_id = c.id'})
+	 * // LEFT JOIN orders o ON o.client_id = c.id
+	 *
+	 * @signature query.join(options)
+	 * @param {Object} options Plain object containing options for the join
+	 * @return {query} Exports `this` for chaining
+	 *
+	 * @example
+	 * query.join({table: 'orders', alias: 'o', on: {'o.client_id':'c.id'})
+	 *
+	 * @example
+	 * query.join({table: 'orders', alias: 'o', type: 'LEFT' on: {'o.client_id':'c.id'})
+	 * // LEFT JOIN orders o ON o.client_id = c.id
+	 * @example
 	 * query.join('orders', {on: {'o.client_id':'c.id', not:true, o.condition: {data: 'A'}})
 	 * // JOIN orders ON o.client_id = c.id AND o.status != ?
 	 * // Data: ['A']
@@ -1039,7 +1115,7 @@ var queryize = function (original) {
 	 * @name innerJoin
 	 * @memberOf query
 	 * @category Inclusion
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function innerJoin() {
 		// See _makeJoiner Function
@@ -1053,7 +1129,7 @@ var queryize = function (original) {
 	 * @name leftJoin
 	 * @memberOf query
 	 * @category Inclusion
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function leftJoin() {
 		// See _makeJoiner Function
@@ -1067,12 +1143,18 @@ var queryize = function (original) {
 	 * @name rightJoin
 	 * @memberOf query
 	 * @category Inclusion
-	 * @returns {query} Exports `this` for chaining
+	 * @return {query} Exports `this` for chaining
 	 */
 	function rightJoin() {
 		// See _makeJoiner Function
 	}
 
+	/**
+	 * Generates the closures for innerJoin, leftJoin and rightJoin
+	 * @private
+	 * @param  {string} type Join type
+	 * @return {function}
+	 */
 	function _makeJoiner(type) {
 		return function (clause, options) {
 
@@ -1101,6 +1183,11 @@ var queryize = function (original) {
 		};
 	}
 
+	/**
+	 * Processes join conditions into a standardized format that's uniformly parsable
+	 * @private
+	 * @return {Array}
+	 */
 	function _processJoinOns(ons, onBoolean) {
 
 		if (typeof ons === 'string') {
@@ -1151,7 +1238,11 @@ var queryize = function (original) {
 		return ons.join(' '+onBoolean+' ');
 	}
 
-
+	/**
+	 * Constructs the table name to use in queries, with backticks
+	 * @private
+	 * @return {string}
+	 */
 	function _buildTableName () {
 		var q = [];
 		
@@ -1168,7 +1259,10 @@ var queryize = function (original) {
 		return q.join('');
 	}
 
-
+	/**
+	 * Query Builder Functions used by query.compile
+	 * @type {Object}
+	 */
 	var builders = {
 		'select': function buildSelect() {
 			var columns = attributes.columns.join(', ');
@@ -1272,7 +1366,7 @@ var queryize = function (original) {
 	 * Compiles the final MySQL query
 	 * @memberOf query
 	 * @category Evaluation
-	 * @return {compiledQuery} Object containing the query string and data array
+	 * @return {Object} {query: String, data: Array<String,Number>}
 	 */
 	function compile () {
 		if (!attributes.builder || !builders[attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
@@ -1346,7 +1440,7 @@ var queryize = function (original) {
 		 *
 		 * @memberOf query
 		 * @param  {boolean} enable
-		 * @returns {query} Exports `this` for chaining
+		 * @return {query} Exports `this` for chaining
 		 */
 		debug: function (enable) {
 			if (isDefined(enable)) enable = true;
@@ -1366,7 +1460,7 @@ var queryize = function (original) {
 		 *
 		 * @memberOf query
 		 * @param  {boolean} enable
-		 * @returns {query} Exports `this` for chaining
+		 * @return {query} Exports `this` for chaining
 		 */
 		useBoundParameters: function (on) {
 			useBoundParameters = isDefined(on) ? on : true;

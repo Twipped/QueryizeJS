@@ -2,20 +2,32 @@
 <html>
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<title>Untitled Document</title>
+		<title>QueryizeJS - API Reference</title>
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<link rel="stylesheet" href="fonts.css">
 		<style>
 
-			.sidenav {
-				padding-top: 50px;
+			.sidenav .nav > li > a {
+				padding: 2px 15px;
 			}
 
-			.nav > li > a {
-				padding: 2px 15px;
+			.sidenav span.name {
+				/*font-size: 13px;*/
+				vertical-align: middle;
+				display: inline-block;
+				line-height: 1;
+			}
+
+			.sidenav .ico-arrow-up {
+				color: #ccc;
+				font-size: 12px;
+			}
+
+			.sidenav .alias .name {
+				color: #ccc;
+				font-size: 12px;
+				margin-left: 10px;
 			}
 
 			.category {
@@ -37,6 +49,14 @@
 				display: none;
 			}
 
+			.pieces .page-header, .pieces h2 {
+				margin-top: 0;
+			}
+
+			.pieces h3 {
+				font-size: 15px;
+			}
+
 			.signature .list-group strong {
 				margin-right: 20px;
 			}
@@ -45,10 +65,28 @@
 				margin-left: 20px;
 			}
 
+			.signature .panel-footer em {
+				color: #999;
+			}
+
+			.signature pre.panel-body + pre.panel-body {
+				border-top: 1px solid #ddd;
+				border-top-left-radius: 0;
+				border-top-right-radius: 0;
+			}
+
 			.codeview .panel-heading {
-				font-size: 11px;
+				font-size: 12px;
 				padding: 5px;
 				cursor: pointer;
+			}
+
+			.codeview .panel-heading .ico-embed {
+				font-size:16px;
+				line-height: 1;
+				vertical-align: middle;
+				position:relative;
+				top: -1px;
 			}
 
 			pre.panel-body, pre.panel-body.prettyprint  {
@@ -84,29 +122,6 @@
 				padding: 3px 15px;
 			}
 
-			.nav-list > .active > a,
-			.nav-list > .active > a:hover,
-			.nav-list > .active > a:focus {
-				color: white;
-				text-shadow: 0 -1px 0 rgba(0, 0, 0, .2);
-				background-color: #08c;
-			}
-
-			.nav-list [class^="icon-"],
-			.nav-list [class*=" icon-"] {
-				margin-right: 2px;
-			}
-
-			.nav-list .divider {
-				*width: 100%;
-				height: 1px;
-				margin: ((1.428571429 / 2) - 1) 1px; // 8px 1px
-				*margin: -5px 0 5px;
-				overflow: hidden;
-				background-color: #428bca;
-				border-bottom: 1px solid white;
-			}
-
 			.nav-header {
 				display: block;
 				padding: 3px 15px;
@@ -122,28 +137,44 @@
 				background: none;
 			}
 
-			// Space them out when they follow another list item (link)
-/*			.nav li + .nav-header {
-				margin-top: 9px;
-			}*/
+			.gh-link {
+				margin: 8px 0 0 15px;
+			}
+
+			.navbar .ico-github {
+				font-size: 32px;
+				text-decoration: none;
+			}
+
 
 		</style>
 	</head>
 	
 	<body>
+		<div class="navbar navbar-default navbar-static-top">
+			<div class="container">
+				<div class="navbar-header"><a class="navbar-brand" href="/">Queryize.js</a></div>
+				<ul class="nav navbar-nav">
+					<li class="active"><a href="/">API Reference</a></li>
+				</ul>
+				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
+			</div>
+		</div>
+
 		<div class="container">
 			<div class="row">
 				<div class="col-md-3 sidenav">
 					<ul class="nav nav-list">
 					{{#with parentless}}
 						{{#each uncategorized}}{{#unless ignore}}
-						<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{name}}</a></li>
+						<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 						{{/unless}}{{/each}}
 						{{#each categories}}
 						<li class="category"><a>{{@key}}</a>
 							<ul class="nav subnav">
 							{{#each this}}{{#unless ignore}}
-								<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{name}}</a></li>
+								<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 							{{/unless}}{{/each}}
 							</ul>
 						</li>
@@ -153,13 +184,13 @@
 						<li class="nav-header"><a>{{name}}</a></li>
 						<li><ul class="nav ">
 						{{#each uncategorized}}{{#unless ignore}}
-							<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{name}}</a></li>
+							<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 						{{/unless}}{{/each}}
 						{{#each categories}}
 								<li class="category"><a>{{@key}}</a>
 									<ul class="nav subnav">
 							{{#each this}}{{#unless ignore}}
-										<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{name}}</a></li>
+										<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 							{{/unless}}{{/each}}
 									</ul>
 								</li>
@@ -168,10 +199,12 @@
 					{{/each}}
 					</ul>
 				</div>
+
+
 				<div class="col-md-9 pieces">
 				{{#each pieces}}{{#unless ignore}}
 					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}" id="{{id}}">
-						<div class="page-header"><h2>{{name}} <small>{{ctx.type}}</small></h2></div>
+						<div class="page-header"><h2>{{name}} <small>{{aliases}}</small></h2></div>
 					{{#unless isAlias}}
 						{{{description.full}}}
 
@@ -192,7 +225,7 @@
 							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
 							{{/each}}
 							{{#if returns}}
-							<div class="panel-footer"><strong>Returns: </strong> <em>{{returns}}</em></div>
+							<div class="panel-footer"><strong>Returns: </strong> {{returns.types}} <em class="pull-right">{{returns.description}}</em></div>
 							{{/if}}
 						</div>
 						{{/each}}
@@ -200,7 +233,7 @@
 
 						<div class="codeview panel panel-default">
 							<div class="panel-heading" data-toggle="collapse" data-target="#{{id}} .panel-collapse">
-								<i class="glyphicon glyphicon-plus"></i> View Code
+								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">{{{code}}}</code></pre>
@@ -215,6 +248,9 @@
 			</div>
 		</div>
 
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
 	</body>
 </html>
