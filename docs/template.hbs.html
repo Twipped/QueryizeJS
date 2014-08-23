@@ -4,16 +4,42 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>QueryizeJS - API Reference</title>
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
 		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 		<link rel="stylesheet" href="fonts.css">
 		<style>
+
+			.jumbotron {
+				margin-top: 30px;
+				background-color: #333;
+				color: white;
+			}
+
+			.jumbotron .btn-code {
+				font-family: Menlo, Monaco, Consolas, "Courier New", monospace;
+				text-shadow: 0 1px 0 rgba(0,0,0,0.2);
+			}
+
+			.jumbotron .prettyprint {
+				padding: 10px;
+			}
+
+			pre {
+				box-shadow: 0 1px 2px rgba(100,100,100,0.2);
+				background-color: #f8f8f8;
+				border-color: #ddd;
+			}
+
+			pre code {
+				word-wrap: normal;
+				white-space: pre;
+			}
 
 			.sidenav .nav > li > a {
 				padding: 2px 15px;
 			}
 
 			.sidenav span.name {
-				/*font-size: 13px;*/
 				vertical-align: middle;
 				display: inline-block;
 				line-height: 1;
@@ -93,6 +119,7 @@
 				padding: 8px;
 				border: none;
 				font-size: 11px;
+				line-height: 13px;
 				margin-bottom: 0;
 				background-color: #fbfbfb;
 				
@@ -146,25 +173,99 @@
 				text-decoration: none;
 			}
 
+			footer {
+				text-align: center;
+				font-size: 10px;
+			}
+
+			@media (max-width: 768px) {
+				.navbar-fixed-top {
+					display: none;
+				}
+
+				.jumbotron {
+					margin-top: 0;
+				}
+
+			}
+
+
 
 		</style>
 	</head>
 	
 	<body>
-		<div class="navbar navbar-default navbar-static-top">
+		<div class="navbar navbar-default navbar-fixed-top">
 			<div class="container">
-				<div class="navbar-header"><a class="navbar-brand" href="/">Queryize.js</a></div>
+				<div class="navbar-header"><a class="navbar-brand" href="#">Queryize.js</a></div>
 				<ul class="nav navbar-nav">
-					<li class="active"><a href="/">API Reference</a></li>
+					<li><a href="#reference">API Reference</a></li>
 				</ul>
 				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
 				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
 			</div>
 		</div>
 
+		<div class="jumbotron">
+			<div class="container">
+				<h1>Queryize.js</h1>
+				<p>A no-frills chainable interface for constructing mutable MySQL queries procedurally in Node.js</p>
+				<p>
+					<a href="http://npmjs.org/queryize" class="btn btn-default btn-code btn-success">npm install queryize</a>
+					<a href="http://github.com/chipersoft/queryizejs" class="btn btn-primary">View on GitHub</a>
+					<a href="http://github.com/chipersoft/queryizejs/issues" class="btn btn-danger">Report an Issue</a>
+				</p>
+				<p>
+					<a href="http://badge.fury.io/js/queryize"><img src="https://img.shields.io/npm/v/queryize.svg?style=flat" alt="NPM Version" height="18"></a>
+					<img src="https://img.shields.io/npm/l/queryize.svg?style=flat" alt="License: MIT" height="18">
+					<a href="http://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
+					<a href="https://travis-ci.org/ChiperSoft/QueryizeJS"><img src="https://img.shields.io/travis/chipersoft/queryize.svg?style=flat" alt="Build Status" height="18"></a>
+					<a href="https://coveralls.io/r/chipersoft/queryize"><img src="https://img.shields.io/coveralls/chipersoft/queryize.svg?style=flat" alt="Coverage" height="18"></a>
+					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
+				</p>
+
+  				<pre class="prettyprint"><code class="language-javascript">var insert = queryize.insert;
+var q = insert()
+  .into('users', 'u')
+  .set({name: 'John Doe', email: 'user@example.com'})
+  .compile();
+
+//q.query contains INSERT INTO users SET u.name = ?, u.email = ?
+//q.data contains  ['John Doe', 'user@example.com']</code></pre>
+				<p>Supports node-mysql and node-mysql2 connections and connection pools for executing queries directly.</p>
+				<pre class="prettyprint"><code class="language-javascript">var queryize = require('queryize');
+var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
+
+queryize()
+  .from('employees').select()
+  .where({city: ['Chicago', 'Miami', 'San Francisco']})
+  .orderBy('lastname', 'firstname')
+  .exec(connection, function (err, results) {
+    if (err) console.error(err);
+    else console.log(results);
+  });</code></pre>
+				<p>Extends the node-mysql query object for use as a promise.</p>
+  				<pre class="prettyprint"><code class="language-javascript">var yesterday = new Date();
+yesterday.setDate(d.getDate() - 1);
+
+queryize.deleteFrom('eventlog')
+  .whereInRange('dts', null, yesterday)
+  .exec(connection)
+  .then(function () {
+  	console.log('Events Deleted');
+  })
+  .catch(function (err) {
+	console.error(err);
+  });</code></pre>
+			</div>
+			</div>
+
+		</div>
+
+		<div id="reference" style="position:relative;top:-60px;"></div>
 		<div class="container">
 			<div class="row">
-				<div class="col-md-3 sidenav">
+				<div class="col-sm-3 sidenav">
 					<ul class="nav nav-list">
 					{{#with parentless}}
 						{{#each uncategorized}}{{#unless ignore}}
@@ -201,7 +302,7 @@
 				</div>
 
 
-				<div class="col-md-9 pieces">
+				<div class="col-sm-9 pieces">
 				{{#each pieces}}{{#unless ignore}}
 					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}" id="{{id}}">
 						<div class="page-header"><h2>{{name}} <small>{{aliases}}</small></h2></div>
@@ -246,6 +347,10 @@
 				{{/unless}}{{/each}}
 				</div>
 			</div>
+
+			<footer>
+				Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
+			</footer>
 		</div>
 
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
