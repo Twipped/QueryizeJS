@@ -1,4 +1,5 @@
 
+var proxmis = require('proxmis');
 var idCounter = 0;
 
 /**
@@ -1392,35 +1393,54 @@ var queryize = function (original) {
 	 */
 
 	/**
-	 * Compiles the MySQL query and runs it using the given `connection` object from node-mysql or node-mysql2
+	 * Compiles the MySQL query and runs it using the provided connection or connection pool.  from node-mysql or node-mysql2.
+	 * If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).
+	 * Returns the mysql query object, extended with .then() and .catch() methods for use as a promise.
+	 *
 	 * @memberOf query
 	 * @category Evaluation
 	 * @alias run
-	 * @param  {Object}   connection node-mysql connection object
+	 * @param  {Object}   connection node-mysql(2) connection(Pool)
 	 * @param  {Object}   [options]  Options object to be passed to `connection.query` with the query string and data mixed in.
-	 * @param  {runCallback} [callback] Callback function to be invoked when the query completes.
-	 * @return {nodeMysqlQuery} Returns the result of `connection.query()`, see node-mysql documentation for details
+	 * @param  {Function} [callback] Callback function to be invoked when the query completes.
+	 * @return {Thenable<MysqlQuery>} Promise extended node-mysql query emitter object
 	 */
 	function exec (connection, options, callback) {
+		var func;
+		if (typeof connection.execute === 'function') func = 'execute';
+		else if (typeof connection.query === 'function') func = 'query';
+		else throw new TypeError('Connection object is not a mysql or mysql2 connection or pool.');
+
 		var q = this.compile();
 
 		if (debugEnabled) console.log(q);
 
-		if (typeof options === 'function') {
+		// if the second argument is a callback, remap the arguments
+		if (!callback && typeof options === 'function') {
 			callback = options;
-			return connection.query(q.query, q.data, callback);
-		} else if (typeof options !== 'object') {
-			options = {};
+			options = null;
+
+		// if the second argument is an options object, wrap it and apply our query & data to it.
+		} else if (typeof options === 'object') {
+			options = Object.create(options);
+			options.sql = q.query;
+			options.values = q.data;
 		}
-		options.sql = q.query;
-		options.values = q.data;
-		
-		// run as a prepared query if the connection supports it
-		if (typeof connection.execute === 'function') {
-			return connection.execute(options, callback);
+
+		// generate a proxmis with the callback (if provided), which will be used to extend the query return
+		var pcb = proxmis(callback);
+
+		var emitter;
+		if (options) {
+			emitter = connection[func](options, pcb);
 		} else {
-			return connection.query(options, callback);
+			emitter = connection[func](q.query, q.data, pcb);
 		}
+
+		emitter.then = pcb.then;
+		emitter.catch = pcb.catch;
+
+		return emitter;
 	}
 
 
@@ -1436,7 +1456,7 @@ var queryize = function (original) {
 		_isQueryizeObject: true,
 
 		/**
-		 * If passed a truthy value, `query.run()` will output the compiled query to the console.
+		 * If passed a truthy value, `query.exec()` will output the compiled query to the console.
 		 *
 		 * @memberOf query
 		 * @param  {boolean} enable
