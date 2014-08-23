@@ -4,7 +4,7 @@
   "description": "A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.",
   "main": "queryize.js",
   "scripts": {
-    "test": "nodeunit tests",
+    "test": "istanbul cover nodeunit -- tests",
     "docs": "node docs/index.js"
   },
   "repository": {
@@ -27,7 +27,8 @@
   "devDependencies": {
     "nodeunit": "~0.8.2",
     "dox": "^0.4.6",
-    "handlebars": "^1.3.0"
+    "handlebars": "^1.3.0",
+    "istanbul": "^0.3.0"
   },
   "dependencies": {
     "proxmis": "^0.2.0"
