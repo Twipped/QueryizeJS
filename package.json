@@ -5,7 +5,7 @@
   "main": "queryize.js",
   "scripts": {
     "test": "istanbul cover nodeunit -- tests",
-    "test-travis": "istanbul cover node_modules/nodeunit/bin/nodeunit --report lcovonly -- --reporter dot",
+    "test-travis": "istanbul cover nodeunit --reporter=lcov -- tests",
     "docs": "node docs/index.js"
   },
   "repository": {
