@@ -4,8 +4,8 @@ A no-frills chainable/fluent interface for constructing mutable MySQL queries wi
 
 [![NPM version](https://img.shields.io/npm/v/queryize.svg)](http://badge.fury.io/js/queryize)
 ![Licensed MIT](https://img.shields.io/npm/l/queryize.svg)
-[![Build Status](https://img.shields.io/travis/chipersoft/queryize.svg)](https://travis-ci.org/chipersoft/queryize)
-[![Coverage Status](https://img.shields.io/coveralls/chipersoft/queryize.svg)](https://coveralls.io/r/chipersoft/queryize)
+[![Build Status](https://img.shields.io/travis/ChiperSoft/QueryizeJS.svg)](https://travis-ci.org/chipersoft/queryize)
+[![Coverage Status](https://img.shields.io/coveralls/ChiperSoft/QueryizeJS.svg)](https://coveralls.io/r/chipersoft/queryize)
 [![Downloads](http://img.shields.io/npm/dm/queryize.svg)](http://npmjs.org/queryize)
 [![Gittip](http://img.shields.io/gittip/chipersoft.svg)](https://www.gittip.com/chipersoft/)
 
