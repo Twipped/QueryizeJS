@@ -1,4 +1,5 @@
-
+var extend = require('lodash.assign');
+var clone = require('lodash.clone');
 var proxmis = require('proxmis');
 var idCounter = 0;
 
@@ -118,21 +119,7 @@ var queryize = function (original) {
 
 		return "'"+value+"'";
 	}
-
-	/**
-	 * Copies the attribute data for the query object and returns the copy
-	 * @private
-	 * @name export
-	 * @memberOf query
-	 * @return {Object}
-	 */
-	function exportAttributes () {
-		// the easiest way to make sure all the arrays are copied instead of passed by reference
-		// is to serialize and deserialize the entire attributes object. Yes it's lazy, but it works perfectly
-		var json = JSON.stringify(attributes);
-		return JSON.parse(json);
-	}
-
+	
 	/**
 	 * Stores the passed `value` under a data binding with the `key` name.
 	 * This allows for explicit usage of bindings within query strings.
@@ -1410,7 +1397,16 @@ var queryize = function (original) {
 			return this;
 		},
 
-		export: exportAttributes,
+		/**
+		 * Copies the attribute data for the query object and returns the copy
+		 * @private
+		 * @name export
+		 * @memberOf query
+		 * @return {Object}
+		 */
+		export: function () {
+			return clone(attributes, true);
+		},
 		createBinding: createBinding,
 		insertBinding: insertBinding,
 		select: select,
@@ -1588,26 +1584,3 @@ function flatten(input, includingObjects) {
 	return result;
 }
 
-
-/**
- * Extends the first argument object with the members of all other argument objects
- * @private
- * @param {Object} object The destination object.
- * @param {...Object} [source] The source objects.
- * @return {Object} The now extended destination object
- */
-function extend(object) {
-	if (!object) {
-		return object;
-	}
-
-	for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
-		var iterable = arguments[argsIndex];
-		if (iterable) {
-			for (var key in iterable) {
-				object[key] = iterable[key];
-			}
-		}
-	}
-	return object;
-}
