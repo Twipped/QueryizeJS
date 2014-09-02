@@ -301,6 +301,9 @@ queryize.deleteFrom('eventlog')
 							<li class=" "><a href="#methodqueryizedeleteFrom"><span class="name">queryize.deleteFrom</span></a></li>
 						
 							<li class=" alias"><a href="#methodqueryizedeleteFrom"><i class="ico-arrow-up"></i><span class="name">queryize.deleet</span></a></li>
+							<li class=" "><a href="#propertyqueryizeuseBoundParameters"><span class="name">queryize.useBoundParameters</span></a></li>
+						
+							<li class=" "><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
 						
 						
 						</ul></li>
@@ -454,27 +457,27 @@ queryize.deleteFrom('eventlog')
 						<p>Creates a <code>query</code> object which encapsulates the state of the query to be generated<br />and provides the methods to manipulate that query.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">queryize([original])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>original</strong> query, Object
 									<em>Optional </em>
 									<br>An existing query object to duplicate.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var queryize = require('queryize');
 var query = queryize();</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -516,9 +519,7 @@ var query = queryize();</code></pre>
 
   return query;
 
-};
-
-queryize.useBoundParameters = true;</code></pre>
+};</code></pre>
 							</div>
 						</div>
 						
@@ -532,18 +533,18 @@ queryize.useBoundParameters = true;</code></pre>
 						<p>Shortcut for creating a new select query</p><p>See <code>query.select()</code> for details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">queryize.select()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -569,18 +570,18 @@ queryize.useBoundParameters = true;</code></pre>
 						<p>Shortcut for creating a new update query</p><p>See <code>query.update()</code> for details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">queryize.update()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -606,18 +607,18 @@ queryize.useBoundParameters = true;</code></pre>
 						<p>Shortcut for creating a new insert query</p><p>See <code>query.insert()</code> for details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">queryize.insert()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -643,18 +644,18 @@ queryize.useBoundParameters = true;</code></pre>
 						<p>Shortcut for creating a new delete query</p><p>See <code>query.select()</code> for details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">queryize.deleteFrom()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -677,6 +678,45 @@ module.exports = queryize;</code></pre>
 					
 					</div>
 				
+					<div id="propertyqueryizeuseBoundParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>queryize.useBoundParameters <small></small></h2></div>
+					
+						<p>Globally controls if new queries will use bound params by default.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">//disable bound params. This is not recommended
+queryize.useBoundParameters = false;</code></pre>
+								
+						</div>
+							
+						
+					
+					</div>
+				
+					<div id="propertyqueryizefn" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>queryize.fn <small></small></h2></div>
+					
+						<p>Public access point for adding functions to query objects</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.fn.someNewFunction = function () {
+  //`this` is the current query, use `this._attributes` to store query parameters
+};</code></pre>
+								
+						</div>
+							
+						
+					
+					</div>
+				
 					<div id="methodquerydebug" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.debug <small></small></h2></div>
@@ -684,24 +724,24 @@ module.exports = queryize;</code></pre>
 						<p>If passed a truthy value, <code>query.exec()</code> will output the compiled query to the console.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.debug(enable)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -729,30 +769,30 @@ module.exports = queryize;</code></pre>
 						<p>Stores the passed <code>value</code> under a data binding with the <code>key</code> name.<br />This allows for explicit usage of bindings within query strings.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.insertBinding(key, value)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>key</strong> string
 									
 									<br>The binding name to store the value under
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>The data to be stored
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -789,36 +829,36 @@ module.exports = queryize;</code></pre>
 						<p>Stores the passed <code>data</code> into the data bindings collection and returns a<br />unique string representation of that data for use in the query.</p><p>Data bindings in queryize are represented by a key name surrounded by<br />double brackets.  These values are then converted to question marks after<br />the query is compiled, with the values appended to the data array.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.createBinding(value, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>The data to be stored
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.createBinding('name@example.com');
 // => "{{binding0d}}"
 
 query.createBinding('2013-06-18', 'DATE');
 // => "DATE({{binding4f}})"</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -859,24 +899,24 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array<br />If useBoundParameters is turned off, it replaces the placeholders with their escaped values.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query._convertNamedParameters(queryString)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>queryString</strong> string
 									
 									<br>The query string to be processed
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> compiledQuery <em class="pull-right">The processed query</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -915,30 +955,30 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Marks the query as being a SELECT statement.</p><p>One or more columns or an array of columns to select from may be passed<br />in as arguments.  See <code>query.columns()</code> for more details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.select([columns])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array&lt;string&gt;
 									<em>Optional </em>
 									<br>All arguments received are passed to a &#x60;query.columns()&#x60; call
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
   .select('name')
   .from('users')
   .where('user.id', 128)
   .compile()</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -966,41 +1006,41 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Marks the query as being a DELETE statement</p><p>Supports passing the target table and alias as syntatic sugar.  See <code>query.from()</code> for more details.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.deleteFrom([tablename], [alias])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>tablename</strong> string, Array&lt;string&gt;
 									<em>Optional </em>
 									<br>Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
 									<br>An alias to use for the table
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
   .deleteFrom('users')
   .where({'u.id':1})
   .compile();</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
   .from('logs')
   .whereInRange('dts', null, '2014-06-01')
   .deleet()
   .compile()</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1036,31 +1076,31 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Marks the query as being an INSERT statement</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.insert([values])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>values</strong> mixed
 									<em>Optional </em>
 									<br>All arguments received are passed to a &#x60;query.set()&#x60; call
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .insert({name: 'joe'})
   .into('users')
   .exec(mysqlConnection, function (result) {
     var id = result.insertId;
   })</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1088,36 +1128,36 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Marks the query as being an UPDATE statement</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.update([tablename], [alias])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									<em>Optional </em>
 									<br>Table to update
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
 									<br>An alias to use for the table
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .update('users')
   .set('name', 'bob')
   .where('id', 234)
   .exec(mysqlConnection) //fire and forget</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1145,45 +1185,45 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Defines the table that the query should be performed on.<br />Can be called directly but is better called via the syntactically correct aliases.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.table(tablename, [alias])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
 									<br>An alias to use for the table
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update()
   .table('users')
   .set('name', 'bob')
   .where('id', 234)
   .exec(mysqlConnection) //fire and forget</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize.select()
   .from('users')
   .compile()</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert()
   .into('orders')
   .set(order)
   .exec(mysqlConnection) //fire and forget</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1211,36 +1251,36 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Defines what database that the query should be performed on.</p><p>This is only necessary if your connection has not defined a database<br />to use, or the query needs to act upon a database other than the one<br />currently in use.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.database(dbname, [tablename], [alias])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>dbname</strong> string
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
 									<br>An alias to use for the table
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1271,37 +1311,37 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Defines what columns a SELECT statement should return, or what tables<br />a DELETE statement should delete from.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Column names can be in any format allowed in a MySQL statement.</p><p>Calling multiple times will replace the previous columns with the new set.</p><p>By default, all queries have <code>*</code> for SELECTs and nothing for DELETEs</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.columns(columns, column2)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array&lt;string&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>column2</strong> ...string
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var query = queryize.select()
   .columns('users.*', 'passwords.hash as password_hash')
   .from('users')
   .join('passwords', {'users.id':'passwords.user_id'})</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.columns(['username', 'firstname', 'lastname']);</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1347,24 +1387,24 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Controls the boolean operator used to combine multiple WHERE clauses</p><p>By default, Queryize will combine all top level WHERE clauses with AND operators.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.comparisonMethod(condition)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>condition</strong> string
 									
 									<br>&quot;AND&quot; or &quot;OR&quot;
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1401,148 +1441,148 @@ query.createBinding('2013-06-18', 'DATE');
 						<p>Adds one or more WHERE clauses to the query.</p><p>Calling multiple times will append more clauses onto the stack.</p><p>Calling without any arguments will empty the stack.</p><p>If an <code>operator</code> is provided, it will be used for all comparisons derived from this call.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.where()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">//removes all existing where clauses
 query.where()</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.where(clause)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>clause</strong> string
 									
 									<br>A pre-written WHERE statement for direct insertion into the query
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('password IS NOT NULL')
 // WHERE password IS NOT NULL</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.where(clauses)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>clause</strong> Array&lt;string&gt;
 									
 									<br>Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where(['account.balance > 0', 'account.gratis IS TRUE'])
 // WHERE account.balance > 0 OR account.gratis IS TRUE</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where(['AND', 'client.active IS TRUE', 'client.paidthru < NOW()'])
 // WHERE client.active IS TRUE AND client.paidthru < NOW()</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.where(field, value, [operator], [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;
 									
 									<br>The table field(s) to match against
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, Array&lt;string&gt;
 									
 									<br>The value(s) to match with (if more than one, performs an OR comparison of each)
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional  (Default: &#x27;=&#x27;)</em>
 									<br>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('age', 21, '<')
 // WHERE age < ?
 // Data: [21]</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('created', new Date('2014-01-01'), '>=', 'DATE')
 // WHERE created >= DATE(?)
 // Data: ['2014-01-01 00:00:00']</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.where(pairs, [operator], [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>pairs</strong> Object
 									
 									<br>Collection of field/value pairs to match against
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional  (Default: &#x27;=&#x27;)</em>
 									<br>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>A MySQL function to wrap the binding in when it is inserted into SQL.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where({studio:'Paramount', franchise: 'Star Trek' });
 // WHERE studio = ? AND franchise = ?
 // Data: ['Paramount', 'Star Trek']</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where({'property.ownership': ['Own', 'Rent']})
 // WHERE property.ownership IN (?, ?)
 // Data: ['Own', 'Rent']</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where({'user.gender':'M, not: true, 'profile.spouse': null})
 // WHERE user.gender = ? AND profile.spouse != NULL
 // Data: ['M']</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1620,42 +1660,42 @@ query.where()</code></pre>
 						<p>Handles basic (field, value) where clauses</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query._processWhereCondition(field, value, [operator], [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, Array&lt;string&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1708,36 +1748,36 @@ query.where()</code></pre>
 						<p>Handles object based where clauses</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query._processWhereObject(clause, [operator], [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>clause</strong> Object
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1783,46 +1823,46 @@ query.where()</code></pre>
 						<p>Adds a where condition for a field between two values.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.whereBetween(field, from, to, modifier)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>from</strong> string, number
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>to</strong> string, number
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereBetween('profile.income', 18000, 60000)
 // Where profile.income BETWEEN ? AND ?
 // Data: [18000, 60000]</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1848,40 +1888,40 @@ query.where()</code></pre>
 						<p>Shortcut for performing a LIKE comparison on a field and value</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.whereLike(field, value, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;, Object
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array&lt;string, number&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select()
   .from('users')
   .whereLike('email', '%gmail.com')</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1910,40 +1950,40 @@ query.where()</code></pre>
 						<p>Shortcut for performing an != comparisoon on a field and value</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.whereNot(field, value, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;, Object
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array&lt;string, number&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select()
   .from('users')
   .whereNot('type', 'Admin')</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1972,36 +2012,36 @@ query.where()</code></pre>
 						<p>Shortcut for performing a NOT LIKE comparison on a field and value</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.whereNotLike(field, value, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;, Object
 									
 									<br>[description]
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array&lt;string, number&gt;
 									
 									<br>[description]
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>[description]
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2030,54 +2070,54 @@ query.where()</code></pre>
 						<p>Creates a where condition for if a field fit within a boundry of values.</p><p>Omitting/passing null to the <code>from</code> or <code>to</code> arguments will make the range boundless on that side.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.whereInRange(field, [from], [to], [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>field</strong> string, Array&lt;string&gt;
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>from</strong> string, number, Date
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>to</strong> string, number, Date
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereInRange('profile.income', 18000, 60000)
 // Where profile.income BETWEEN ? AND ?
 // Data: [18000, 60000]</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereInRange('age', 21)
 // WHERE age >= ?
 // Data: [21]</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereInRange('product.cost', null, 100)
 // WHERE product.cost <= ?
 // Data: [100]</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2108,26 +2148,26 @@ query.where()</code></pre>
 						<p>Defines what columns a select statement should use to sort the results.<br />Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous sort order with the new values.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.orderBy(columns)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>columns</strong> ...string, Array&lt;string&gt;
 									
 									<br>Column names can be in any format allowed in a MySQL statement.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.orderBy('category', 'DATE(date_posted) DESC');</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2155,26 +2195,26 @@ query.where()</code></pre>
 						<p>Defines what columns and conditions a select statement should group the results under.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous grouping rules with the new values.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.groupBy(columns)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>columns</strong> string..., Array&lt;string&gt;
 									
 									<br>Column names can be in any format allowed in a MySQL statement.
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.groupBy('user.id', 'DATE(dts)');</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2202,24 +2242,24 @@ query.where()</code></pre>
 						<p>Defines if a SELECT statement should return distinct results only</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.distinct(enable)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2244,30 +2284,30 @@ query.where()</code></pre>
 						<p>Defines the maximum results the query should return, and the starting offset of the first row within a set.</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.limit(max, [offset])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>max</strong> number
 									
 									<br>Total results to return
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>offset</strong> number
 									<em>Optional </em>
 									<br>Starting offset of first row within the results
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2296,81 +2336,81 @@ query.where()</code></pre>
 						<p>Defines what data to set the specified columns to during INSERT and UPDATE queries</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.set(statement)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>statement</strong> string
 									
 									<br>A fully written set condition
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.set(column, value, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>column</strong> string
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> string, number
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.set(data, [modifier])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>data</strong> Object
 									
 									<br>A plain object collection of column/value pairs
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									
 									<br>[description]
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('user.lastlogin = NOW()')
 // SET user.lastlogin = NOW()</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('address', '9 Pseudopolis Yard')
 // SET address = ?
 // Data: ['9 Pseudopolis Yard']</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.set({firstname: 'Susan', lastname: 'Sto Helet'})
 // SET firstname = ?, lastname = ?
 // DATA: ['Susan', 'Sto Helet']</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2415,92 +2455,92 @@ query.where()</code></pre>
 						<p>Adds a table join to the query.</p><p>Queryize will append any missing JOIN command at the beginning of a statement</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.join(statement)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>statement</strong> string
 									
 									<br>Fully formed join statement
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders o ON o.client_id = c.id')
 query.join('JOIN orders o ON o.client_id = c.id')
 query.join('LEFT JOIN orders o ON o.client_id = c.id')</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.join(tablename, options)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
 									<br>
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									
 									<br>Plain object containing options for the join
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {alias: 'o', on: 'o.client_id = c.id'})
 query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 // JOIN orders o ON o.client_id = c.id</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {on: {'o.client_id':'c.id', not:true, o.status: [4,5]})
 // JOIN orders ON o.client_id = c.id AND o.status NOT IN (?,?)
 // Data: [4, 5]</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {on: {'o.client_id':'c.id', not:true, o.condition: {data: 'A'}})
 // JOIN orders ON o.client_id = c.id AND o.status != ?
 // Data: ['A']</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {alias: 'o', type: 'LEFT', on: 'o.client_id = c.id'})
 // LEFT JOIN orders o ON o.client_id = c.id</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.join(options)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									
 									<br>Plain object containing options for the join
 								</li>
-							
+								
 							</ol>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join({table: 'orders', alias: 'o', on: {'o.client_id':'c.id'})</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join({table: 'orders', alias: 'o', type: 'LEFT' on: {'o.client_id':'c.id'})
 // LEFT JOIN orders o ON o.client_id = c.id</code></pre>
-							
+								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {on: {'o.client_id':'c.id', not:true, o.condition: {data: 'A'}})
 // JOIN orders ON o.client_id = c.id AND o.status != ?
 // Data: ['A']</code></pre>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2565,24 +2605,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Generates the closures for innerJoin, leftJoin and rightJoin</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">_makeJoiner(type)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>type</strong> string
 									
 									<br>Join type
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> function <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2630,18 +2670,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Shortcut for creating an INNER JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.innerJoin()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2663,18 +2703,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Shortcut for creating a LEFT JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.leftJoin()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2696,18 +2736,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Shortcut for creating a RIGHT JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.rightJoin()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2729,18 +2769,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Processes join conditions into a standardized format that&#39;s uniformly parsable</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query._processJoinOns()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Array <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2812,18 +2852,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Constructs the table name to use in queries, with backticks</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query._buildTableName()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2859,18 +2899,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Compiles the final MySQL query</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.compile()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right">{query: String, data: Array&lt;String,Number&gt;}</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2899,34 +2939,34 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Compiles the MySQL query and runs it using the provided connection or connection pool.  from node-mysql or node-mysql2.<br />If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.exec(connection, [options], [callback])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>connection</strong> Object
 									
 									<br>node-mysql(2) connection(Pool)
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									<em>Optional </em>
 									<br>Options object to be passed to &#x60;connection.query&#x60; with the query string and data mixed in.
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
 									<br>Callback function to be invoked when the query completes.
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2983,18 +3023,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Copies the attribute data for the query object and returns the copy</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.export()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3018,18 +3058,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Generates a duplicate of the current query</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.clone()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3053,24 +3093,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Controls if compiled queries should have values replaced with placeholders for<br />data binding, or simply have escaped values directly in the query.</p><p>By default, queryize will use data binding.  Passing false to this function will disable this behavior.</p><p>You can also set <code>queryize.useBoundParameters = false</code> to disable databinding for all queries</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.useBoundParameters(enable)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3095,24 +3135,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>creates a string that is unique to this runtime session</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">_uniqueId([prefix])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>prefix</strong> string
 									<em>Optional </em>
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3137,24 +3177,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Test if a value is defined and not null</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">isDefined(value)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3178,24 +3218,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Tests if a value is a valid type for storing in mysql</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">isValidPrimative(value)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
 									<br>
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3223,30 +3263,30 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Flattens a nested array into a single level array</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">flatten(input, [includingObjects])</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>input</strong> Array
 									
 									<br>The top level array to flatten
 								</li>
-							
+								
 								<li class="list-group-item">
 									<strong>includingObjects</strong> boolean
 									<em>Optional  (Default: false)</em>
 									<br>If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Array <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3286,24 +3326,24 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Escapes a value for use in a MySQL query without SQL injection</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">_escapeValue(value)</div></div>
 							<ol class="list-group">
-							
+								
 								<li class="list-group-item">
 									<strong>value</strong> *
 									
 									<br>The value to be escaped
 								</li>
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> string, number <em class="pull-right">The escaped value ready to be used in a query.</em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">
@@ -3356,18 +3396,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<p>Helper function to convert arguments to an array without triggering de-optimization in V8<br />MUST be called via .apply</p>
 						
 						<h3>Usage:</h3>
-						
+							
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">arrayFromArguments()</div></div>
 							<ol class="list-group">
-							
+								
 							</ol>
-							
-							
+								
+								
 							<div class="panel-footer"><strong>Returns: </strong> Array&lt;mixed&gt; <em class="pull-right"></em></div>
-							
+								
 						</div>
-						
+							
 
 
 						<div class="codeview panel panel-default">

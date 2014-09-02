@@ -316,26 +316,26 @@ queryize.deleteFrom('eventlog')
 						{{{description.full}}}
 						{{#unless isAbstract}}
 						<h3>Usage:</h3>
-						{{#each signatures}}
+							{{#each signatures}}
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">{{signature}}</div></div>
 							<ol class="list-group">
-							{{#each params}}
+								{{#each params}}
 								<li class="list-group-item">
 									<strong>{{name}}</strong> {{types}}
 									{{#if optional}}<em>Optional {{#if default}} (Default: {{default}}){{/if}}</em>{{/if}}
 									<br>{{description}}
 								</li>
-							{{/each}}
+								{{/each}}
 							</ol>
-							{{#each examples}}
+								{{#each examples}}
 							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
-							{{/each}}
-							{{#if returns}}
+								{{/each}}
+								{{#if returns}}
 							<div class="panel-footer"><strong>Returns: </strong> {{returns.types}} <em class="pull-right">{{returns.description}}</em></div>
-							{{/if}}
+								{{/if}}
 						</div>
-						{{/each}}
+							{{/each}}
 
 
 						<div class="codeview panel panel-default">
@@ -348,13 +348,13 @@ queryize.deleteFrom('eventlog')
 						</div>
 						{{else}}
 						<h3>Usage:</h3>
-						{{#each signatures}}
+							{{#each signatures}}
 						<div class="signature panel panel-default">
-							{{#each examples}}
+								{{#each examples}}
 							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
-							{{/each}}
+								{{/each}}
 						</div>
-						{{/each}}
+							{{/each}}
 						{{/unless}}
 					{{else}}
 						<a href="#{{id}}">See {{original}}</a>

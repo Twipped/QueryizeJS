@@ -114,7 +114,7 @@ parsed.forEach(function (item) {
 	// If no signature was ever created, then make one up using the function header
 	if (!currentSignature) {
 		ensureSignature();
-		currentSignature.signature = (item.ctx.parent && item.ctx.parent + '.' || '') + item.ctx.string;
+		currentSignature.signature = (item.ctx.parent && item.ctx.string.indexOf(item.ctx.parent) !== 0 && item.ctx.parent + '.' || '') + item.ctx.string;
 	}
 
 	// add any left over signature
