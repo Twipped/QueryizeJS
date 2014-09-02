@@ -187,3 +187,16 @@ exports['select with empty limit'] = function (test) {
 
 	test.done();
 };
+
+exports['select with distinct'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.distinct();
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT DISTINCT * FROM `users`',
+		data: []
+	});
+
+	test.done();
+};
