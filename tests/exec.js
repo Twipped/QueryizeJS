@@ -25,6 +25,37 @@ exports['exec with callback, calls query'] = function (test) {
 	});
 };
 
+exports['exec with callback and options, calls query'] = function (test) {
+	test.expect(4);
+	var q = queryize.select().from('test_table');
+
+	var conn = {
+		query: function (options, callback) {
+			test.deepEqual(options, {
+				sql: 'SELECT * FROM `test_table`',
+				values: []
+			});
+			test.deepEqual(options.__proto__, {
+				sql: 'FOO',
+				bar: 42
+			});
+			test.ok(true);
+			callback(false, [{name: 'John'}]);
+			return new EventEmitter();
+		}
+	};
+
+	var options = {
+		sql: 'FOO',
+		bar: 42
+	};
+
+	q.exec(conn, options, function (err, results) {
+		test.deepEqual(results, [{name: 'John'}]);
+		test.done();
+	});
+};
+
 exports['exec with callback, calls execute'] = function (test) {
 	test.expect(4);
 	var q = queryize.select().from('test_table');
