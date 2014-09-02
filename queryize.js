@@ -20,13 +20,12 @@ var queryize = function (original) {
 
 	var useBoundParameters = queryize.useBoundParameters;
 
-	var dataBindings = {};
-
 	var attributes = {
 		debugEnabled: false,
 		database: false,
 		tableName: false,
 		tableAlias: false,
+		dataBindings: {},
 		where: [],
 		whereBoolean: ' AND ',
 		set: [],
@@ -60,17 +59,17 @@ var queryize = function (original) {
 
 		if (useBoundParameters) {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				data.push(dataBindings[name]);
+				data.push(attributes.dataBindings[name]);
 
 				return '?';
 			});
 		} else {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				return _escapeValue(dataBindings[name]);
+				return _escapeValue(attributes.dataBindings[name]);
 			});
 		}
 
@@ -141,7 +140,7 @@ var queryize = function (original) {
 
 		if (key.substr(0,2) !== '{{') key = '{{' + key + '}}';
 
-		dataBindings[key] = value;
+		attributes.dataBindings[key] = value;
 
 		return this;
 	}
