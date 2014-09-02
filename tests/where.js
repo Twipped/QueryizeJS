@@ -29,6 +29,32 @@ exports['select with string where clause'] = function (test) {
 	test.done();
 };
 
+exports['select with string where clause in array'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.where(['id = 1']);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 1',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['select with string where clause in array, opening AND'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.where(['AND', 'id = 1']);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 1',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['select with two argument where clause'] = function (test) {
 	var q = queryize().select().from('users');
 
@@ -120,6 +146,19 @@ exports['select with object where clause'] = function (test) {
 	test.done();
 };
 
+exports['select with object where clause in array'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.where([{id:1}]);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = ?',
+		data: [1]
+	});
+
+	test.done();
+};
+
 exports['select with 2 item object where clause'] = function (test) {
 	var q = queryize().select().from('users');
 
@@ -200,6 +239,31 @@ exports['select with object where clause and operator'] = function (test) {
 	test.done();
 };
 
+exports['select with whereNot'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.whereNot('id', 1);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id != ?',
+		data: [1]
+	});
+
+	test.done();
+};
+
+exports['select with whereNot using object'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.whereNot({'id': 1});
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id != ?',
+		data: [1]
+	});
+
+	test.done();
+};
 
 exports['select with whereLike'] = function (test) {
 	var q = queryize().select().from('users');
