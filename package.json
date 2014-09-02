@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/ChiperSoft/QueryizeJS/issues"
   },
-  "homepage": "https://github.com/ChiperSoft/QueryizeJS",
+  "homepage": "http://queryizejs.com/",
   "devDependencies": {
     "nodeunit": "~0.8.2",
     "dox": "^0.4.6",
