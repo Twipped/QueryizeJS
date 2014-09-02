@@ -145,3 +145,22 @@ exports['pre-seeded query'] = function (test) {
 
 	test.done();
 };
+
+exports['confirm pre-bound mutators'] = function (test) {
+	var q = queryize();
+	var from = q.from,
+	    select = q.select,
+	    where = q.where;
+	
+	select();
+	from('users');
+	where('id = 12');
+	where('name IS NOT NULL');
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 12 AND name IS NOT NULL',
+		data: []
+	});
+
+	test.done();
+};
