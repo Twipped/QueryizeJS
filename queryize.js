@@ -18,14 +18,13 @@ var idCounter = 0;
  */
 var queryize = function (original) {
 
-	var useBoundParameters = queryize.useBoundParameters;
-
 	var attributes = {
 		debugEnabled: false,
 		database: false,
 		tableName: false,
 		tableAlias: false,
 		dataBindings: {},
+		useBoundParameters: queryize.useBoundParameters,
 		where: [],
 		whereBoolean: ' AND ',
 		set: [],
@@ -57,7 +56,7 @@ var queryize = function (original) {
 	function _convertNamedParameters (queryString) {
 		var data = [];
 
-		if (useBoundParameters) {
+		if (attributes.useBoundParameters) {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
 				if (attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
@@ -1391,7 +1390,7 @@ var queryize = function (original) {
 		 * @return {query} Exports `this` for chaining
 		 */
 		useBoundParameters: function (on) {
-			useBoundParameters = isDefined(on) ? on : true;
+			attributes.useBoundParameters = isDefined(on) ? on : true;
 			return this;
 		},
 
