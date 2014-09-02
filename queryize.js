@@ -3,17 +3,6 @@ var proxmis = require('proxmis');
 var idCounter = 0;
 
 /**
- * creates a string that is unique to this runtime session
- * @private
- * @param  {string} [prefix]
- * @return {string}
- */
-function _uniqueId(prefix) {
-	var id = (++idCounter).toString(16);
-	return prefix ? prefix + id : id;
-}
-
-/**
  * Creates a `query` object which encapsulates the state of the query to be generated
  * and provides the methods to manipulate that query.
  *
@@ -51,72 +40,6 @@ var queryize = function (original) {
 	};
 
 	if (original) extend(attributes, original._isQueryizeObject ? original.export() : original);
-
-	var isArray = Array.isArray;
-
-	function isDefined(value) {
-		return value !== undefined && value !== null;
-	}
-
-	function isValidPrimative(value) {
-		return typeof value === 'string' ||
-			typeof value === 'boolean' ||
-			typeof value === 'number' ||
-			value === null ||
-			(value instanceof Date);
-	}
-
-
-	/**
-	 * Flattens a nested array into a single level array
-	 * @private
-	 * @param  {Array} input The top level array to flatten
-	 * @param  {boolean} [includingObjects=false] If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
-	 * @return {Array}
-	 */
-	function flatten(input, includingObjects) {
-		var result = [];
-
-		function descend(level) {
-			if (isArray(level)) {
-				level.forEach(descend);
-			} else if (typeof level === 'object' && includingObjects) {
-				Object.keys(level).forEach(function (key) {
-					descend(level[key]);
-				});
-			} else {
-				result.push(level);
-			}
-		}
-
-		descend(input);
-
-		return result;
-	}
-
-
-	/**
-	 * Extends the first argument object with the members of all other argument objects
-	 * @private
-	 * @param {Object} object The destination object.
-	 * @param {...Object} [source] The source objects.
-	 * @return {Object} The now extended destination object
-	 */
-	function extend(object) {
-		if (!object) {
-			return object;
-		}
-
-		for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
-			var iterable = arguments[argsIndex];
-			if (iterable) {
-				for (var key in iterable) {
-					object[key] = iterable[key];
-				}
-			}
-		}
-		return object;
-	}
 
 	/**
 	 * @typedef compiledQuery
@@ -1594,3 +1517,97 @@ queryize.deleteFrom = function () {
 queryize.deleet = queryize.deleteFrom;
 
 module.exports = queryize;
+
+/**
+ * creates a string that is unique to this runtime session
+ * @private
+ * @param  {string} [prefix]
+ * @return {string}
+ */
+function _uniqueId(prefix) {
+	var id = (++idCounter).toString(16);
+	return prefix ? prefix + id : id;
+}
+
+/**
+ * Shorthand for Array.isArray
+ * @param {mixed} input
+ * @return {boolean}
+ * @private
+ */
+var isArray = Array.isArray;
+
+/**
+ * Test if a value is defined and not null
+ * @param  {mixed}  value
+ * @return {Boolean}
+ * @private
+ */
+function isDefined(value) {
+	return value !== undefined && value !== null;
+}
+
+/**
+ * Tests if a value is a valid type for storing in mysql
+ * @param  {mixed}  value
+ * @return {Boolean}
+ * @private
+ */
+function isValidPrimative(value) {
+	return typeof value === 'string' ||
+		typeof value === 'boolean' ||
+		typeof value === 'number' ||
+		value === null ||
+		(value instanceof Date);
+}
+
+/**
+ * Flattens a nested array into a single level array
+ * @private
+ * @param  {Array} input The top level array to flatten
+ * @param  {boolean} [includingObjects=false] If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
+ * @return {Array}
+ */
+function flatten(input, includingObjects) {
+	var result = [];
+
+	function descend(level) {
+		if (isArray(level)) {
+			level.forEach(descend);
+		} else if (typeof level === 'object' && includingObjects) {
+			Object.keys(level).forEach(function (key) {
+				descend(level[key]);
+			});
+		} else {
+			result.push(level);
+		}
+	}
+
+	descend(input);
+
+	return result;
+}
+
+
+/**
+ * Extends the first argument object with the members of all other argument objects
+ * @private
+ * @param {Object} object The destination object.
+ * @param {...Object} [source] The source objects.
+ * @return {Object} The now extended destination object
+ */
+function extend(object) {
+	if (!object) {
+		return object;
+	}
+
+	for (var argsIndex = 1, argsLength = arguments.length; argsIndex < argsLength; argsIndex++) {
+		var iterable = arguments[argsIndex];
+		if (iterable) {
+			for (var key in iterable) {
+				object[key] = iterable[key];
+			}
+		}
+	}
+	return object;
+}
