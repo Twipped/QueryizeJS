@@ -102,3 +102,29 @@ exports['basic deleteFrom from shortcut'] = function (test) {
 
 	test.done();
 };
+
+exports['query duplication'] = function (test) {
+	test.expect(3);
+	var a = queryize.deleteFrom('users', 'u');
+	var b = queryize(a);
+	var c = b.clone();
+	
+	a.where('id = 1');
+	c.where('id = 2');
+
+	test.deepEqual(a.compile(), {
+		query: 'DELETE FROM `users` u WHERE id = 1',
+		data: []
+	});
+
+	test.throws(function () {
+		b.compile();
+	});
+
+	test.deepEqual(c.compile(), {
+		query: 'DELETE FROM `users` u WHERE id = 2',
+		data: []
+	});
+
+	test.done();
+};
