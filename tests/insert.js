@@ -109,5 +109,14 @@ exports['set throws an error if no parameters provided'] = function (test) {
 	test.done();
 };
 
+exports['insert called with arguments'] = function (test) {
+	var q = queryize().insert({value: false}).into('users', 'u');
 
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET value = FALSE',
+		data: []
+	});
+
+	test.done();
+};
 
