@@ -298,9 +298,10 @@ queryize.deleteFrom('eventlog')
 						
 							<li class=" "><a href="#methodqueryizeinsert"><span class="name">queryize.insert</span></a></li>
 						
-							<li class=" "><a href="#methodqueryizedeleteFrom"><span class="name">queryize.deleteFrom</span></a></li>
+							<li class=" "><a href="#methodqueryizedelete"><span class="name">queryize.delete</span></a></li>
 						
-							<li class=" alias"><a href="#methodqueryizedeleteFrom"><i class="ico-arrow-up"></i><span class="name">queryize.deleet</span></a></li>
+							<li class=" alias"><a href="#methodqueryizedelete"><i class="ico-arrow-up"></i><span class="name">queryize.deleteFrom</span></a></li>
+						
 							<li class=" "><a href="#propertyqueryizeuseBoundParameters"><span class="name">queryize.useBoundParameters</span></a></li>
 						
 							<li class=" "><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
@@ -347,9 +348,9 @@ queryize.deleteFrom('eventlog')
 							
 										<li class=" "><a href="#methodqueryselect"><span class="name">query.select</span></a></li>
 							
-										<li class=" "><a href="#propertyquerydeleteFrom"><span class="name">query.deleteFrom</span></a></li>
+										<li class=" "><a href="#propertyquerydelete"><span class="name">query.delete</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerydeleteFrom"><i class="ico-arrow-up"></i><span class="name">query.deleet</span></a></li>
+										<li class=" alias"><a href="#propertyquerydelete"><i class="ico-arrow-up"></i><span class="name">query.deleteFrom</span></a></li>
 							
 										<li class=" "><a href="#methodqueryinsert"><span class="name">query.insert</span></a></li>
 							
@@ -637,16 +638,16 @@ var query = queryize();</code></pre>
 					
 					</div>
 				
-					<div id="methodqueryizedeleteFrom" style="position:relative;top:-60px;"></div>
+					<div id="methodqueryizedelete" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
-						<div class="page-header"><h2>queryize.deleteFrom <small>deleet</small></h2></div>
+						<div class="page-header"><h2>queryize.delete <small>deleteFrom</small></h2></div>
 					
 						<p>Shortcut for creating a new delete query</p><p>See <code>query.select()</code> for details.</p>
 						
 						<h3>Usage:</h3>
 							
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">queryize.deleteFrom()</div></div>
+							<div class="panel-heading"><div class="panel-title">queryize.delete()</div></div>
 							<ol class="list-group">
 								
 							</ol>
@@ -659,19 +660,17 @@ var query = queryize();</code></pre>
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizedeleteFrom + .piece .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizedelete + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.deleteFrom = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.delete = function () {
   var q = queryize();
   q.deleteFrom.apply(q, arguments);
   return q;
 };
 
-queryize.deleet = queryize.deleteFrom;
-
-module.exports = queryize;</code></pre>
+queryize.deleteFrom = queryize.delete;</code></pre>
 							</div>
 						</div>
 						
@@ -999,16 +998,16 @@ query.createBinding('2013-06-18', 'DATE');
 					
 					</div>
 				
-					<div id="propertyquerydeleteFrom" style="position:relative;top:-60px;"></div>
+					<div id="propertyquerydelete" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
-						<div class="page-header"><h2>query.deleteFrom <small>deleet</small></h2></div>
+						<div class="page-header"><h2>query.delete <small>deleteFrom</small></h2></div>
 					
 						<p>Marks the query as being a DELETE statement</p><p>Supports passing the target table and alias as syntatic sugar.  See <code>query.from()</code> for more details.</p>
 						
 						<h3>Usage:</h3>
 							
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.deleteFrom([tablename], [alias])</div></div>
+							<div class="panel-heading"><div class="panel-title">query.delete([tablename], [alias])</div></div>
 							<ol class="list-group">
 								
 								<li class="list-group-item">
@@ -1026,14 +1025,14 @@ query.createBinding('2013-06-18', 'DATE');
 							</ol>
 								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
-  .deleteFrom('users')
+  .delete('users')
   .where({'u.id':1})
   .compile();</code></pre>
 								
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
   .from('logs')
   .whereInRange('dts', null, '2014-06-01')
-  .deleet()
+  .deleteFrom()
   .compile()</code></pre>
 								
 								
@@ -1044,11 +1043,11 @@ query.createBinding('2013-06-18', 'DATE');
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#propertyquerydeleteFrom + .piece .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertyquerydelete + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.deleteFrom = exports.deleet = exports.delete = function deleteFrom (tablename, alias) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">exports.delete = query.deleteFrom = function deleteFrom (tablename, alias) {
   this._attributes.builder = 'delete';
 
   if (isArray(tablename)) {

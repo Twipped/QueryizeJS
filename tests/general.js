@@ -78,7 +78,7 @@ exports['basic insert from shortcut'] = function (test) {
 };
 
 exports['basic delete from shortcut'] = function (test) {
-	var q = queryize.deleet().from('users', 'u');
+	var q = queryize.delete().from('users', 'u');
 	
 	q.where('id = 1');
 

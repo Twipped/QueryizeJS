@@ -2,7 +2,7 @@
 var queryize = require('../queryize');
 
 exports['delete without where throws error'] = function (test) {
-	var q = queryize().deleet().from('users', 'u');
+	var q = queryize().delete().from('users', 'u');
 	
 	test.throws(function () {
 		q.compile();
@@ -12,7 +12,7 @@ exports['delete without where throws error'] = function (test) {
 };
 
 exports['basic delete'] = function (test) {
-	var q = queryize().deleet().from('users', 'u');
+	var q = queryize().delete().from('users', 'u');
 	
 	q.where('id = 1');
 
@@ -25,7 +25,7 @@ exports['basic delete'] = function (test) {
 };
 
 exports['basic delete with database'] = function (test) {
-	var q = queryize().deleet().fromDatabase('test', 'users', 'u');
+	var q = queryize().delete().fromDatabase('test', 'users', 'u');
 		
 	q.where('id = 1');
 
