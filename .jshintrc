@@ -17,6 +17,7 @@
 	"noarg": true,
 	"node": true,
 	"noempty": false,
+	"proto": true,
 	"quotmark": false,
 	"regexp": true,
 	"smarttabs": true,
