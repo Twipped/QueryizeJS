@@ -148,7 +148,7 @@ var queryize = function (original) {
 	function select () {
 		this._attributes.builder = 'select';
 		if (arguments.length) {
-			this.columns([].slice.call(arguments));
+			this.columns(arrayFromArguments.apply(null, arguments));
 		}
 		return this;
 	}
@@ -211,7 +211,7 @@ var queryize = function (original) {
 	function insert () {
 		this._attributes.builder = 'insert';
 		if (arguments.length) {
-			this.set([].slice.call(arguments));
+			this.set(arrayFromArguments.apply(null, arguments));
 		}
 		return this;
 	}
@@ -328,7 +328,7 @@ var queryize = function (original) {
 	 *
 	 */
 	function columns () {
-		var args = flatten(Array.prototype.slice.call(arguments));
+		var args = flatten(arrayFromArguments.apply(null, arguments));
 		var self = this;
 
 		args = args.map(function (column) {
@@ -736,7 +736,7 @@ var queryize = function (original) {
 	 * query.orderBy('category', 'DATE(date_posted) DESC');
 	 */
 	function orderBy (columns) {
-		var args = flatten([].slice.call(arguments));
+		var args = flatten(arrayFromArguments.apply(null, arguments));
 
 		this._attributes.orderBy = args;
 
@@ -758,7 +758,7 @@ var queryize = function (original) {
 	 * query.groupBy('user.id', 'DATE(dts)');
 	 */
 	function groupBy (columns) {
-		var args = flatten([].slice.call(arguments));
+		var args = flatten(arrayFromArguments.apply(null, arguments));
 
 		this._attributes.groupBy = args;
 
@@ -1590,4 +1590,18 @@ function _escapeValue(value) {
 	});
 
 	return "'"+value+"'";
+}
+
+/**
+ * Helper function to convert arguments to an array without triggering de-optimization in V8
+ * MUST be called via .apply
+ * @return {[type]} [description]
+ */
+function arrayFromArguments() {
+    var len = arguments.length;
+    var args = new Array(len);
+    for(var i = 0; i < len; ++i) {
+    	args[i] = arguments[i];
+    }
+    return args;
 }
