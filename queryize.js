@@ -26,21 +26,21 @@ var queryize = function (original) {
 	 * @return {compiledQuery} The processed query
 	 */
 	function _convertNamedParameters (queryString) {
-		var data = [], that = this;
+		var data = [], self = this;
 
 		if (this._attributes.useBoundParameters) {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (that._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				data.push(that._attributes.dataBindings[name]);
+				data.push(self._attributes.dataBindings[name]);
 
 				return '?';
 			});
 		} else {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (that._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				return _escapeValue(that._attributes.dataBindings[name]);
+				return _escapeValue(self._attributes.dataBindings[name]);
 			});
 		}
 
@@ -329,7 +329,7 @@ var queryize = function (original) {
 	 */
 	function columns () {
 		var args = flatten(Array.prototype.slice.call(arguments));
-		var that = this;
+		var self = this;
 
 		args = args.map(function (column) {
 			if (typeof column === 'string') {
@@ -337,11 +337,11 @@ var queryize = function (original) {
 			}
 
 			if (typeof column === 'number' || column instanceof Date) {
-				return that.createBinding(column);
+				return self.createBinding(column);
 			}
 
 			if (typeof column === 'object' && isDefined(column.data)) {
-				return that.createBinding(column.data, column.modifier);
+				return self.createBinding(column.data, column.modifier);
 			}
 
 			console.log(column);
@@ -468,7 +468,7 @@ var queryize = function (original) {
 			return this;
 		}
 
-		var that = this;
+		var self = this;
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
@@ -488,7 +488,7 @@ var queryize = function (original) {
 			clause = flatten(clause).map(function (c) {
 				switch (typeof c) {
 				case 'string': return c;
-				case 'object': return that._processWhereObject(clause, operator, modifier);
+				case 'object': return self._processWhereObject(clause, operator, modifier);
 				default:
 					throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
 				}
@@ -530,12 +530,12 @@ var queryize = function (original) {
 	 * @return {query} Exports `this` for chaining
 	 */
 	function _processWhereCondition (field, value, operator, modifier) {
-		var that = this;
+		var self = this;
 		if (!operator) operator = '=';
 
 		if (isArray(field)) {
 			return field.map(function (field) {
-				return that._processWhereCondition(field, value, operator, modifier);
+				return self._processWhereCondition(field, value, operator, modifier);
 			});
 		}
 
@@ -545,21 +545,21 @@ var queryize = function (original) {
 			if (operator === '=') {
 
 				//process the values into bindings, and join the bindings inside an IN() clause
-				return field + ' IN (' + value.map(function (v) { return that.createBinding(v, modifier); }).join(',') + ')';
+				return field + ' IN (' + value.map(function (v) { return self.createBinding(v, modifier); }).join(',') + ')';
 			} else if (operator === '!=') {
 
 				//process the values into bindings, and join the bindings inside an IN() clause
-				return field + ' NOT IN (' + value.map(function (v) { return that.createBinding(v, modifier); }).join(',') + ')';
+				return field + ' NOT IN (' + value.map(function (v) { return self.createBinding(v, modifier); }).join(',') + ')';
 
 			} else {
 
 				// process each value individually as a single condition and join the values in an OR
-				return value.map(function (value) { return that._processWhereCondition(field, value, operator, modifier); });
+				return value.map(function (value) { return self._processWhereCondition(field, value, operator, modifier); });
 
 			}
 		}
 
-		return [field, operator, that.createBinding(value, modifier)].join(' ');
+		return [field, operator, self.createBinding(value, modifier)].join(' ');
 	}
 
 	/**
@@ -574,7 +574,7 @@ var queryize = function (original) {
 	function _processWhereObject (clause, operator, modifier) {
 		if (!operator) operator = '=';
 
-		var not = false, that = this;
+		var not = false, self = this;
 		clause = Object.keys(clause).map(function (field) {
 			// if the object contains a 'not' key, all subsequent keys parsed will be negations.
 			if (field === 'not' && clause[field] === true) {
@@ -583,7 +583,7 @@ var queryize = function (original) {
 				return undefined;
 			}
 
-			return that._processWhereCondition(field, clause[field], operator, modifier);
+			return self._processWhereCondition(field, clause[field], operator, modifier);
 		});
 
 		clause = flatten(clause).filter(function (d) { return d;});
@@ -831,13 +831,13 @@ var queryize = function (original) {
 	 * // DATA: ['Susan', 'Sto Helet']
 	 */
 	function set (clause, value, modifier) {
-		var that = this;
+		var self = this;
 
 		if (!isDefined(clause)) throw new Error('You must define a field to set.');
 
 		if (typeof clause === 'object') {
 			Object.keys(clause).forEach(function (field) {
-				that.set(field, clause[field], value);
+				self.set(field, clause[field], value);
 			});
 			return this;
 		}
@@ -1046,10 +1046,10 @@ var queryize = function (original) {
 			return ons;
 		}
 
-		var that = this;
+		var self = this;
 
 		if (isArray(ons)) {
-			ons = ons.map(function (d) { return that._processJoinOns(d); });
+			ons = ons.map(function (d) { return self._processJoinOns(d); });
 		}
 
 		if (typeof ons === 'object' && !isArray(ons)) {
@@ -1065,7 +1065,7 @@ var queryize = function (original) {
 
 				// if value is an array, perform an IN() on the values
 				if (isArray(value)) {
-					value = value.map(function (d) {return that.createBinding(d); });
+					value = value.map(function (d) {return self.createBinding(d); });
 					return [field, not ? 'NOT IN' : 'IN', '(', value.join(', '), ')'].join(' ');
 
 				// if value is a string or a number, process as if a normal pairing of columns
@@ -1074,11 +1074,11 @@ var queryize = function (original) {
 
 				// finally, process the value as if it were an actual value for binding
 				} else if (isValidPrimative(value)) {
-					return [field, not ? '!=' : '=', that.createBinding(value)].join(' ');
+					return [field, not ? '!=' : '=', self.createBinding(value)].join(' ');
 
 				// if value is an object, verify if it's a data object, and if so create a binding for the value
 				} else if (typeof value === 'object' && value.data !== undefined) {
-					return [field, not ? '!=' : '=', that.createBinding(value.data, value.modifier)].join(' ');
+					return [field, not ? '!=' : '=', self.createBinding(value.data, value.modifier)].join(' ');
 				}
 
 				// we don't know how to handle the value
