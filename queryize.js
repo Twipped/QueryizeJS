@@ -18,13 +18,12 @@ var idCounter = 0;
  */
 var queryize = function (original) {
 
-	var debugEnabled = false;
-
 	var useBoundParameters = queryize.useBoundParameters;
 
 	var dataBindings = {};
 
 	var attributes = {
+		debugEnabled: false,
 		database: false,
 		tableName: false,
 		tableAlias: false,
@@ -1323,7 +1322,7 @@ var queryize = function (original) {
 
 		var q = this.compile();
 
-		if (debugEnabled) console.log(q);
+		if (attributes.debugEnabled) console.log(q);
 
 		// if the second argument is a callback, remap the arguments
 		if (!callback && typeof options === 'function') {
@@ -1375,7 +1374,7 @@ var queryize = function (original) {
 		debug: function (enable) {
 			if (isDefined(enable)) enable = true;
 
-			debugEnabled = enable;
+			attributes.debugEnabled = enable;
 
 			return this;
 		},
