@@ -73,6 +73,9 @@ parsed.forEach(function (item) {
 		case 'abstract':
 			item.isAbstract = true;
 			break;
+		case 'deprecated':
+			item.isDeprecated = tag.string;
+			break;
 
 		case 'param':
 			ensureSignature();

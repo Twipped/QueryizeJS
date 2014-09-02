@@ -56,6 +56,11 @@
 				margin-left: 10px;
 			}
 
+			.sidenav .deprecated .name {
+				color: #b3d3ec;
+				opacity: 0.7;
+			}
+
 			.category {
 				margin-top: 5px;
 			}
@@ -288,23 +293,23 @@ queryize.deleteFrom('eventlog')
 					
 					
 						
-							<li class=" "><a href="#constructorqueryize"><span class="name">queryize</span></a></li>
+							<li class=""><a href="#constructorqueryize"><span class="name">queryize</span></a></li>
 						
 						<li><ul class="nav ">
 						
-							<li class=" "><a href="#methodqueryizeselect"><span class="name">queryize.select</span></a></li>
+							<li class=""><a href="#methodqueryizeselect"><span class="name">queryize.select</span></a></li>
 						
-							<li class=" "><a href="#methodqueryizeupdate"><span class="name">queryize.update</span></a></li>
+							<li class=""><a href="#methodqueryizeupdate"><span class="name">queryize.update</span></a></li>
 						
-							<li class=" "><a href="#methodqueryizeinsert"><span class="name">queryize.insert</span></a></li>
+							<li class=""><a href="#methodqueryizeinsert"><span class="name">queryize.insert</span></a></li>
 						
-							<li class=" "><a href="#methodqueryizedelete"><span class="name">queryize.delete</span></a></li>
+							<li class=""><a href="#methodqueryizedelete"><span class="name">queryize.delete</span></a></li>
 						
-							<li class=" alias"><a href="#methodqueryizedelete"><i class="ico-arrow-up"></i><span class="name">queryize.deleteFrom</span></a></li>
+							<li class="alias "><a href="#methodqueryizedelete"><i class="ico-arrow-up"></i><span class="name">queryize.deleteFrom</span></a></li>
 						
-							<li class=" "><a href="#propertyqueryizeuseBoundParameters"><span class="name">queryize.useBoundParameters</span></a></li>
+							<li class=""><a href="#propertyqueryizeuseBoundParameters"><span class="name">queryize.useBoundParameters</span></a></li>
 						
-							<li class=" "><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
+							<li class=""><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
 						
 						
 						</ul></li>
@@ -314,7 +319,7 @@ queryize.deleteFrom('eventlog')
 						
 						<li><ul class="nav ">
 						
-							<li class=" "><a href="#methodquerydebug"><span class="name">query.debug</span></a></li>
+							<li class=""><a href="#methodquerydebug"><span class="name">query.debug</span></a></li>
 						
 							<li class="private "><a href="#methodquery_convertNamedParameters"><span class="name">query._convertNamedParameters</span></a></li>
 						
@@ -328,17 +333,19 @@ queryize.deleteFrom('eventlog')
 						
 							<li class="private "><a href="#methodqueryexport"><span class="name">query.export</span></a></li>
 						
-							<li class=" "><a href="#methodqueryclone"><span class="name">query.clone</span></a></li>
-						
-							<li class=" "><a href="#methodqueryuseBoundParameters"><span class="name">query.useBoundParameters</span></a></li>
+							<li class=""><a href="#methodqueryclone"><span class="name">query.clone</span></a></li>
 						
 						
 								<li class="category"><a>Data</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodqueryinsertBinding"><span class="name">query.insertBinding</span></a></li>
+										<li class=""><a href="#methodqueryinsertBinding"><span class="name">query.insertBinding</span></a></li>
 							
-										<li class=" "><a href="#methodquerycreateBinding"><span class="name">query.createBinding</span></a></li>
+										<li class=""><a href="#methodquerycreateBinding"><span class="name">query.createBinding</span></a></li>
+							
+										<li class=""><a href="#methodquerydisableBoundParameters"><span class="name">query.disableBoundParameters</span></a></li>
+							
+										<li class="deprecated "><a href="#methodqueryuseBoundParameters"><span class="name">query.useBoundParameters</span></a></li>
 							
 									</ul>
 								</li>
@@ -346,15 +353,15 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Action</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodqueryselect"><span class="name">query.select</span></a></li>
+										<li class=""><a href="#methodqueryselect"><span class="name">query.select</span></a></li>
 							
-										<li class=" "><a href="#propertyquerydelete"><span class="name">query.delete</span></a></li>
+										<li class=""><a href="#propertyquerydelete"><span class="name">query.delete</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerydelete"><i class="ico-arrow-up"></i><span class="name">query.deleteFrom</span></a></li>
+										<li class="alias "><a href="#propertyquerydelete"><i class="ico-arrow-up"></i><span class="name">query.deleteFrom</span></a></li>
 							
-										<li class=" "><a href="#methodqueryinsert"><span class="name">query.insert</span></a></li>
+										<li class=""><a href="#methodqueryinsert"><span class="name">query.insert</span></a></li>
 							
-										<li class=" "><a href="#methodqueryupdate"><span class="name">query.update</span></a></li>
+										<li class=""><a href="#methodqueryupdate"><span class="name">query.update</span></a></li>
 							
 									</ul>
 								</li>
@@ -362,19 +369,19 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Sourcing</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#propertyquerytable"><span class="name">query.table</span></a></li>
+										<li class=""><a href="#propertyquerytable"><span class="name">query.table</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerytable"><i class="ico-arrow-up"></i><span class="name">query.into</span></a></li>
+										<li class="alias "><a href="#propertyquerytable"><i class="ico-arrow-up"></i><span class="name">query.into</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerytable"><i class="ico-arrow-up"></i><span class="name">query.from</span></a></li>
+										<li class="alias "><a href="#propertyquerytable"><i class="ico-arrow-up"></i><span class="name">query.from</span></a></li>
 							
-										<li class=" "><a href="#propertyquerydatabase"><span class="name">query.database</span></a></li>
+										<li class=""><a href="#propertyquerydatabase"><span class="name">query.database</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerydatabase"><i class="ico-arrow-up"></i><span class="name">query.intoDatabase</span></a></li>
+										<li class="alias "><a href="#propertyquerydatabase"><i class="ico-arrow-up"></i><span class="name">query.intoDatabase</span></a></li>
 							
-										<li class=" alias"><a href="#propertyquerydatabase"><i class="ico-arrow-up"></i><span class="name">query.fromDatabase</span></a></li>
+										<li class="alias "><a href="#propertyquerydatabase"><i class="ico-arrow-up"></i><span class="name">query.fromDatabase</span></a></li>
 							
-										<li class=" "><a href="#methodquerycolumns"><span class="name">query.columns</span></a></li>
+										<li class=""><a href="#methodquerycolumns"><span class="name">query.columns</span></a></li>
 							
 									</ul>
 								</li>
@@ -382,19 +389,19 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Reduction</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodquerycomparisonMethod"><span class="name">query.comparisonMethod</span></a></li>
+										<li class=""><a href="#methodquerycomparisonMethod"><span class="name">query.comparisonMethod</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhere"><span class="name">query.where</span></a></li>
+										<li class=""><a href="#methodquerywhere"><span class="name">query.where</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhereBetween"><span class="name">query.whereBetween</span></a></li>
+										<li class=""><a href="#methodquerywhereBetween"><span class="name">query.whereBetween</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhereLike"><span class="name">query.whereLike</span></a></li>
+										<li class=""><a href="#methodquerywhereLike"><span class="name">query.whereLike</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhereNot"><span class="name">query.whereNot</span></a></li>
+										<li class=""><a href="#methodquerywhereNot"><span class="name">query.whereNot</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhereNotLike"><span class="name">query.whereNotLike</span></a></li>
+										<li class=""><a href="#methodquerywhereNotLike"><span class="name">query.whereNotLike</span></a></li>
 							
-										<li class=" "><a href="#methodquerywhereInRange"><span class="name">query.whereInRange</span></a></li>
+										<li class=""><a href="#methodquerywhereInRange"><span class="name">query.whereInRange</span></a></li>
 							
 									</ul>
 								</li>
@@ -402,13 +409,13 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Selection</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodqueryorderBy"><span class="name">query.orderBy</span></a></li>
+										<li class=""><a href="#methodqueryorderBy"><span class="name">query.orderBy</span></a></li>
 							
-										<li class=" "><a href="#methodquerygroupBy"><span class="name">query.groupBy</span></a></li>
+										<li class=""><a href="#methodquerygroupBy"><span class="name">query.groupBy</span></a></li>
 							
-										<li class=" "><a href="#methodquerydistinct"><span class="name">query.distinct</span></a></li>
+										<li class=""><a href="#methodquerydistinct"><span class="name">query.distinct</span></a></li>
 							
-										<li class=" "><a href="#methodquerylimit"><span class="name">query.limit</span></a></li>
+										<li class=""><a href="#methodquerylimit"><span class="name">query.limit</span></a></li>
 							
 									</ul>
 								</li>
@@ -416,7 +423,7 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Insertion &amp; Replacement</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodqueryset"><span class="name">query.set</span></a></li>
+										<li class=""><a href="#methodqueryset"><span class="name">query.set</span></a></li>
 							
 									</ul>
 								</li>
@@ -424,13 +431,13 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Inclusion</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodqueryjoin"><span class="name">query.join</span></a></li>
+										<li class=""><a href="#methodqueryjoin"><span class="name">query.join</span></a></li>
 							
-										<li class=" "><a href="#propertyqueryinnerJoin"><span class="name">query.innerJoin</span></a></li>
+										<li class=""><a href="#propertyqueryinnerJoin"><span class="name">query.innerJoin</span></a></li>
 							
-										<li class=" "><a href="#propertyqueryleftJoin"><span class="name">query.leftJoin</span></a></li>
+										<li class=""><a href="#propertyqueryleftJoin"><span class="name">query.leftJoin</span></a></li>
 							
-										<li class=" "><a href="#propertyqueryrightJoin"><span class="name">query.rightJoin</span></a></li>
+										<li class=""><a href="#propertyqueryrightJoin"><span class="name">query.rightJoin</span></a></li>
 							
 									</ul>
 								</li>
@@ -438,11 +445,11 @@ queryize.deleteFrom('eventlog')
 								<li class="category"><a>Evaluation</a>
 									<ul class="nav subnav">
 							
-										<li class=" "><a href="#methodquerycompile"><span class="name">query.compile</span></a></li>
+										<li class=""><a href="#methodquerycompile"><span class="name">query.compile</span></a></li>
 							
-										<li class=" "><a href="#propertyqueryexec"><span class="name">query.exec</span></a></li>
+										<li class=""><a href="#propertyqueryexec"><span class="name">query.exec</span></a></li>
 							
-										<li class=" alias"><a href="#propertyqueryexec"><i class="ico-arrow-up"></i><span class="name">query.run</span></a></li>
+										<li class="alias "><a href="#propertyqueryexec"><i class="ico-arrow-up"></i><span class="name">query.run</span></a></li>
 							
 									</ul>
 								</li>
@@ -458,6 +465,7 @@ queryize.deleteFrom('eventlog')
 					<div id="constructorqueryize" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize <small></small></h2></div>
+					
 					
 						<p>Creates a <code>query</code> object which encapsulates the state of the query to be generated<br />and provides the methods to manipulate that query.</p>
 						
@@ -535,6 +543,7 @@ var query = queryize();</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.select <small></small></h2></div>
 					
+					
 						<p>Shortcut for creating a new select query</p><p>See <code>query.select()</code> for details.</p>
 						
 						<h3>Usage:</h3>
@@ -571,6 +580,7 @@ var query = queryize();</code></pre>
 					<div id="methodqueryizeupdate" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.update <small></small></h2></div>
+					
 					
 						<p>Shortcut for creating a new update query</p><p>See <code>query.update()</code> for details.</p>
 						
@@ -609,6 +619,7 @@ var query = queryize();</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.insert <small></small></h2></div>
 					
+					
 						<p>Shortcut for creating a new insert query</p><p>See <code>query.insert()</code> for details.</p>
 						
 						<h3>Usage:</h3>
@@ -645,6 +656,7 @@ var query = queryize();</code></pre>
 					<div id="methodqueryizedelete" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.delete <small>deleteFrom</small></h2></div>
+					
 					
 						<p>Shortcut for creating a new delete query</p><p>See <code>query.select()</code> for details.</p>
 						
@@ -685,6 +697,7 @@ queryize.deleteFrom = queryize.delete;</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.useBoundParameters <small></small></h2></div>
 					
+					
 						<p>Globally controls if new queries will use bound params by default.</p>
 						
 						<h3>Usage:</h3>
@@ -703,6 +716,7 @@ queryize.useBoundParameters = false;</code></pre>
 					<div id="propertyqueryizefn" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.fn <small></small></h2></div>
+					
 					
 						<p>Public access point for adding functions to query objects</p>
 						
@@ -723,6 +737,7 @@ queryize.useBoundParameters = false;</code></pre>
 					<div id="methodquerydebug" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.debug <small></small></h2></div>
+					
 					
 						<p>If passed a truthy value, <code>query.exec()</code> will output the compiled query to the console.</p>
 						
@@ -768,6 +783,7 @@ queryize.useBoundParameters = false;</code></pre>
 					<div id="methodqueryinsertBinding" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.insertBinding <small></small></h2></div>
+					
 					
 						<p>Stores the passed <code>value</code> under a data binding with the <code>key</code> name.<br />This allows for explicit usage of bindings within query strings.</p>
 						
@@ -828,6 +844,7 @@ queryize.useBoundParameters = false;</code></pre>
 					<div id="methodquerycreateBinding" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.createBinding <small></small></h2></div>
+					
 					
 						<p>Stores the passed <code>data</code> into the data bindings collection and returns a<br />unique string representation of that data for use in the query.</p><p>Data bindings in queryize are represented by a key name surrounded by<br />double brackets.  These values are then converted to question marks after<br />the query is compiled, with the values appended to the data array.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
 						
@@ -899,6 +916,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div class="piece private ">
 						<div class="page-header"><h2>query._convertNamedParameters <small></small></h2></div>
 					
+					
 						<p>Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array<br />If useBoundParameters is turned off, it replaces the placeholders with their escaped values.</p>
 						
 						<h3>Usage:</h3>
@@ -955,6 +973,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div class="piece  ">
 						<div class="page-header"><h2>query.select <small></small></h2></div>
 					
+					
 						<p>Marks the query as being a SELECT statement.</p><p>One or more columns or an array of columns to select from may be passed<br />in as arguments.  See <code>query.columns()</code> for more details.</p>
 						
 						<h3>Usage:</h3>
@@ -1005,6 +1024,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div id="propertyquerydelete" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.delete <small>deleteFrom</small></h2></div>
+					
 					
 						<p>Marks the query as being a DELETE statement</p><p>Supports passing the target table and alias as syntatic sugar.  See <code>query.from()</code> for more details.</p>
 						
@@ -1076,6 +1096,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div class="piece  ">
 						<div class="page-header"><h2>query.insert <small></small></h2></div>
 					
+					
 						<p>Marks the query as being an INSERT statement</p>
 						
 						<h3>Usage:</h3>
@@ -1127,6 +1148,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div id="methodqueryupdate" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.update <small></small></h2></div>
+					
 					
 						<p>Marks the query as being an UPDATE statement</p>
 						
@@ -1184,6 +1206,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div id="propertyquerytable" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.table <small>into, from</small></h2></div>
+					
 					
 						<p>Defines the table that the query should be performed on.<br />Can be called directly but is better called via the syntactically correct aliases.</p>
 						
@@ -1251,6 +1274,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div class="piece  ">
 						<div class="page-header"><h2>query.database <small>intoDatabase, fromDatabase</small></h2></div>
 					
+					
 						<p>Defines what database that the query should be performed on.</p><p>This is only necessary if your connection has not defined a database<br />to use, or the query needs to act upon a database other than the one<br />currently in use.</p>
 						
 						<h3>Usage:</h3>
@@ -1310,6 +1334,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div id="methodquerycolumns" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.columns <small></small></h2></div>
+					
 					
 						<p>Defines what columns a SELECT statement should return, or what tables<br />a DELETE statement should delete from.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Column names can be in any format allowed in a MySQL statement.</p><p>Calling multiple times will replace the previous columns with the new set.</p><p>By default, all queries have <code>*</code> for SELECTs and nothing for DELETEs</p>
 						
@@ -1387,6 +1412,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div class="piece  ">
 						<div class="page-header"><h2>query.comparisonMethod <small></small></h2></div>
 					
+					
 						<p>Controls the boolean operator used to combine multiple WHERE clauses</p><p>By default, Queryize will combine all top level WHERE clauses with AND operators.</p>
 						
 						<h3>Usage:</h3>
@@ -1440,6 +1466,7 @@ query.createBinding('2013-06-18', 'DATE');
 					<div id="methodquerywhere" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.where <small></small></h2></div>
+					
 					
 						<p>Adds one or more WHERE clauses to the query.</p><p>Calling multiple times will append more clauses onto the stack.</p><p>Calling without any arguments will empty the stack.</p><p>If an <code>operator</code> is provided, it will be used for all comparisons derived from this call.</p><p>If a <code>modifier</code> function name is provided, the returned binding will be wrapped with that MySQL function.</p>
 						
@@ -1660,6 +1687,7 @@ query.where()</code></pre>
 					<div class="piece private ">
 						<div class="page-header"><h2>query._processWhereCondition <small></small></h2></div>
 					
+					
 						<p>Handles basic (field, value) where clauses</p>
 						
 						<h3>Usage:</h3>
@@ -1748,6 +1776,7 @@ query.where()</code></pre>
 					<div class="piece private ">
 						<div class="page-header"><h2>query._processWhereObject <small></small></h2></div>
 					
+					
 						<p>Handles object based where clauses</p>
 						
 						<h3>Usage:</h3>
@@ -1823,6 +1852,7 @@ query.where()</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.whereBetween <small></small></h2></div>
 					
+					
 						<p>Adds a where condition for a field between two values.</p>
 						
 						<h3>Usage:</h3>
@@ -1888,6 +1918,7 @@ query.where()</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.whereLike <small></small></h2></div>
 					
+					
 						<p>Shortcut for performing a LIKE comparison on a field and value</p>
 						
 						<h3>Usage:</h3>
@@ -1949,6 +1980,7 @@ query.where()</code></pre>
 					<div id="methodquerywhereNot" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.whereNot <small></small></h2></div>
+					
 					
 						<p>Shortcut for performing an != comparisoon on a field and value</p>
 						
@@ -2012,6 +2044,7 @@ query.where()</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.whereNotLike <small></small></h2></div>
 					
+					
 						<p>Shortcut for performing a NOT LIKE comparison on a field and value</p>
 						
 						<h3>Usage:</h3>
@@ -2069,6 +2102,7 @@ query.where()</code></pre>
 					<div id="methodquerywhereInRange" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.whereInRange <small></small></h2></div>
+					
 					
 						<p>Creates a where condition for if a field fit within a boundry of values.</p><p>Omitting/passing null to the <code>from</code> or <code>to</code> arguments will make the range boundless on that side.</p>
 						
@@ -2148,6 +2182,7 @@ query.where()</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.orderBy <small></small></h2></div>
 					
+					
 						<p>Defines what columns a select statement should use to sort the results.<br />Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous sort order with the new values.</p>
 						
 						<h3>Usage:</h3>
@@ -2194,6 +2229,7 @@ query.where()</code></pre>
 					<div id="methodquerygroupBy" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.groupBy <small></small></h2></div>
+					
 					
 						<p>Defines what columns and conditions a select statement should group the results under.</p><p>Accepts either an array of <code>columns</code>, or multiple <code>column</code> arguments.</p><p>Calling multiple times will replace the previous grouping rules with the new values.</p>
 						
@@ -2242,6 +2278,7 @@ query.where()</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.distinct <small></small></h2></div>
 					
+					
 						<p>Defines if a SELECT statement should return distinct results only</p>
 						
 						<h3>Usage:</h3>
@@ -2283,6 +2320,7 @@ query.where()</code></pre>
 					<div id="methodquerylimit" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.limit <small></small></h2></div>
+					
 					
 						<p>Defines the maximum results the query should return, and the starting offset of the first row within a set.</p>
 						
@@ -2335,6 +2373,7 @@ query.where()</code></pre>
 					<div id="methodqueryset" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.set <small></small></h2></div>
+					
 					
 						<p>Defines what data to set the specified columns to during INSERT and UPDATE queries</p>
 						
@@ -2454,6 +2493,7 @@ query.where()</code></pre>
 					<div id="methodqueryjoin" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.join <small></small></h2></div>
+					
 					
 						<p>Adds a table join to the query.</p><p>Queryize will append any missing JOIN command at the beginning of a statement</p>
 						
@@ -2605,6 +2645,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece private ">
 						<div class="page-header"><h2>_makeJoiner <small></small></h2></div>
 					
+					
 						<p>Generates the closures for innerJoin, leftJoin and rightJoin</p>
 						
 						<h3>Usage:</h3>
@@ -2670,6 +2711,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece  ">
 						<div class="page-header"><h2>query.innerJoin <small></small></h2></div>
 					
+					
 						<p>Shortcut for creating an INNER JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
 						<h3>Usage:</h3>
@@ -2702,6 +2744,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="propertyqueryleftJoin" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.leftJoin <small></small></h2></div>
+					
 					
 						<p>Shortcut for creating a LEFT JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
@@ -2736,6 +2779,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece  ">
 						<div class="page-header"><h2>query.rightJoin <small></small></h2></div>
 					
+					
 						<p>Shortcut for creating a RIGHT JOIN</p><p>See <code>query.join()</code> for argument details</p>
 						
 						<h3>Usage:</h3>
@@ -2768,6 +2812,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="methodquery_processJoinOns" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>query._processJoinOns <small></small></h2></div>
+					
 					
 						<p>Processes join conditions into a standardized format that&#39;s uniformly parsable</p>
 						
@@ -2852,6 +2897,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece private ">
 						<div class="page-header"><h2>query._buildTableName <small></small></h2></div>
 					
+					
 						<p>Constructs the table name to use in queries, with backticks</p>
 						
 						<h3>Usage:</h3>
@@ -2899,6 +2945,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece  ">
 						<div class="page-header"><h2>query.compile <small></small></h2></div>
 					
+					
 						<p>Compiles the final MySQL query</p>
 						
 						<h3>Usage:</h3>
@@ -2938,6 +2985,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="propertyqueryexec" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.exec <small>run</small></h2></div>
+					
 					
 						<p>Compiles the MySQL query and runs it using the provided connection or connection pool.  from node-mysql or node-mysql2.<br />If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
 						
@@ -3023,6 +3071,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece private ">
 						<div class="page-header"><h2>query.export <small></small></h2></div>
 					
+					
 						<p>Copies the attribute data for the query object and returns the copy</p>
 						
 						<h3>Usage:</h3>
@@ -3058,6 +3107,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece  ">
 						<div class="page-header"><h2>query.clone <small></small></h2></div>
 					
+					
 						<p>Generates a duplicate of the current query</p>
 						
 						<h3>Usage:</h3>
@@ -3089,16 +3139,17 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					
 					</div>
 				
-					<div id="methodqueryuseBoundParameters" style="position:relative;top:-60px;"></div>
+					<div id="methodquerydisableBoundParameters" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
-						<div class="page-header"><h2>query.useBoundParameters <small></small></h2></div>
+						<div class="page-header"><h2>query.disableBoundParameters <small></small></h2></div>
 					
-						<p>Controls if compiled queries should have values replaced with placeholders for<br />data binding, or simply have escaped values directly in the query.</p><p>By default, queryize will use data binding.  Passing false to this function will disable this behavior.</p><p>You can also set <code>queryize.useBoundParameters = false</code> to disable databinding for all queries</p>
+					
+						<p>Causes queryize to insert escaped data directly into the query instead of using data bound placeholders.<br />This is not recommended and should only be used for debugging purposes.</p><p>You can also set <code>queryize.useBoundParameters = false</code> to disable databinding for all queries</p>
 						
 						<h3>Usage:</h3>
 							
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.useBoundParameters(enable)</div></div>
+							<div class="panel-heading"><div class="panel-title">query.disableBoundParameters(enable)</div></div>
 							<ol class="list-group">
 								
 								<li class="list-group-item">
@@ -3117,12 +3168,55 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
 
 						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquerydisableBoundParameters + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.disableBoundParameters = function disableBoundParameters (bool) {
+  this._attributes.useBoundParameters = isDefined(bool) ? !bool : false;
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryuseBoundParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.useBoundParameters <small></small></h2></div>
+					<div class="alert alert-danger"><strong>This method is deprecated:</strong> Use disableBoundParameters instead.</div>
+					
+						
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.useBoundParameters(bool)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>bool</strong> Boolean
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
 							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryuseBoundParameters + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.useBoundParameters = function useBoundParameters (on) {
-  this._attributes.useBoundParameters = isDefined(on) ? on : true;
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.useBoundParameters = function (bool) {
+  this.disableBoundParameters(isDefined(bool) ? !bool : true);
   return this;
 };</code></pre>
 							</div>
@@ -3134,6 +3228,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="function_uniqueId" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>_uniqueId <small></small></h2></div>
+					
 					
 						<p>creates a string that is unique to this runtime session</p>
 						
@@ -3177,6 +3272,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div class="piece private ">
 						<div class="page-header"><h2>isDefined <small></small></h2></div>
 					
+					
 						<p>Test if a value is defined and not null</p>
 						
 						<h3>Usage:</h3>
@@ -3217,6 +3313,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="functionisValidPrimative" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>isValidPrimative <small></small></h2></div>
+					
 					
 						<p>Tests if a value is a valid type for storing in mysql</p>
 						
@@ -3262,6 +3359,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="functionflatten" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>flatten <small></small></h2></div>
+					
 					
 						<p>Flattens a nested array into a single level array</p>
 						
@@ -3325,6 +3423,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="function_escapeValue" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>_escapeValue <small></small></h2></div>
+					
 					
 						<p>Escapes a value for use in a MySQL query without SQL injection</p>
 						
@@ -3395,6 +3494,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					<div id="functionarrayFromArguments" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>arrayFromArguments <small></small></h2></div>
+					
 					
 						<p>Helper function to convert arguments to an array without triggering de-optimization in V8<br />MUST be called via .apply</p>
 						

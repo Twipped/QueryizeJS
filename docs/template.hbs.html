@@ -56,6 +56,11 @@
 				margin-left: 10px;
 			}
 
+			.sidenav .deprecated .name {
+				color: #b3d3ec;
+				opacity: 0.7;
+			}
+
 			.category {
 				margin-top: 5px;
 			}
@@ -270,7 +275,7 @@ queryize.deleteFrom('eventlog')
 					<ul class="nav nav-list">
 					{{#with parentless}}
 						{{#each uncategorized}}{{#unless ignore}}
-						<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+						<li class="{{#if isPrivate}}private {{/if}}{{#if isAlias}}alias {{/if}}{{#if isDeprecated}}deprecated {{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 						{{/unless}}{{/each}}
 						{{#each categories}}
 						<li class="category"><a>{{@key}}</a>
@@ -284,19 +289,19 @@ queryize.deleteFrom('eventlog')
 					{{/with}}
 					{{#each parents}}
 						{{#if item}}
-							{{#with item}}<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>{{/with}}
+							{{#with item}}<li class="{{#if isPrivate}}private {{/if}}{{#if isAlias}}alias {{/if}}{{#if isDeprecated}}deprecated {{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>{{/with}}
 						{{else}}
 							<li class=""><a>{{name}}</a></li>
 						{{/if}}
 						<li><ul class="nav ">
 						{{#each uncategorized}}{{#unless ignore}}
-							<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+							<li class="{{#if isPrivate}}private {{/if}}{{#if isAlias}}alias {{/if}}{{#if isDeprecated}}deprecated {{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 						{{/unless}}{{/each}}
 						{{#each categories}}
 								<li class="category"><a>{{@key}}</a>
 									<ul class="nav subnav">
 							{{#each this}}{{#unless ignore}}
-										<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
+										<li class="{{#if isPrivate}}private {{/if}}{{#if isAlias}}alias {{/if}}{{#if isDeprecated}}deprecated {{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
 							{{/unless}}{{/each}}
 									</ul>
 								</li>
@@ -312,6 +317,7 @@ queryize.deleteFrom('eventlog')
 					<div id="{{id}}" style="position:relative;top:-60px;"></div>
 					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}">
 						<div class="page-header"><h2>{{name}} <small>{{aliases}}</small></h2></div>
+					{{#if isDeprecated}}<div class="alert alert-danger"><strong>This {{ctx.type}} is deprecated:</strong> {{isDeprecated}}</div>{{/if}}
 					{{#unless isAlias}}
 						{{{description.full}}}
 						{{#unless isAbstract}}
