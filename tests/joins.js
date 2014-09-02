@@ -25,6 +25,20 @@ exports['select with string join'] = function (test) {
 	test.done();
 };
 
+exports['select with string join and custom binding'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	q.insertBinding('orderType', 'express');
+	q.join('JOIN orders o ON o.userid = u.id AND o.type = {{orderType}}');
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u JOIN orders o ON o.userid = u.id AND o.type = ?',
+		data: ['express']
+	});
+
+	test.done();
+};
+
 exports['select with string join, no join prefix'] = function (test) {
 	var q = queryize().select().from('users', 'u');
 	

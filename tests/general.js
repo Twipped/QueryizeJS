@@ -128,3 +128,20 @@ exports['query duplication'] = function (test) {
 
 	test.done();
 };
+
+exports['pre-seeded query'] = function (test) {
+	test.expect(1);
+
+	var q = queryize({
+		tableName: 'users',
+		alias: 'u',
+		builder: 'select'
+	});
+	
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u',
+		data: []
+	});
+
+	test.done();
+};

@@ -16,6 +16,36 @@ exports['where without parameters erases the where clauses'] = function (test) {
 	test.done();
 };
 
+exports['multiple where clauses with AND condition'] = function (test) {
+	var q = queryize().select().from('users');
+	
+	q.where('id = 1');
+	q.where('active', true);
+	q.comparisonMethod(true);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 1 AND active = TRUE',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['multiple where clauses with OR condition'] = function (test) {
+	var q = queryize().select().from('users');
+	
+	q.where('id = 1');
+	q.where('active', true);
+	q.comparisonMethod(false);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` WHERE id = 1 OR active = TRUE',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['select with string where clause'] = function (test) {
 	var q = queryize().select().from('users');
 
