@@ -73,6 +73,7 @@
 
 			.pieces .private, .nav .private {
 				display: none;
+				opacity: 0.5;
 			}
 
 			.pieces .page-header, .pieces h2 {
@@ -282,7 +283,11 @@ queryize.deleteFrom('eventlog')
 						{{/each}}
 					{{/with}}
 					{{#each parents}}
-						<li class="nav-header"><a>{{name}}</a></li>
+						{{#if item}}
+							{{#with item}}<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>{{/with}}
+						{{else}}
+							<li class=""><a>{{name}}</a></li>
+						{{/if}}
 						<li><ul class="nav ">
 						{{#each uncategorized}}{{#unless ignore}}
 							<li class="{{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}"><a href="#{{id}}">{{#if isAlias}}<i class="ico-arrow-up"></i>{{/if}}<span class="name">{{name}}</span></a></li>
@@ -304,11 +309,12 @@ queryize.deleteFrom('eventlog')
 
 				<div class="col-sm-9 pieces">
 				{{#each pieces}}{{#unless ignore}}
-					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}" id="{{id}}">
+					<div id="{{id}}" style="position:relative;top:-60px;"></div>
+					<div class="piece {{#if isPrivate}}private{{/if}} {{#if isAlias}}alias{{/if}}">
 						<div class="page-header"><h2>{{name}} <small>{{aliases}}</small></h2></div>
 					{{#unless isAlias}}
 						{{{description.full}}}
-
+						{{#unless isAbstract}}
 						<h3>Usage:</h3>
 						{{#each signatures}}
 						<div class="signature panel panel-default">
@@ -333,13 +339,23 @@ queryize.deleteFrom('eventlog')
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#{{id}} .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#{{id}} + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">{{{code}}}</code></pre>
 							</div>
 						</div>
+						{{else}}
+						<h3>Usage:</h3>
+						{{#each signatures}}
+						<div class="signature panel panel-default">
+							{{#each examples}}
+							<pre class="panel-body prettyprint"><code class="language-javascript">{{{this}}}</code></pre>
+							{{/each}}
+						</div>
+						{{/each}}
+						{{/unless}}
 					{{else}}
 						<a href="#{{id}}">See {{original}}</a>
 					{{/unless}}

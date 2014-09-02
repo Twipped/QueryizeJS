@@ -4,8 +4,9 @@ var Handlebars = require('handlebars');
 
 var template = Handlebars.compile(fs.readFileSync(__dirname + '/template.hbs.html').toString('utf8'));
 
-var src = fs.readFileSync(__dirname + '/../queryize.js');
-var parsed = dox.parseComments(src.toString('utf8'));
+var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../lib/queryize.js').toString('utf8'));
+
+parsed = parsed.concat( dox.parseComments(fs.readFileSync(__dirname + '/../lib/mutators.js').toString('utf8')) );
 
 var parents = {};
 var parentless = {
@@ -13,7 +14,7 @@ var parentless = {
 	uncategorized: []
 };
 
-parsed.forEach(function (item, index) {
+parsed.forEach(function (item) {
 	if (!item.ctx) {
 		// If there's no context, then it's an extra chunk we don't care about
 		item.ignore = true;
@@ -26,13 +27,13 @@ parsed.forEach(function (item, index) {
 	var currentSignature;
 
 	function addSignature () {
-		if (!currentSignature) return; //nothing to add
+		if (!currentSignature) {return;} //nothing to add
 
 		if (!currentSignature.signature) {
 			currentSignature.signature =
 				(item.ctx.parent && item.ctx.parent + '.' || '') +
 				item.ctx.name + '(' +
-				currentSignature.params.map(function (p) {return p.optional ? '['+p.name+']' : p.name;}).join(', ') +
+				currentSignature.params.map(function (p) {return p.optional ? '[' + p.name + ']' : p.name;}).join(', ') +
 				')';
 		}
 
@@ -66,18 +67,23 @@ parsed.forEach(function (item, index) {
 		case 'alias':
 			item.aliases.push(tag.string);
 			break;
-
+		case 'constructor':
+			item.isConstructor = true;
+			break;
+		case 'abstract':
+			item.isAbstract = true;
+			break;
 
 		case 'param':
 			ensureSignature();
 
-			if ((tag.optional = tag.name[0] == '[')) {
+			if ((tag.optional = tag.name[0] === '[')) {
 				tag.name = tag.name.substring(1, tag.name.length -1);
 			}
 
 			i = tag.name.indexOf('=');
-			if (i>0) {
-				tag.default = tag.name.substring(i+1);
+			if (i > 0) {
+				tag.default = tag.name.substring(i + 1);
 				tag.name = tag.name.substring(0, i);
 			}
 
@@ -134,6 +140,14 @@ parsed.forEach(function (item, index) {
 			categories: {},
 			uncategorized: []
 		});
+	} else if (item.isConstructor) {
+		parents[item.ctx.name] = {
+			name: item.ctx.name,
+			categories: {},
+			uncategorized: [],
+			item: item
+		};
+		return;
 	} else {
 		parentBranch = parentless;
 	}
