@@ -18,34 +18,6 @@ var idCounter = 0;
  */
 var queryize = function (original) {
 
-	var attributes = {
-		debugEnabled: false,
-		database: false,
-		tableName: false,
-		tableAlias: false,
-		dataBindings: {},
-		useBoundParameters: queryize.useBoundParameters,
-		where: [],
-		whereBoolean: ' AND ',
-		set: [],
-		columns: ['*'],
-		joins: [],
-		orderBy: false,
-		groupBy: false,
-		distinct: false,
-		limit: false,
-		builder: false
-	};
-
-	if (original) extend(attributes, original._isQueryizeObject ? original.export() : original);
-
-	/**
-	 * @typedef compiledQuery
-	 * @type {Object}
-	 * @property {string} query The query string ready for sending to mysql
-	 * @property {Array<string|number>} data All bound data values for the query, in order of the corrusponding placeholder questionmark in the query string.
-	 */
-
 	/**
 	 * Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array
 	 * If useBoundParameters is turned off, it replaces the placeholders with their escaped values.
@@ -54,69 +26,36 @@ var queryize = function (original) {
 	 * @return {compiledQuery} The processed query
 	 */
 	function _convertNamedParameters (queryString) {
-		var data = [];
+		var data = [], that = this;
 
-		if (attributes.useBoundParameters) {
+		if (this._attributes.useBoundParameters) {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (that._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				data.push(attributes.dataBindings[name]);
+				data.push(that._attributes.dataBindings[name]);
 
 				return '?';
 			});
 		} else {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (that._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
 
-				return _escapeValue(attributes.dataBindings[name]);
+				return _escapeValue(that._attributes.dataBindings[name]);
 			});
 		}
 
+		/**
+		 * @typedef compiledQuery
+		 * @type {Object}
+		 * @property {string} query The query string ready for sending to mysql
+		 * @property {Array<string|number>} data All bound data values for the query, in order of the corrusponding placeholder questionmark in the query string.
+		 */
 		return {
 			query: queryString,
 			data: data
 		};
 	}
 
-	/**
-	 * Escapes a value for use in a MySQL query without SQL injection
-	 * @private
-	 * @param  {*} value The value to be escaped
-	 * @return {string|number} The escaped value ready to be used in a query.
-	 */
-	function _escapeValue(value) {
-		if (value === undefined || value === null) {
-			return 'NULL';
-		}
-
-		switch (typeof value) {
-			case 'boolean': return (value) ? 'true' : 'false';
-			case 'number': return value+'';
-		}
-
-		if (value instanceof Date) {
-			value = data.toISOString().slice(0, 19).replace('T', ' ');
-		}
-
-		if (typeof value === 'object') {
-			throw new TypeError('Cannot escape object');
-		}
-
-		value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
-			switch(s) {
-				case "\0": return "\\0";
-				case "\n": return "\\n";
-				case "\r": return "\\r";
-				case "\b": return "\\b";
-				case "\t": return "\\t";
-				case "\x1a": return "\\Z";
-				default: return "\\"+s;
-			}
-		});
-
-		return "'"+value+"'";
-	}
-	
 	/**
 	 * Stores the passed `value` under a data binding with the `key` name.
 	 * This allows for explicit usage of bindings within query strings.
@@ -139,7 +78,7 @@ var queryize = function (original) {
 
 		if (key.substr(0,2) !== '{{') key = '{{' + key + '}}';
 
-		attributes.dataBindings[key] = value;
+		this._attributes.dataBindings[key] = value;
 
 		return this;
 	}
@@ -184,7 +123,7 @@ var queryize = function (original) {
 
 		var key = '{{' + _uniqueId('binding') + '}}';
 
-		insertBinding(key, value);
+		this.insertBinding(key, value);
 
 		return modifier ? [modifier, '(', key, ')'].join('') : key;
 	}
@@ -207,7 +146,7 @@ var queryize = function (original) {
 	 *   .compile()
 	 */
 	function select () {
-		attributes.builder = 'select';
+		this._attributes.builder = 'select';
 		if (arguments.length) {
 			this.columns([].slice.call(arguments));
 		}
@@ -239,7 +178,7 @@ var queryize = function (original) {
      *   .compile()
 	 */
 	function deleteFrom (tablename, alias) {
-		attributes.builder = 'delete';
+		this._attributes.builder = 'delete';
 
 		if (isArray(tablename)) {
 			if (alias) {
@@ -270,7 +209,7 @@ var queryize = function (original) {
 	 *   })
 	 */
 	function insert () {
-		attributes.builder = 'insert';
+		this._attributes.builder = 'insert';
 		if (arguments.length) {
 			this.set([].slice.call(arguments));
 		}
@@ -293,7 +232,7 @@ var queryize = function (original) {
 	 *   .exec(mysqlConnection) //fire and forget
 	 */
 	function update (tablename, alias) {
-		attributes.builder = 'update';
+		this._attributes.builder = 'update';
 		if (tablename) {
 			this.table(tablename, alias);
 		}
@@ -328,9 +267,9 @@ var queryize = function (original) {
 	 *   .exec(mysqlConnection) //fire and forget
 	 */
 	function table (tablename, alias) {
-		attributes.tableName = tablename;
+		this._attributes.tableName = tablename;
 		if (isDefined(alias)) {
-			attributes.alias = alias;
+			this._attributes.alias = alias;
 		}
 		return this;
 	}
@@ -350,12 +289,12 @@ var queryize = function (original) {
 	 * @return {query} Exports `this` for chaining
 	 */
 	function database (dbname, tablename, alias) {
-		attributes.database = dbname;
+		this._attributes.database = dbname;
 		if (tablename) {
-			attributes.tableName = tablename;
+			this._attributes.tableName = tablename;
 		}
 		if (alias) {
-			attributes.alias = alias;
+			this._attributes.alias = alias;
 		}
 		return this;
 	}
@@ -389,7 +328,8 @@ var queryize = function (original) {
 	 *
 	 */
 	function columns () {
-		var args = flatten([].slice.call(arguments));
+		var args = flatten(Array.prototype.slice.call(arguments));
+		var that = this;
 
 		args = args.map(function (column) {
 			if (typeof column === 'string') {
@@ -397,18 +337,18 @@ var queryize = function (original) {
 			}
 
 			if (typeof column === 'number' || column instanceof Date) {
-				return createBinding(column);
+				return that.createBinding(column);
 			}
 
 			if (typeof column === 'object' && isDefined(column.data)) {
-				return createBinding(column.data, column.modifier);
+				return that.createBinding(column.data, column.modifier);
 			}
 
 			console.log(column);
 			throw new TypeError('Unknown column type');
 		});
 
-		attributes.columns = args;
+		this._attributes.columns = args;
 
 		return this;
 	}
@@ -429,13 +369,13 @@ var queryize = function (original) {
 		case 'and':
 		case 'AND':
 		case 'yes':
-			attributes.whereBoolean = ' AND '; break;
+			this._attributes.whereBoolean = ' AND '; break;
 
 		case false:
 		case 'or':
 		case 'OR':
 		case 'no':
-			attributes.whereBoolean = ' OR '; break;
+			this._attributes.whereBoolean = ' OR '; break;
 		}
 		return this;
 	}
@@ -524,20 +464,22 @@ var queryize = function (original) {
 	function where (clause, value, operator, modifier) {
 
 		if (!isDefined(clause)) {
-			attributes.where = [];
+			this._attributes.where = [];
 			return this;
 		}
+
+		var that = this;
 
 		// if a value is defined, then we're performing a field > value comparison
 		// and must parse that first.
 		if (value !== undefined && (typeof clause === 'string' || isArray(clause))) {
-			clause = _processWhereCondition(clause, value, operator, modifier);
+			clause = this._processWhereCondition(clause, value, operator, modifier);
 
 		// if there was no value, check to see if we got an object based where definition
 		} else if (typeof clause === 'object' && !isArray(clause)) {
 			modifier = operator;
 			operator = value;
-			clause = _processWhereObject(clause, operator, modifier);
+			clause = this._processWhereObject(clause, operator, modifier);
 		}
 
 		// if we've got an array at this point, then we should parse it as if it were
@@ -546,7 +488,7 @@ var queryize = function (original) {
 			clause = flatten(clause).map(function (c) {
 				switch (typeof c) {
 				case 'string': return c;
-				case 'object': return _processWhereObject(clause, operator, modifier);
+				case 'object': return that._processWhereObject(clause, operator, modifier);
 				default:
 					throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
 				}
@@ -569,7 +511,7 @@ var queryize = function (original) {
 
 		// by now the clause should be a string. if it isn't, then someone gave us an unusable clause
 		if (typeof clause === 'string') {
-			attributes.where.push(clause);
+			this._attributes.where.push(clause);
 		} else {
 			throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
 		}
@@ -588,11 +530,12 @@ var queryize = function (original) {
 	 * @return {query} Exports `this` for chaining
 	 */
 	function _processWhereCondition (field, value, operator, modifier) {
+		var that = this;
 		if (!operator) operator = '=';
 
 		if (isArray(field)) {
 			return field.map(function (field) {
-				return _processWhereCondition(field, value, operator, modifier);
+				return that._processWhereCondition(field, value, operator, modifier);
 			});
 		}
 
@@ -602,21 +545,21 @@ var queryize = function (original) {
 			if (operator === '=') {
 
 				//process the values into bindings, and join the bindings inside an IN() clause
-				return field + ' IN (' + value.map(function (v) { return createBinding(v, modifier); }).join(',') + ')';
+				return field + ' IN (' + value.map(function (v) { return that.createBinding(v, modifier); }).join(',') + ')';
 			} else if (operator === '!=') {
 
 				//process the values into bindings, and join the bindings inside an IN() clause
-				return field + ' NOT IN (' + value.map(function (v) { return createBinding(v, modifier); }).join(',') + ')';
+				return field + ' NOT IN (' + value.map(function (v) { return that.createBinding(v, modifier); }).join(',') + ')';
 
 			} else {
 
 				// process each value individually as a single condition and join the values in an OR
-				return value.map(function (value) { return _processWhereCondition(field, value, operator, modifier); });
+				return value.map(function (value) { return that._processWhereCondition(field, value, operator, modifier); });
 
 			}
 		}
 
-		return [field, operator, createBinding(value, modifier)].join(' ');
+		return [field, operator, that.createBinding(value, modifier)].join(' ');
 	}
 
 	/**
@@ -631,7 +574,7 @@ var queryize = function (original) {
 	function _processWhereObject (clause, operator, modifier) {
 		if (!operator) operator = '=';
 
-		var not = false;
+		var not = false, that = this;
 		clause = Object.keys(clause).map(function (field) {
 			// if the object contains a 'not' key, all subsequent keys parsed will be negations.
 			if (field === 'not' && clause[field] === true) {
@@ -640,7 +583,7 @@ var queryize = function (original) {
 				return undefined;
 			}
 
-			return _processWhereCondition(field, clause[field], operator, modifier);
+			return that._processWhereCondition(field, clause[field], operator, modifier);
 		});
 
 		clause = flatten(clause).filter(function (d) { return d;});
@@ -670,7 +613,7 @@ var queryize = function (original) {
 	 * // Data: [18000, 60000]
 	 */
 	function whereBetween (field, from, to, modifier) {
-		where([field, 'BETWEEN', createBinding(from, modifier), 'AND', createBinding(to, modifier)].join(' '));
+		this.where([field, 'BETWEEN', this.createBinding(from, modifier), 'AND', this.createBinding(to, modifier)].join(' '));
 
 		return this;
 	}
@@ -691,9 +634,9 @@ var queryize = function (original) {
 	 */
 	function whereLike (field, value, modifier) {
 		if (typeof field === 'object') {
-			where(field, 'LIKE', modifier);
+			this.where(field, 'LIKE', modifier);
 		} else {
-			where(field, value, 'LIKE', modifier);
+			this.where(field, value, 'LIKE', modifier);
 		}
 		return this;
 	}
@@ -714,9 +657,9 @@ var queryize = function (original) {
 	 */
 	function whereNot (field, value, modifier) {
 		if (typeof field === 'object') {
-			where(field, '!=', modifier);
+			this.where(field, '!=', modifier);
 		} else {
-			where(field, value, '!=', modifier);
+			this.where(field, value, '!=', modifier);
 		}
 		return this;
 	}
@@ -733,9 +676,9 @@ var queryize = function (original) {
 	 */
 	function whereNotLike (field, value, modifier) {
 		if (typeof field === 'object') {
-			where(field, 'NOT LIKE', modifier);
+			this.where(field, 'NOT LIKE', modifier);
 		} else {
-			where(field, value, 'NOT LIKE', modifier);
+			this.where(field, value, 'NOT LIKE', modifier);
 		}
 		return this;
 	}
@@ -770,11 +713,11 @@ var queryize = function (original) {
 	 */
 	function whereInRange (field, from, to, modifier) {
 		if (isDefined(from) && isDefined(to)) {
-			whereBetween(field, from, to, modifier);
+			this.whereBetween(field, from, to, modifier);
 		} else if (isDefined(from)) {
-			where(field, from, '>=', modifier);
+			this.where(field, from, '>=', modifier);
 		} else if (isDefined(to)) {
-			where(field, to, '<=', modifier);
+			this.where(field, to, '<=', modifier);
 		}
 		return this;
 	}
@@ -795,7 +738,7 @@ var queryize = function (original) {
 	function orderBy (columns) {
 		var args = flatten([].slice.call(arguments));
 
-		attributes.orderBy = args;
+		this._attributes.orderBy = args;
 
 		return this;
 	}
@@ -817,7 +760,7 @@ var queryize = function (original) {
 	function groupBy (columns) {
 		var args = flatten([].slice.call(arguments));
 
-		attributes.groupBy = args;
+		this._attributes.groupBy = args;
 
 		return this;
 	}
@@ -831,7 +774,7 @@ var queryize = function (original) {
 	 * @return {query} Exports `this` for chaining
 	 */
 	function distinct (enable) {
-		attributes.distinct = isDefined(enable) ? true : enable;
+		this._attributes.distinct = isDefined(enable) ? true : enable;
 		return this;
 	}
 
@@ -848,7 +791,7 @@ var queryize = function (original) {
 		if (isDefined(max)) max = 0;
 		if (isDefined(offset)) offset = 0;
 
-		attributes.limit = max ? ['LIMIT ',Number(offset), ', ', Number(max)].join() : false;
+		this._attributes.limit = max ? ['LIMIT ',Number(offset), ', ', Number(max)].join() : false;
 
 		return this;
 	}
@@ -888,12 +831,13 @@ var queryize = function (original) {
 	 * // DATA: ['Susan', 'Sto Helet']
 	 */
 	function set (clause, value, modifier) {
+		var that = this;
 
 		if (!isDefined(clause)) throw new Error('You must define a field to set.');
 
 		if (typeof clause === 'object') {
 			Object.keys(clause).forEach(function (field) {
-				set(field, clause[field], value);
+				that.set(field, clause[field], value);
 			});
 			return this;
 		}
@@ -903,10 +847,10 @@ var queryize = function (original) {
 			if (!isValidPrimative(value)) {
 				throw new TypeError('Unknown data type in set clause');
 			}
-			clause = [clause, '=', createBinding(value, modifier)].join(' ');
+			clause = [clause, '=', this.createBinding(value, modifier)].join(' ');
 		}
 
-		attributes.set.push(clause);
+		this._attributes.set.push(clause);
 
 		return this;
 	}
@@ -1003,14 +947,14 @@ var queryize = function (original) {
 				stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(', ') : clause.using) + ')' );
 
 			} else if (clause.on) {
-				stack.push( 'ON (' + _processJoinOns(clause.on, clause.onBoolean || 'AND') + ')' );
+				stack.push( 'ON (' + this._processJoinOns(clause.on, clause.onBoolean || 'AND') + ')' );
 
 			}
 
 			clause = stack.join(' ');
 		}
 
-		attributes.joins.push(clause);
+		this._attributes.joins.push(clause);
 
 		return this;
 	}
@@ -1085,7 +1029,7 @@ var queryize = function (original) {
 				clause = clause.search(joinTest) > -1 ? clause.replace(joinTest, type+' JOIN ') : type+' JOIN ' + clause;
 			}
 
-			join(clause);
+			this.join(clause);
 
 			return this;
 		};
@@ -1102,8 +1046,10 @@ var queryize = function (original) {
 			return ons;
 		}
 
+		var that = this;
+
 		if (isArray(ons)) {
-			ons = ons.map(function (d) { return _processJoinOns(d); });
+			ons = ons.map(function (d) { return that._processJoinOns(d); });
 		}
 
 		if (typeof ons === 'object' && !isArray(ons)) {
@@ -1119,7 +1065,7 @@ var queryize = function (original) {
 
 				// if value is an array, perform an IN() on the values
 				if (isArray(value)) {
-					value = value.map(function (d) {return createBinding(d); });
+					value = value.map(function (d) {return that.createBinding(d); });
 					return [field, not ? 'NOT IN' : 'IN', '(', value.join(', '), ')'].join(' ');
 
 				// if value is a string or a number, process as if a normal pairing of columns
@@ -1128,11 +1074,11 @@ var queryize = function (original) {
 
 				// finally, process the value as if it were an actual value for binding
 				} else if (isValidPrimative(value)) {
-					return [field, not ? '!=' : '=', createBinding(value)].join(' ');
+					return [field, not ? '!=' : '=', that.createBinding(value)].join(' ');
 
 				// if value is an object, verify if it's a data object, and if so create a binding for the value
 				} else if (typeof value === 'object' && value.data !== undefined) {
-					return [field, not ? '!=' : '=', createBinding(value.data, value.modifier)].join(' ');
+					return [field, not ? '!=' : '=', that.createBinding(value.data, value.modifier)].join(' ');
 				}
 
 				// we don't know how to handle the value
@@ -1154,14 +1100,14 @@ var queryize = function (original) {
 	function _buildTableName () {
 		var q = [];
 		
-		if (attributes.database) {
-			q.push('`' + attributes.database + '`.');
+		if (this._attributes.database) {
+			q.push('`' + this._attributes.database + '`.');
 		}
 		
-		q.push('`' + attributes.tableName + '`');
+		q.push('`' + this._attributes.tableName + '`');
 		
-		if (attributes.alias) {
-			q.push(' ' + attributes.alias);
+		if (this._attributes.alias) {
+			q.push(' ' + this._attributes.alias);
 		}
 
 		return q.join('');
@@ -1173,30 +1119,30 @@ var queryize = function (original) {
 	 */
 	var builders = {
 		'select': function buildSelect() {
-			var columns = attributes.columns.join(', ');
-			if (attributes.distinct) columns = 'DISTINCT ' + columns;
+			var columns = this._attributes.columns.join(', ');
+			if (this._attributes.distinct) columns = 'DISTINCT ' + columns;
 
-			var q = ['SELECT', columns, 'FROM', _buildTableName()];
+			var q = ['SELECT', columns, 'FROM', this._buildTableName()];
 
-			q = q.concat(attributes.joins);
+			q = q.concat(this._attributes.joins);
 
-			if (attributes.where.length) {
+			if (this._attributes.where.length) {
 				q.push('WHERE');
-				q.push(attributes.where.join(attributes.whereBoolean));
+				q.push(this._attributes.where.join(this._attributes.whereBoolean));
 			}
 
-			if (attributes.groupBy.length) {
+			if (this._attributes.groupBy.length) {
 				q.push('GROUP BY');
-				q.push(attributes.groupBy.join(', '));
+				q.push(this._attributes.groupBy.join(', '));
 			}
 
-			if (attributes.orderBy.length) {
+			if (this._attributes.orderBy.length) {
 				q.push('ORDER BY');
-				q.push(attributes.orderBy.join(', '));
+				q.push(this._attributes.orderBy.join(', '));
 			}
 
-			if (attributes.limit) {
-				q.push(attributes.limit);
+			if (this._attributes.limit) {
+				q.push(this._attributes.limit);
 			}
 
 			q = q.join(' ');
@@ -1205,23 +1151,23 @@ var queryize = function (original) {
 		},
 
 		'update': function buildUpdate() {
-			var q = ['UPDATE', _buildTableName()];
+			var q = ['UPDATE', this._buildTableName()];
 
-			if (!attributes.set.length) {
+			if (!this._attributes.set.length) {
 				throw new Error('No values to insert have been defined');
 			}
 
-			q = q.concat(attributes.joins);
+			q = q.concat(this._attributes.joins);
 
 			q.push('SET');
-			q.push(attributes.set.join(', '));
+			q.push(this._attributes.set.join(', '));
 
-			if (!attributes.where.length) {
+			if (!this._attributes.where.length) {
 				throw new Error('No where clauses have been defined for the delete query.');
 			}
 
 			q.push('WHERE');
-			q.push(attributes.where.join(attributes.whereBoolean));
+			q.push(this._attributes.where.join(this._attributes.whereBoolean));
 
 			q = q.join(' ');
 
@@ -1229,14 +1175,14 @@ var queryize = function (original) {
 		},
 
 		'insert': function buildInsert() {
-			var q = ['INSERT INTO', _buildTableName()];
+			var q = ['INSERT INTO', this._buildTableName()];
 
-			if (!attributes.set.length) {
+			if (!this._attributes.set.length) {
 				throw new Error('No values to insert have been defined');
 			}
 
 			q.push('SET');
-			q.push(attributes.set.join(', '));
+			q.push(this._attributes.set.join(', '));
 
 			q = q.join(' ');
 
@@ -1246,22 +1192,22 @@ var queryize = function (original) {
 		'delete': function buildDelete() {
 			var q = ['DELETE'];
 
-			if (attributes.columns.length) {
-				var columns = attributes.columns.join(', ');
+			if (this._attributes.columns.length) {
+				var columns = this._attributes.columns.join(', ');
 				if (columns && columns !== '*') q.push(columns);
 			}
 
 			q.push('FROM');
-			q.push(_buildTableName());
+			q.push(this._buildTableName());
 
-			q = q.concat(attributes.joins);
+			q = q.concat(this._attributes.joins);
 
-			if (!attributes.where.length) {
+			if (!this._attributes.where.length) {
 				throw new Error('No where clauses have been defined for the delete query.');
 			}
 			
 			q.push('WHERE');
-			q.push(attributes.where.join(attributes.whereBoolean));
+			q.push(this._attributes.where.join(this._attributes.whereBoolean));
 
 			q = q.join(' ');
 
@@ -1277,12 +1223,12 @@ var queryize = function (original) {
 	 * @return {Object} {query: String, data: Array<String,Number>}
 	 */
 	function compile () {
-		if (!attributes.builder || !builders[attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
-		if (!attributes.tableName) throw new Error('No table name has been defined');
+		if (!this._attributes.builder || !builders[this._attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
+		if (!this._attributes.tableName) throw new Error('No table name has been defined');
 
-		var queryString = builders[attributes.builder]();
+		var queryString = builders[this._attributes.builder].call(this);
 
-		return _convertNamedParameters(queryString);
+		return this._convertNamedParameters(queryString);
 	}
 
 	/**
@@ -1320,7 +1266,7 @@ var queryize = function (original) {
 
 		var q = this.compile();
 
-		if (attributes.debugEnabled) console.log(q);
+		if (this._attributes.debugEnabled) console.log(q);
 
 		// if the second argument is a callback, remap the arguments
 		if (!callback && typeof options === 'function') {
@@ -1361,6 +1307,24 @@ var queryize = function (original) {
 	var query = {
 
 		_isQueryizeObject: true,
+		_attributes: {
+			debugEnabled: false,
+			database: false,
+			tableName: false,
+			tableAlias: false,
+			dataBindings: {},
+			useBoundParameters: queryize.useBoundParameters,
+			where: [],
+			whereBoolean: ' AND ',
+			set: [],
+			columns: ['*'],
+			joins: [],
+			orderBy: false,
+			groupBy: false,
+			distinct: false,
+			limit: false,
+			builder: false
+		},
 
 		/**
 		 * If passed a truthy value, `query.exec()` will output the compiled query to the console.
@@ -1372,7 +1336,7 @@ var queryize = function (original) {
 		debug: function (enable) {
 			if (isDefined(enable)) enable = true;
 
-			attributes.debugEnabled = enable;
+			this._attributes.debugEnabled = enable;
 
 			return this;
 		},
@@ -1390,7 +1354,7 @@ var queryize = function (original) {
 		 * @return {query} Exports `this` for chaining
 		 */
 		useBoundParameters: function (on) {
-			attributes.useBoundParameters = isDefined(on) ? on : true;
+			this._attributes.useBoundParameters = isDefined(on) ? on : true;
 			return this;
 		},
 
@@ -1402,7 +1366,7 @@ var queryize = function (original) {
 		 * @return {Object}
 		 */
 		export: function () {
-			return clone(attributes, true);
+			return clone(this._attributes, true);
 		},
 		createBinding: createBinding,
 		insertBinding: insertBinding,
@@ -1436,9 +1400,17 @@ var queryize = function (original) {
 		limit: limit,
 		compile: compile,
 		run: exec,
-		exec: exec
+		exec: exec,
+
+		_convertNamedParameters: _convertNamedParameters,
+		_processWhereCondition: _processWhereCondition,
+		_processWhereObject: _processWhereObject,
+		_processJoinOns: _processJoinOns,
+		_buildTableName: _buildTableName
 
 	};
+
+	if (original) extend(query._attributes, original._isQueryizeObject ? original.export() : original);
 
 	return query;
 
@@ -1581,3 +1553,41 @@ function flatten(input, includingObjects) {
 	return result;
 }
 
+/**
+ * Escapes a value for use in a MySQL query without SQL injection
+ * @private
+ * @param  {*} value The value to be escaped
+ * @return {string|number} The escaped value ready to be used in a query.
+ */
+function _escapeValue(value) {
+	if (value === undefined || value === null) {
+		return 'NULL';
+	}
+
+	switch (typeof value) {
+		case 'boolean': return (value) ? 'true' : 'false';
+		case 'number': return value+'';
+	}
+
+	if (value instanceof Date) {
+		value = data.toISOString().slice(0, 19).replace('T', ' ');
+	}
+
+	if (typeof value === 'object') {
+		throw new TypeError('Cannot escape object');
+	}
+
+	value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
+		switch(s) {
+			case "\0": return "\\0";
+			case "\n": return "\\n";
+			case "\r": return "\\r";
+			case "\b": return "\\b";
+			case "\t": return "\\t";
+			case "\x1a": return "\\Z";
+			default: return "\\"+s;
+		}
+	});
+
+	return "'"+value+"'";
+}
