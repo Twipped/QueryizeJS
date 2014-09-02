@@ -30,7 +30,7 @@ var queryize = function (original) {
 
 		if (this._attributes.useBoundParameters) {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
 
 				data.push(self._attributes.dataBindings[name]);
 
@@ -38,7 +38,7 @@ var queryize = function (original) {
 			});
 		} else {
 			queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding '+name+' could not be found.');
+				if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
 
 				return _escapeValue(self._attributes.dataBindings[name]);
 			});
@@ -145,7 +145,7 @@ var queryize = function (original) {
 	 *   .where('user.id', 128)
 	 *   .compile()
 	 */
-	function select () {
+	function select (columns) {
 		this._attributes.builder = 'select';
 		if (arguments.length) {
 			this.columns(arrayFromArguments.apply(null, arguments));
@@ -198,7 +198,7 @@ var queryize = function (original) {
 	 *
 	 * @memberOf query
 	 * @category Action
-	 * @param {mixed} [arguments] All arguments received are passed to a `query.set()` call
+	 * @param {mixed} [values] All arguments received are passed to a `query.set()` call
 	 * @return {query} Exports `this` for chaining
 	 * @example
 	 * queryize()
@@ -208,7 +208,7 @@ var queryize = function (original) {
 	 *     var id = result.insertId;
 	 *   })
 	 */
-	function insert () {
+	function insert (values) {
 		this._attributes.builder = 'insert';
 		if (arguments.length) {
 			this.set(arrayFromArguments.apply(null, arguments));
@@ -1089,7 +1089,7 @@ var queryize = function (original) {
 		//remove any undefined or empty string values
 		ons = ons.filter(function (d) { return d; });
 
-		return ons.join(' '+onBoolean+' ');
+		return ons.join(' ' + onBoolean + ' ');
 	}
 
 	/**
@@ -1099,13 +1099,13 @@ var queryize = function (original) {
 	 */
 	function _buildTableName () {
 		var q = [];
-		
+
 		if (this._attributes.database) {
 			q.push('`' + this._attributes.database + '`.');
 		}
-		
+
 		q.push('`' + this._attributes.tableName + '`');
-		
+
 		if (this._attributes.alias) {
 			q.push(' ' + this._attributes.alias);
 		}
@@ -1118,7 +1118,7 @@ var queryize = function (original) {
 	 * @type {Object}
 	 */
 	var builders = {
-		'select': function buildSelect() {
+		'select': function buildSelect () {
 			var columns = this._attributes.columns.join(', ');
 			if (this._attributes.distinct) columns = 'DISTINCT ' + columns;
 
@@ -1150,7 +1150,7 @@ var queryize = function (original) {
 			return q;
 		},
 
-		'update': function buildUpdate() {
+		'update': function buildUpdate () {
 			var q = ['UPDATE', this._buildTableName()];
 
 			if (!this._attributes.set.length) {
@@ -1174,7 +1174,7 @@ var queryize = function (original) {
 			return q;
 		},
 
-		'insert': function buildInsert() {
+		'insert': function buildInsert () {
 			var q = ['INSERT INTO', this._buildTableName()];
 
 			if (!this._attributes.set.length) {
@@ -1189,7 +1189,7 @@ var queryize = function (original) {
 			return q;
 		},
 
-		'delete': function buildDelete() {
+		'delete': function buildDelete () {
 			var q = ['DELETE'];
 
 			if (this._attributes.columns.length) {
@@ -1489,7 +1489,7 @@ module.exports = queryize;
  * @param  {string} [prefix]
  * @return {string}
  */
-function _uniqueId(prefix) {
+function _uniqueId (prefix) {
 	var id = (++idCounter).toString(16);
 	return prefix ? prefix + id : id;
 }
@@ -1508,7 +1508,7 @@ var isArray = Array.isArray;
  * @return {Boolean}
  * @private
  */
-function isDefined(value) {
+function isDefined (value) {
 	return value !== undefined && value !== null;
 }
 
@@ -1518,7 +1518,7 @@ function isDefined(value) {
  * @return {Boolean}
  * @private
  */
-function isValidPrimative(value) {
+function isValidPrimative (value) {
 	return typeof value === 'string' ||
 		typeof value === 'boolean' ||
 		typeof value === 'number' ||
@@ -1533,10 +1533,10 @@ function isValidPrimative(value) {
  * @param  {boolean} [includingObjects=false] If an object is encountered and this argument is truthy, the object will also be flattened by its property values.
  * @return {Array}
  */
-function flatten(input, includingObjects) {
+function flatten (input, includingObjects) {
 	var result = [];
 
-	function descend(level) {
+	function descend (level) {
 		if (isArray(level)) {
 			level.forEach(descend);
 		} else if (typeof level === 'object' && includingObjects) {
@@ -1559,14 +1559,14 @@ function flatten(input, includingObjects) {
  * @param  {*} value The value to be escaped
  * @return {string|number} The escaped value ready to be used in a query.
  */
-function _escapeValue(value) {
+function _escapeValue (value) {
 	if (value === undefined || value === null) {
 		return 'NULL';
 	}
 
 	switch (typeof value) {
 		case 'boolean': return (value) ? 'true' : 'false';
-		case 'number': return value+'';
+		case 'number': return value + '';
 	}
 
 	if (value instanceof Date) {
@@ -1577,7 +1577,7 @@ function _escapeValue(value) {
 		throw new TypeError('Cannot escape object');
 	}
 
-	value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function(s) {
+	value = value.replace(/[\0\n\r\b\t\\\'\"\x1a]/g, function( s) {
 		switch(s) {
 			case "\0": return "\\0";
 			case "\n": return "\\n";
@@ -1585,11 +1585,11 @@ function _escapeValue(value) {
 			case "\b": return "\\b";
 			case "\t": return "\\t";
 			case "\x1a": return "\\Z";
-			default: return "\\"+s;
+			default: return "\\" + s;
 		}
 	});
 
-	return "'"+value+"'";
+	return "'" + value + "'";
 }
 
 /**
@@ -1597,11 +1597,11 @@ function _escapeValue(value) {
  * MUST be called via .apply
  * @return {[type]} [description]
  */
-function arrayFromArguments() {
-    var len = arguments.length;
-    var args = new Array(len);
-    for(var i = 0; i < len; ++i) {
-    	args[i] = arguments[i];
-    }
-    return args;
+function arrayFromArguments () {
+	var len = arguments.length;
+	var args = new Array(len);
+	for(var i = 0; i < len; ++i) {
+		args[i] = arguments[i];
+	}
+	return args;
 }
