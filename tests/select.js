@@ -140,3 +140,50 @@ exports['select with groupBy'] = function (test) {
 
 	test.done();
 };
+
+
+exports['select with limit'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.limit(10);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` LIMIT 10',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['select with limit and offset'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.limit(10, 20);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` LIMIT 20, 10',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['select with empty limit'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.limit(10);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` LIMIT 10',
+		data: []
+	});
+
+	q.limit();
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users`',
+		data: []
+	});
+
+	test.done();
+};
