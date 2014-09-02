@@ -3118,6 +3118,20 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								
 							</ol>
 								
+							<pre class="panel-body prettyprint"><code class="language-javascript">var findCompleted = queryize()
+  .from('orders')
+  .where('status', 'completed')
+  .select();
+
+var archiveCompleted = a.clone()
+  .update()
+  .set('status', 'archived');
+
+findCompleted.exec(connection, function (results) {
+  // do something with the results and then...
+  archiveCompleted.exec(connection);
+});</code></pre>
+								
 								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right"></em></div>
 								
