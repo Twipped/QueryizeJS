@@ -507,7 +507,7 @@ var query = queryize();</code></pre>
     debugEnabled: false,
     database: false,
     tableName: false,
-    tableAlias: false,
+    alias: false,
     dataBindings: {},
     useBoundParameters: queryize.useBoundParameters,
     where: [],
@@ -891,15 +891,6 @@ query.createBinding('2013-06-18', 'DATE');
   if (value === false) return 'FALSE';
   if (value === null) return 'NULL';
 
-  if (typeof value === 'object') {
-    // if we've got a date, convert it into a mysql ready datestamp
-    if (value instanceof Date) {
-      value = value.toISOString().slice(0, 19).replace('T', ' ');
-    } else {
-      throw new TypeError('Received unparsable object as field value.');
-    }
-  }
-
   var key = '{{' + _uniqueId('binding') + '}}';
 
   this.insertBinding(key, value);
@@ -1135,7 +1126,7 @@ query.createBinding('2013-06-18', 'DATE');
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.insert = function insert () {
   this._attributes.builder = 'insert';
   if (arguments.length) {
-    this.set(arrayFromArguments.apply(null, arguments));
+    this.set.apply(this, arguments);
   }
   return this;
 };</code></pre>
@@ -1394,8 +1385,7 @@ query.createBinding('2013-06-18', 'DATE');
       return self.createBinding(column.data, column.modifier);
     }
 
-    console.log(column);
-    throw new TypeError('Unknown column type');
+    throw new TypeError('Unknown column type: ' + JSON.stringify(column));
   });
 
   this._attributes.columns = args;
@@ -1647,9 +1637,9 @@ query.where()</code></pre>
     clause = flatten(clause).map(function (c) {
       switch (typeof c) {
       case 'string': return c;
-      case 'object': return self._processWhereObject(clause, operator, modifier);
+      case 'object': return self._processWhereObject(c, operator, modifier);
       default:
-        throw new TypeError('Where clause could not be processed. Found ' + (typeof clause) + ' instead.');
+        throw new TypeError('Where clause could not be processed. Found ' + (typeof c) + ' instead.');
       }
     });
 
@@ -1661,8 +1651,13 @@ query.where()</code></pre>
       if (clause[0] === 'AND') {
         subBoolean = 'AND';
         clause.shift();
+        l--;
       }
-      clause = '(' + clause.join(subBoolean) + ')';
+      if (l === 1) {
+        clause = clause[0];
+      } else {
+        clause = '(' + clause.join(subBoolean) + ')';
+      }
     } else {
       clause = null;
     }
@@ -2308,7 +2303,7 @@ query.where()</code></pre>
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.distinct = function distinct (enable) {
-  this._attributes.distinct = isDefined(enable) ? true : enable;
+  this._attributes.distinct = isDefined(enable) ? enable : true;
   return this;
 };</code></pre>
 							</div>
@@ -2357,10 +2352,18 @@ query.where()</code></pre>
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.limit = function limit (max, offset) {
-  if (isDefined(max)) max = 0;
-  if (isDefined(offset)) offset = 0;
+  if (!isDefined(max)) max = 0;
+  if (!isDefined(offset)) offset = 0;
 
-  this._attributes.limit = max ? ['LIMIT ',Number(offset), ', ', Number(max)].join() : false;
+  if (max) {
+    if (offset) {
+      this._attributes.limit = 'LIMIT ' + Number(offset) + ', ' + Number(max);
+    } else {
+      this._attributes.limit = 'LIMIT ' + Number(max);
+    }
+  } else {
+    this._attributes.limit = false;
+  }
 
   return this;
 };</code></pre>
