@@ -13,6 +13,17 @@ exports['from subquery'] = function (test) {
 	test.done();
 };
 
+exports['from subquery, with missing table name'] = function (test) {
+	var s = queryize();
+	var q = queryize().select();
+
+	test.throws(function () {
+		q.from(s);
+	});
+
+	test.done();
+};
+
 exports['from subquery without name'] = function (test) {
 	var s = queryize().from('users').columns('MIN(date_created)');
 	var q = queryize().select().from(s);
