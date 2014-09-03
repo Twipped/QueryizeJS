@@ -1,7 +1,7 @@
 
 var queryize = require('../queryize');
 
-exports['requirement'] = function (test) {
+exports['exports correctly'] = function (test) {
 	test.strictEqual(typeof queryize, 'function', 'queryize is a function');
 	test.done();
 };
@@ -164,3 +164,22 @@ exports['confirm pre-bound mutators'] = function (test) {
 
 	test.done();
 };
+
+
+exports['debug toggles the correct flag'] = function (test) {
+	test.expect(3);
+	var q = queryize();
+
+	test.strictEqual(q._attributes.debugEnabled, false);
+
+	q.debug();
+
+	test.strictEqual(q._attributes.debugEnabled, true);
+
+	q.debug(false);
+
+	test.strictEqual(q._attributes.debugEnabled, false);
+
+	test.done();
+};
+
