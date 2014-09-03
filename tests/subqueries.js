@@ -141,3 +141,56 @@ exports['joining subquery with options alias'] = function (test) {
 
 	test.done();
 };
+
+exports['column as subquery'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	q.columns(
+		'id',
+		queryize()
+			.select('SUM(total_invoice)')
+			.from('orders')
+			.groupBy('userid')
+			.as('total_invoiced')
+	);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT id, (SELECT SUM(total_invoice) FROM `orders` GROUP BY userid) as `total_invoiced` FROM `users` u',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['column as subquery w/ too many columns'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	test.throws(function () {
+		q.columns(
+			'id',
+			queryize()
+				.select('id', 'SUM(total_invoice)')
+				.from('orders')
+				.groupBy('userid')
+				.as('total_invoiced')
+		);
+	});
+
+	test.done();
+};
+
+exports['column as subquery w/ default columns'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	test.throws(function () {
+		q.columns(
+			'id',
+			queryize()
+				.from('orders')
+				.groupBy('userid')
+				.as('total_invoiced')
+		);
+	});
+
+	test.done();
+};
