@@ -1,3 +1,10 @@
+0.4.0 / 2014-09-03
+==================
+
+  * Added support for using queryize objects as subqueries in columns, joins and select from.
+    - Use `query.as(name)` to define the name for the subquery. If omitted, queryize will create a random name.
+  * Fixed bug in `query.debug()` that prevented it from enabling without passing true.
+  * Added documentation examples for all possible ways you can use `query.exec()`
 
 0.3.0 / 2014-09-02
 ==================
