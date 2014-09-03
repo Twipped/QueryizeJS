@@ -226,7 +226,7 @@
 					<img src="https://img.shields.io/npm/l/queryize.svg?style=flat" alt="License: MIT" height="18">
 					<a href="http://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
 					<a href="https://travis-ci.org/ChiperSoft/QueryizeJS"><img src="https://img.shields.io/travis/ChiperSoft/QueryizeJS.svg?style=flat" alt="Build Status" height="18"></a>
-					<a href="https://coveralls.io/r/chipersoft/queryize"><img src="https://img.shields.io/coveralls/ChiperSoft/QueryizeJS.svg?style=flat" alt="Coverage" height="18"></a>
+					<a href="https://coveralls.io/r/ChiperSoft/QueryizeJS"><img src="https://img.shields.io/coveralls/ChiperSoft/QueryizeJS.svg?style=flat" alt="Coverage" height="18"></a>
 					<a href="https://www.gittip.com/chipersoft"><img src="http://img.shields.io/gittip/chipersoft.svg?style=flat" alt="Gittip" height="18"></a>
 				</p>
 
@@ -283,6 +283,8 @@ queryize.deleteFrom('eventlog')
 						
 						<li class="private "><a href="#functionisValidPrimative"><span class="name">isValidPrimative</span></a></li>
 						
+						<li class="private "><a href="#functionisQueryizeObject"><span class="name">isQueryizeObject</span></a></li>
+						
 						<li class="private "><a href="#functionflatten"><span class="name">flatten</span></a></li>
 						
 						<li class="private "><a href="#function_escapeValue"><span class="name">_escapeValue</span></a></li>
@@ -321,15 +323,21 @@ queryize.deleteFrom('eventlog')
 						
 							<li class=""><a href="#methodquerydebug"><span class="name">query.debug</span></a></li>
 						
-							<li class="private "><a href="#methodquery_convertNamedParameters"><span class="name">query._convertNamedParameters</span></a></li>
-						
 							<li class="private "><a href="#methodquery_processWhereCondition"><span class="name">query._processWhereCondition</span></a></li>
 						
 							<li class="private "><a href="#methodquery_processWhereObject"><span class="name">query._processWhereObject</span></a></li>
 						
 							<li class="private "><a href="#methodquery_processJoinOns"><span class="name">query._processJoinOns</span></a></li>
 						
+							<li class="private "><a href="#methodquery_buildSubquery"><span class="name">query._buildSubquery</span></a></li>
+						
+							<li class="private "><a href="#methodquery_mergeSubquery"><span class="name">query._mergeSubquery</span></a></li>
+						
 							<li class="private "><a href="#methodquery_buildTableName"><span class="name">query._buildTableName</span></a></li>
+						
+							<li class="private "><a href="#methodquery_convertNamedParameters"><span class="name">query._convertNamedParameters</span></a></li>
+						
+							<li class="private "><a href="#methodquery_collectNamedParameters"><span class="name">query._collectNamedParameters</span></a></li>
 						
 							<li class="private "><a href="#methodqueryexport"><span class="name">query.export</span></a></li>
 						
@@ -442,6 +450,14 @@ queryize.deleteFrom('eventlog')
 									</ul>
 								</li>
 						
+								<li class="category"><a>Subqueries</a>
+									<ul class="nav subnav">
+							
+										<li class=""><a href="#methodqueryas"><span class="name">query.as</span></a></li>
+							
+									</ul>
+								</li>
+						
 								<li class="category"><a>Evaluation</a>
 									<ul class="nav subnav">
 							
@@ -500,13 +516,21 @@ var query = queryize();</code></pre>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">var queryize = function (original) {
 
-  var query = Object.create(mutators);
+  var query = {};
+
+  //bind all mutators directly to query
+  var proto = mapValues(mutators, function (fn) { return typeof fn === 'function' ? fn.bind(query) : fn; });
+
+  //mix in the bound mutators
+  extend(query, proto);
+
   query._constructor = queryize;
   query._isQueryizeObject = true;
   query._attributes = {
     debugEnabled: false,
     database: false,
     tableName: false,
+    fromSubquery: false,
     alias: false,
     dataBindings: {},
     useBoundParameters: queryize.useBoundParameters,
@@ -519,6 +543,7 @@ var query = queryize();</code></pre>
     groupBy: false,
     distinct: false,
     limit: false,
+    asName: false,
     builder: false
   };
 
@@ -768,9 +793,7 @@ queryize.useBoundParameters = false;</code></pre>
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.debug = function debug (enable) {
-  if (isDefined(enable)) enable = true;
-
-  this._attributes.debugEnabled = enable;
+  this._attributes.debugEnabled = isDefined(enable) ? enable : true;
 
   return this;
 };</code></pre>
@@ -897,63 +920,6 @@ query.createBinding('2013-06-18', 'DATE');
 
   return modifier ? [modifier, '(', key, ')'].join('') : key;
 };</code></pre>
-							</div>
-						</div>
-						
-					
-					</div>
-				
-					<div id="methodquery_convertNamedParameters" style="position:relative;top:-60px;"></div>
-					<div class="piece private ">
-						<div class="page-header"><h2>query._convertNamedParameters <small></small></h2></div>
-					
-					
-						<p>Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array<br />If useBoundParameters is turned off, it replaces the placeholders with their escaped values.</p>
-						
-						<h3>Usage:</h3>
-							
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query._convertNamedParameters(queryString)</div></div>
-							<ol class="list-group">
-								
-								<li class="list-group-item">
-									<strong>queryString</strong> string
-									
-									<br>The query string to be processed
-								</li>
-								
-							</ol>
-								
-								
-							<div class="panel-footer"><strong>Returns: </strong> compiledQuery <em class="pull-right">The processed query</em></div>
-								
-						</div>
-							
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_convertNamedParameters + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query._convertNamedParameters = function _convertNamedParameters (queryString) {
-  var data = [], self = this;
-
-  if (this._attributes.useBoundParameters) {
-    queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-      if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
-
-      data.push(self._attributes.dataBindings[name]);
-
-      return '?';
-    });
-  } else {
-    queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
-      if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
-
-      return _escapeValue(self._attributes.dataBindings[name]);
-    });
-  }</code></pre>
 							</div>
 						</div>
 						
@@ -1241,6 +1207,37 @@ query.createBinding('2013-06-18', 'DATE');
 								
 						</div>
 							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.from(subquery, [as])</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>subquery</strong> query
+									
+									<br>A query object to use as a subquery
+								</li>
+								
+								<li class="list-group-item">
+									<strong>as</strong> string
+									<em>Optional </em>
+									<br>Name to use for the subquery (overrides query.as() value)
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
+  .select('AVG(total_per_user)')
+  .from(queryize()
+    .select('SUM(total_invoice) AS total_per_user')
+    .from('orders')
+    .groupBy('userid')
+    .as('order_totals');</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1249,6 +1246,14 @@ query.createBinding('2013-06-18', 'DATE');
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.table = exports.into = exports.from = function table (tablename, alias) {
+  if (isQueryizeObject(tablename)) {
+    if (isDefined(alias)) {
+      tablename = tablename.clone().as(alias);
+    }
+    this._attributes.fromSubquery = this._mergeSubquery(tablename);
+    return this;
+  }
+
   this._attributes.tableName = tablename;
   if (isDefined(alias)) {
     this._attributes.alias = alias;
@@ -1356,6 +1361,15 @@ query.createBinding('2013-06-18', 'DATE');
 								
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.columns(['username', 'firstname', 'lastname']);</code></pre>
 								
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.columns(
+  'users.id',
+  queryize()
+    .select('SUM(total_invoice)')
+    .from('orders')
+    .groupBy('userid')
+    .as('total_invoiced')
+);</code></pre>
+								
 								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
 								
@@ -1379,6 +1393,13 @@ query.createBinding('2013-06-18', 'DATE');
 
     if (typeof column === 'number' || column instanceof Date) {
       return self.createBinding(column);
+    }
+
+    if (isQueryizeObject(column)) {
+      if (column._attributes.columns.length > 1 || column._attributes.columns[0] === '*') {
+        throw new Error('Column level subqueries can only return a single column.');
+      }
+      return self._mergeSubquery(column);
     }
 
     if (typeof column === 'object' && isDefined(column.data)) {
@@ -2587,6 +2608,37 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								
 						</div>
 							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.join(subquery, options)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>subquery</strong> query
+									
+									<br>A query object to use as a subquery
+								</li>
+								
+								<li class="list-group-item">
+									<strong>options</strong> Object
+									
+									<br>Plain object containing options for the join
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
+  .select('AVG(total_per_user)')
+  .from(queryize()
+    .select('SUM(total_invoice) AS total_per_user')
+    .from('orders')
+    .groupBy('userid')
+    .as('order_totals');</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
 
 
 						<div class="codeview panel panel-default">
@@ -2597,7 +2649,15 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.join = function join (clause, options) {
   if (!isDefined(clause)) throw new Error('You must define a table to join against.');
 
-  if (typeof clause === 'object') {
+  if (isQueryizeObject(clause)) {
+
+    if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.')
+      
+    options = Object.create(options);
+    options.table = clause;
+    clause = options;
+
+  } else if (typeof clause === 'object') {
 
     if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
     if (!clause.table) throw new Error('You must define a table to join against');
@@ -2620,8 +2680,17 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
     if (clause.type) stack.push(clause.type);
     stack.push('JOIN');
-    stack.push(clause.table);
-    if (clause.alias) stack.push(clause.alias);
+    if (isQueryizeObject(clause.table)) {
+      if (clause.alias) {
+        clause.table = clause.table.clone().as(clause.alias);
+      }
+      stack.push(this._mergeSubquery(clause.table));
+    } else if (typeof clause.table !== 'string') {
+      throw new TypeError('The join table name is not a string.');
+    } else {
+      stack.push(clause.table);
+      if (clause.alias) stack.push(clause.alias);
+    }
 
     if (clause.using) {
       stack.push( 'USING (' + (isArray(clause.using) ? clause.using.join(', ') : clause.using) + ')' );
@@ -2680,7 +2749,15 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<pre class="panel-body prettyprint"><code class="language-javascript">function _makeJoiner(type) {
   return function (clause, options) {
 
-    if (typeof clause === 'object') {
+    if (isQueryizeObject(clause)) {
+
+      if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.')
+        
+      options = Object.create(options);
+      options.table = clause;
+      clause = options;
+
+    } else if (typeof clause === 'object') {
 
       if (isArray(clause)) throw new TypeError('Join clauses can only be strings or object definitions');
       if (!clause.table) throw new Error('You must define a table to join against');
@@ -2896,6 +2973,230 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					
 					</div>
 				
+					<div id="methodqueryas" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.as <small></small></h2></div>
+					
+					
+						<p>Defines the name to be used to identify the results of a subquery</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.as(name)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>name</strong> string
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryas + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.as = function asNamed (name) {
+  this._attributes.asName = name;
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquery_buildSubquery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._buildSubquery <small></small></h2></div>
+					
+					
+						<p>Compiles this query for use as a subquery in another query object.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._buildSubquery()</div></div>
+							<ol class="list-group">
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right">{query: String, data: Object&lt;Binding:Value&gt;}</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_buildSubquery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._buildSubquery = function _buildSubquery () {
+  if (!this._attributes.tableName && !this._attributes.fromSubquery) throw new Error('No table name has been defined for a sub-query.');
+
+  // I couldn't find a single instance of a non-select subquery, so I'm just assuming it here
+  var queryString = builders.select.call(this);
+  var queryData = this._collectNamedParameters(queryString);
+
+  queryString = '(' + queryString + ') as `' + (this._attributes.asName || _uniqueId('subquery')) + '`';
+
+  return {
+    query: queryString,
+    data: queryData
+  };
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquery_mergeSubquery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._mergeSubquery <small></small></h2></div>
+					
+					
+						<p>Compiles an external query object and merges the bound data values into this query</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._mergeSubquery(query)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>query</strong> query
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">Returns the query string to be used as a subquery</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_mergeSubquery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeSubquery = function _mergeSubquery (query) {
+  if (!isQueryizeObject(query)) throw new TypeError('Provided subquery is not a queryize object.');
+
+  var q = query._buildSubquery();
+
+  extend(this._attributes.dataBindings, q.data);
+
+  return q.query;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquerydisableBoundParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.disableBoundParameters <small></small></h2></div>
+					
+					
+						<p>Causes queryize to insert escaped data directly into the query instead of using data bound placeholders.<br />This is not recommended and should only be used for debugging purposes.</p><p>You can also set <code>queryize.useBoundParameters = false</code> to disable databinding for all queries</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.disableBoundParameters(enable)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>enable</strong> boolean
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquerydisableBoundParameters + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.disableBoundParameters = function disableBoundParameters (bool) {
+  this._attributes.useBoundParameters = isDefined(bool) ? !bool : false;
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryuseBoundParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.useBoundParameters <small></small></h2></div>
+					<div class="alert alert-danger"><strong>This method is deprecated:</strong> Use disableBoundParameters instead.</div>
+					
+						
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.useBoundParameters(bool)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>bool</strong> Boolean
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryuseBoundParameters + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.useBoundParameters = function (bool) {
+  this.disableBoundParameters(isDefined(bool) ? !bool : true);
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
 					<div id="methodquery_buildTableName" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>query._buildTableName <small></small></h2></div>
@@ -2924,6 +3225,10 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query._buildTableName = function _buildTableName () {
+  if (this._attributes.fromSubquery) {
+    return this._attributes.fromSubquery;
+  }
+
   var q = [];
 
   if (this._attributes.database) {
@@ -2973,11 +3278,119 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.compile = function compile () {
   if (!this._attributes.builder || !builders[this._attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
-  if (!this._attributes.tableName) throw new Error('No table name has been defined');
+  if (!this._attributes.tableName && !this._attributes.fromSubquery) throw new Error('No table name has been defined');
 
   var queryString = builders[this._attributes.builder].call(this);
 
   return this._convertNamedParameters(queryString);
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquery_convertNamedParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._convertNamedParameters <small></small></h2></div>
+					
+					
+						<p>Processes the freshly compiled query string, replacing all data bindings with placeholders and constructs the data array<br />If useBoundParameters is turned off, it replaces the placeholders with their escaped values.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._convertNamedParameters(queryString)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>queryString</strong> string
+									
+									<br>The query string to be processed
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> compiledQuery <em class="pull-right">The processed query</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_convertNamedParameters + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._convertNamedParameters = function _convertNamedParameters (queryString) {
+  var data = [], self = this;
+
+  if (this._attributes.useBoundParameters) {
+    queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
+      if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
+
+      data.push(self._attributes.dataBindings[name]);
+
+      return '?';
+    });
+  } else {
+    queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
+      if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
+
+      return _escapeValue(self._attributes.dataBindings[name]);
+    });
+  }</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquery_collectNamedParameters" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._collectNamedParameters <small></small></h2></div>
+					
+					
+						<p>Processes the freshly compiled query string, finding all data bindings placeholders and collecting the values for those bindings.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._collectNamedParameters(queryString)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>queryString</strong> string
+									
+									<br>The query string to be processed
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right">A hash table of binding values</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_collectNamedParameters + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._collectNamedParameters = function _collectNamedParameters (queryString) {
+  var data = {}, self = this;
+
+  (queryString.match(/({{\w*}})/g) || []).forEach(function (name) {
+    // Subqueries might reference data bound to the parent query, so it's ok if a value doesn't exist
+    if (self._attributes.dataBindings[name] !== undefined) {
+      data[name] = self._attributes.dataBindings[name];
+    }
+  });
+
+  return data;
 };</code></pre>
 							</div>
 						</div>
@@ -3018,6 +3431,67 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								
 							</ol>
 								
+							<pre class="panel-body prettyprint"><code class="language-javascript">var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used with callback
+queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname')
+  .exec(connection, function (err, employees) {
+    if (err) console.error(err);
+    else console.log(employees);
+  });</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used as event emitter
+queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname')
+  .exec(connection)
+    .on('result', function (row) {
+      console.log(row);
+    })
+    .on('error', function (err) {
+      console.error(err);
+    });</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used as promise
+queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname')
+  .exec(connection)
+    .then(function (employees) {
+      console.log(employees);
+    })
+    .catch(function (err) {
+      console.error(err);
+    });</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// Query exec piped to node stream
+queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname')
+  .exec(connection)
+    .stream({highWaterMark: 5})
+    .pipe(process.stdout)</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// insert query exec with insert id
+queryize()
+  .insert({
+    name: 'John Doe',
+    birthdate: new Date('1992-05-20')
+  })
+  .into('employees')
+  .exec(connection)
+    .then(function (response) {
+      console.log(response.insertId);
+    });</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> nodeMysqlQuery <em class="pull-right">Returns a promise extended node-mysql(2) query emitter.</em></div>
 								
 						</div>
 							
@@ -3156,92 +3630,6 @@ findCompleted.exec(connection, function (results) {
 					
 					</div>
 				
-					<div id="methodquerydisableBoundParameters" style="position:relative;top:-60px;"></div>
-					<div class="piece  ">
-						<div class="page-header"><h2>query.disableBoundParameters <small></small></h2></div>
-					
-					
-						<p>Causes queryize to insert escaped data directly into the query instead of using data bound placeholders.<br />This is not recommended and should only be used for debugging purposes.</p><p>You can also set <code>queryize.useBoundParameters = false</code> to disable databinding for all queries</p>
-						
-						<h3>Usage:</h3>
-							
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.disableBoundParameters(enable)</div></div>
-							<ol class="list-group">
-								
-								<li class="list-group-item">
-									<strong>enable</strong> boolean
-									
-									<br>
-								</li>
-								
-							</ol>
-								
-								
-							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-								
-						</div>
-							
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodquerydisableBoundParameters + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.disableBoundParameters = function disableBoundParameters (bool) {
-  this._attributes.useBoundParameters = isDefined(bool) ? !bool : false;
-  return this;
-};</code></pre>
-							</div>
-						</div>
-						
-					
-					</div>
-				
-					<div id="methodqueryuseBoundParameters" style="position:relative;top:-60px;"></div>
-					<div class="piece  ">
-						<div class="page-header"><h2>query.useBoundParameters <small></small></h2></div>
-					<div class="alert alert-danger"><strong>This method is deprecated:</strong> Use disableBoundParameters instead.</div>
-					
-						
-						
-						<h3>Usage:</h3>
-							
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.useBoundParameters(bool)</div></div>
-							<ol class="list-group">
-								
-								<li class="list-group-item">
-									<strong>bool</strong> Boolean
-									
-									<br>
-								</li>
-								
-							</ol>
-								
-								
-							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
-								
-						</div>
-							
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryuseBoundParameters + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.useBoundParameters = function (bool) {
-  this.disableBoundParameters(isDefined(bool) ? !bool : true);
-  return this;
-};</code></pre>
-							</div>
-						</div>
-						
-					
-					</div>
-				
 					<div id="function_uniqueId" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>_uniqueId <small></small></h2></div>
@@ -3366,6 +3754,48 @@ findCompleted.exec(connection, function (results) {
     typeof value === 'number' ||
     value === null ||
     (value instanceof Date);
+}</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="functionisQueryizeObject" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>isQueryizeObject <small></small></h2></div>
+					
+					
+						<p>Tests if the provided value is a queryize query object</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">isQueryizeObject(value)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>value</strong> mixed
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#functionisQueryizeObject + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">function isQueryizeObject (value) {
+  return typeof value === 'object' && value._isQueryizeObject;
 }</code></pre>
 							</div>
 						</div>
