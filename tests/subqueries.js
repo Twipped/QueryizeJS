@@ -62,3 +62,71 @@ exports['from subquery with data'] = function (test) {
 
 	test.done();
 };
+
+exports['joining subquery'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	q.join(queryize()
+		.select('userid', 'SUM(total_invoice) AS total_invoiced')
+		.from('orders')
+		.groupBy('userid')
+		.as('order_totals'),
+		{on: 'order_totals.userid = u.id'});
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['left joining subquery'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	q.leftJoin(queryize()
+		.select('userid', 'SUM(total_invoice) AS total_invoiced')
+		.from('orders')
+		.groupBy('userid')
+		.as('order_totals'),
+		{on: 'order_totals.userid = u.id'});
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u LEFT JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['joining subquery without options'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	test.throws(function () {
+		q.join(queryize()
+			.select('userid', 'SUM(total_invoice) AS total_invoiced')
+			.from('orders')
+			.groupBy('userid')
+			.as('order_totals'));
+	});
+
+	test.done();
+};
+
+exports['joining subquery with options alias'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+	
+	q.join(queryize()
+		.select('userid', 'SUM(total_invoice) AS total_invoiced')
+		.from('orders')
+		.groupBy('userid')
+		.as('order_totals'),
+		{on: 'ot.userid = u.id', alias: 'ot'});
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `ot` ON (ot.userid = u.id)',
+		data: []
+	});
+
+	test.done();
+};
