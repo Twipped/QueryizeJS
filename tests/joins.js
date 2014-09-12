@@ -499,3 +499,18 @@ exports['select with multiple joins'] = function (test) {
 
 	test.done();
 };
+
+exports['update with join'] = function (test) {
+	var q = queryize().update('tablea');
+
+	q.join('tableb', {on: {'tablea.id': 'tableb.id'}});
+	q.set('tablea.foo = tableb.foo');
+	q.where('tablea.batch', 10);
+
+	test.deepEqual(q.compile(), {
+		query: 'UPDATE `tablea` JOIN `tableb` ON (tablea.id = tableb.id) SET tablea.foo = tableb.foo WHERE tablea.batch = ?',
+		data: [10]
+	});
+
+	test.done();
+};
