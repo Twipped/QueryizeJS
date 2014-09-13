@@ -277,6 +277,8 @@ queryize.deleteFrom('eventlog')
 						
 						<li class="private "><a href="#function_makeJoiner"><span class="name">_makeJoiner</span></a></li>
 						
+						<li class=""><a href="#method_buildWhereBoolean"><span class="name">_buildWhereBoolean</span></a></li>
+						
 						<li class="private "><a href="#function_uniqueId"><span class="name">_uniqueId</span></a></li>
 						
 						<li class="private "><a href="#functionisDefined"><span class="name">isDefined</span></a></li>
@@ -331,7 +333,11 @@ queryize.deleteFrom('eventlog')
 						
 							<li class="private "><a href="#methodquery_buildSubquery"><span class="name">query._buildSubquery</span></a></li>
 						
+							<li class="private "><a href="#methodquery_buildCompoundWhere"><span class="name">query._buildCompoundWhere</span></a></li>
+						
 							<li class="private "><a href="#methodquery_mergeSubquery"><span class="name">query._mergeSubquery</span></a></li>
+						
+							<li class="private "><a href="#methodquery_mergeCompoundWhere"><span class="name">query._mergeCompoundWhere</span></a></li>
 						
 							<li class="private "><a href="#methodquery_buildTableName"><span class="name">query._buildTableName</span></a></li>
 						
@@ -535,7 +541,7 @@ var query = queryize();</code></pre>
     dataBindings: {},
     useBoundParameters: queryize.useBoundParameters,
     where: [],
-    whereBoolean: ' AND ',
+    whereBoolean: null,
     set: [],
     columns: ['*'],
     joins: [],
@@ -1453,19 +1459,22 @@ query.createBinding('2013-06-18', 'DATE');
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.comparisonMethod = function comparisonMethod (condition) {
-  switch (condition) {
-  case true:
+  if (typeof condition === 'boolean') {
+    condition = condition ? 'and' : 'or';
+  }
+
+  switch (String(condition).trim()) {
   case 'and':
   case 'AND':
   case 'yes':
-    this._attributes.whereBoolean = ' AND '; break;
+    this._attributes.whereBoolean = 'AND'; break;
 
-  case false:
   case 'or':
   case 'OR':
   case 'no':
-    this._attributes.whereBoolean = ' OR '; break;
+    this._attributes.whereBoolean = 'OR'; break;
   }
+
   return this;
 };</code></pre>
 							</div>
@@ -1624,6 +1633,32 @@ query.where()</code></pre>
 								
 						</div>
 							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.where(query)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>query</strong> query
+									
+									<br>A subquery to be used as a compound where clause.
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">query
+  .where('type', [4,5,6])
+  .where(queryize()
+    .whereLike('address', '%' + search + '%')
+    .whereLike('city', '%' + search + '%')
+  )
+// WHERE type IN (?,?,?) AND (address LIKE ? OR city LIKE ?)
+// Data: [4, 5, 6, '%Foo%', '%Foo%']</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
+								
+						</div>
+							
 
 
 						<div class="codeview panel panel-default">
@@ -1639,6 +1674,11 @@ query.where()</code></pre>
   }
 
   var self = this;
+
+  if (isQueryizeObject(clause)) {
+    clause = this._mergeCompoundWhere(clause);
+    console.log(clause);
+  }
 
   // if a value is defined, then we're performing a field > value comparison
   // and must parse that first.
@@ -1670,7 +1710,7 @@ query.where()</code></pre>
     } else if (l > 1) {
       // if the first value in the array is "AND", reverse our typical boolean.
       if (clause[0] === 'AND') {
-        subBoolean = 'AND';
+        subBoolean = ' AND ';
         clause.shift();
         l--;
       }
@@ -2651,7 +2691,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
   if (isQueryizeObject(clause)) {
 
-    if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.')
+    if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.');
       
     options = Object.create(options);
     options.table = clause;
@@ -3063,12 +3103,60 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					
 					</div>
 				
+					<div id="methodquery_buildCompoundWhere" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._buildCompoundWhere <small></small></h2></div>
+					
+					
+						<p>Compiles this query for use as a where clause in another query.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._buildCompoundWhere()</div></div>
+							<ol class="list-group">
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right">{query: String, data: Object&lt;Binding:Value&gt;}</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_buildCompoundWhere + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._buildCompoundWhere = function _buildCompoundWhere () {
+  var wheres = this._attributes.where.concat();
+
+  // if the whereBoolean is defined and contains AND, the compound condition was explicitly defined as an AND.
+  if (this._attributes.whereBoolean === 'AND') {
+    // an array of wheres is normally processed as an OR condition.
+    // prefixing it with 'AND' changes it to an AND condition
+    wheres.unshift('AND');
+  }
+
+  return {
+    where: wheres,
+    data: this._collectNamedParameters(wheres.join(' '))
+  };
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
 					<div id="methodquery_mergeSubquery" style="position:relative;top:-60px;"></div>
 					<div class="piece private ">
 						<div class="page-header"><h2>query._mergeSubquery <small></small></h2></div>
 					
 					
-						<p>Compiles an external query object and merges the bound data values into this query</p>
+						<p>Extracts an external query object as a subquery and merges the bound data values into this query</p>
 						
 						<h3>Usage:</h3>
 							
@@ -3104,6 +3192,54 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
   extend(this._attributes.dataBindings, q.data);
 
   return q.query;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodquery_mergeCompoundWhere" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._mergeCompoundWhere <small></small></h2></div>
+					
+					
+						<p>Extracts the where clauses of an external query object and merges the bound data values into this query</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query._mergeCompoundWhere(query)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>query</strong> query
+									
+									<br>
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">Returns the query string to be used as a subquery</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_mergeCompoundWhere + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeCompoundWhere = function _mergeCompoundWhere (query) {
+  if (!isQueryizeObject(query)) throw new TypeError('Provided compound where is not a queryize object.');
+
+  var q = query._buildCompoundWhere();
+
+  extend(this._attributes.dataBindings, q.data);
+
+  return q.where;
 };</code></pre>
 							</div>
 						</div>
@@ -3242,6 +3378,42 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
   }
 
   return q.join('');
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="method_buildWhereBoolean" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>_buildWhereBoolean <small></small></h2></div>
+					
+					
+						<p>Parses the comparisonMethod value and returns a string suitable as a delimiter.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">_buildWhereBoolean()</div></div>
+							<ol class="list-group">
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> [type] <em class="pull-right">[description]</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#method_buildWhereBoolean + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._buildWhereBoolean = function _buildWhereBoolean () {
+  return ' ' + (this._attributes.whereBoolean && this._attributes.whereBoolean.trim() || 'AND') + ' ';
 };</code></pre>
 							</div>
 						</div>
