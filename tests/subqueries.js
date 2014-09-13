@@ -194,3 +194,56 @@ exports['column as subquery w/ default columns'] = function (test) {
 
 	test.done();
 };
+
+exports['compound where clause'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+
+	q.where('name', 'John');
+	q.where(queryize()
+		.where({type: [15,23]})
+		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
+	);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
+		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+	});
+
+	test.done();
+};
+
+exports['compound where clause w/ compound AND'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+
+	q.where('name', 'John');
+	q.where(queryize()
+		.comparisonMethod('and')
+		.where({type: [15,23]})
+		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
+	);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) AND date_created BETWEEN ? AND ?)',
+		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+	});
+
+	test.done();
+};
+
+exports['compound where clause w/ compound OR'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+
+	q.where('name', 'John');
+	q.where(queryize()
+		.comparisonMethod('or')
+		.where({type: [15,23]})
+		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
+	);
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
+		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+	});
+
+	test.done();
+};
