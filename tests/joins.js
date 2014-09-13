@@ -508,7 +508,7 @@ exports['update with join'] = function (test) {
 	q.where('tablea.batch', 10);
 
 	test.deepEqual(q.compile(), {
-		query: 'UPDATE `tablea` JOIN `tableb` ON (tablea.id = tableb.id) SET tablea.foo = tableb.foo WHERE tablea.batch = ?',
+		query: 'UPDATE `tablea` JOIN tableb ON (tablea.id = tableb.id) SET tablea.foo = tableb.foo WHERE tablea.batch = ?',
 		data: [10]
 	});
 
