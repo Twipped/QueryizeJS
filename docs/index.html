@@ -473,6 +473,8 @@ queryize.deleteFrom('eventlog')
 							
 										<li class="alias "><a href="#propertyqueryexec"><i class="ico-arrow-up"></i><span class="name">query.run</span></a></li>
 							
+										<li class=""><a href="#methodqueryemitted"><span class="name">query.emitted</span></a></li>
+							
 									</ul>
 								</li>
 						
@@ -3574,7 +3576,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<div class="page-header"><h2>query.exec <small>run</small></h2></div>
 					
 					
-						<p>Compiles the MySQL query and runs it using the provided connection or connection pool.  from node-mysql or node-mysql2.<br />If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
+						<p>Compiles the MySQL query and runs it using the provided connection or connection pool from node-mysql or node-mysql2.<br />If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
 						
 						<h3>Usage:</h3>
 							
@@ -3614,19 +3616,6 @@ queryize()
     else console.log(employees);
   });</code></pre>
 								
-							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used as event emitter
-queryize()
-  .select()
-  .from('employees')
-  .orderBy('lastname', 'firstname')
-  .exec(connection)
-    .on('result', function (row) {
-      console.log(row);
-    })
-    .on('error', function (err) {
-      console.error(err);
-    });</code></pre>
-								
 							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used as promise
 queryize()
   .select()
@@ -3639,15 +3628,6 @@ queryize()
     .catch(function (err) {
       console.error(err);
     });</code></pre>
-								
-							<pre class="panel-body prettyprint"><code class="language-javascript">// Query exec piped to node stream
-queryize()
-  .select()
-  .from('employees')
-  .orderBy('lastname', 'firstname')
-  .exec(connection)
-    .stream({highWaterMark: 5})
-    .pipe(process.stdout)</code></pre>
 								
 							<pre class="panel-body prettyprint"><code class="language-javascript">// insert query exec with insert id
 queryize()
@@ -3673,7 +3653,7 @@ queryize()
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.exec = exports.run = function exec (connection, options, callback) {
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.exec = query.run = function exec (connection, options, callback) {
   var func;
   if (typeof connection.execute === 'function') func = 'execute';
   else if (typeof connection.query === 'function') func = 'query';
@@ -3704,8 +3684,100 @@ queryize()
     emitter = connection[func](q.query, q.data, pcb);
   }
 
+  // if the connection was a pool, then query/execute don't return values
+  emitter = emitter || {};
   emitter.then = pcb.then;
   emitter.catch = pcb.catch;
+
+  return emitter;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryemitted" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.emitted <small></small></h2></div>
+					
+					
+						<p>Compiles the MySQL query and runs it using the provided connection from node-mysql or node-mysql2, returning an event emitter that fires for every row as they are received.<br />You <em>must</em> provide a connection, not a connection pool, as pools cannot return streams.<br />If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.emitted(connection, [options])</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>connection</strong> Object
+									
+									<br>node-mysql(2) connection(Pool)
+								</li>
+								
+								<li class="list-group-item">
+									<strong>options</strong> Object
+									<em>Optional </em>
+									<br>Options object to be passed to &#x60;connection.query&#x60;.
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">// query stream used as event emitter
+queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname')
+  .emitted(connection)
+    .on('result', function (row) {
+      console.log(row);
+    })
+    .on('error', function (err) {
+      console.error(err);
+    })
+    .on('end', function () {
+      console.log('done');
+    })</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> stream <em class="pull-right">Returns a node streams2 stream object</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryemitted + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.emitted = function (connection, options) {
+  if (connection.getConnection) {
+    throw new Error('query.stream cannot use connection pools, as pool.query does not return a stream.');
+  }
+
+  var func;
+  if (typeof connection.execute === 'function') func = 'execute';
+  else if (typeof connection.query === 'function') func = 'query';
+  else throw new TypeError('Connection object is not a mysql or mysql2 connection or pool.');
+
+  var q = this.compile();
+
+  if (this._attributes.debugEnabled) console.log(q);
+
+  if (typeof options === 'object') {
+    options = Object.create(options);
+    options.sql = q.query;
+    options.values = q.data;
+  }
+
+  var emitter;
+  if (options) {
+    emitter = connection[func](options);
+  } else {
+    emitter = connection[func](q.query, q.data);
+  }
 
   return emitter;
 };</code></pre>
