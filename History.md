@@ -1,3 +1,23 @@
+0.6.0 / 2014-09-12
+==================
+
+  * Added `query.emitted()` as an alternative to `query.exec()`.
+    - node-mysql does not return a row emitter if a callback is provided. Since a callback is always provided as
+      part of the promise extension, this made it impossible to receive a row emitter when using node-mysql
+      (node-mysql2 does not have this limitation). This new function works around that limitation.
+
+
+0.5.1 / 2014-09-13
+==================
+
+  * Removed a console.log that slipped in.
+
+
+0.5.0 / 2014-09-12
+==================
+
+  * Added ability to provide a queryize object as a compound where condition.
+
 0.4.0 / 2014-09-03
 ==================
 
