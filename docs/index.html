@@ -277,8 +277,6 @@ queryize.deleteFrom('eventlog')
 						
 						<li class="private "><a href="#function_makeJoiner"><span class="name">_makeJoiner</span></a></li>
 						
-						<li class=""><a href="#method_buildWhereBoolean"><span class="name">_buildWhereBoolean</span></a></li>
-						
 						<li class="private "><a href="#function_uniqueId"><span class="name">_uniqueId</span></a></li>
 						
 						<li class="private "><a href="#functionisDefined"><span class="name">isDefined</span></a></li>
@@ -340,6 +338,8 @@ queryize.deleteFrom('eventlog')
 							<li class="private "><a href="#methodquery_mergeCompoundWhere"><span class="name">query._mergeCompoundWhere</span></a></li>
 						
 							<li class="private "><a href="#methodquery_buildTableName"><span class="name">query._buildTableName</span></a></li>
+						
+							<li class="private "><a href="#methodquery_buildWhereBoolean"><span class="name">query._buildWhereBoolean</span></a></li>
 						
 							<li class="private "><a href="#methodquery_convertNamedParameters"><span class="name">query._convertNamedParameters</span></a></li>
 						
@@ -3386,9 +3386,9 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 					
 					</div>
 				
-					<div id="method_buildWhereBoolean" style="position:relative;top:-60px;"></div>
-					<div class="piece  ">
-						<div class="page-header"><h2>_buildWhereBoolean <small></small></h2></div>
+					<div id="methodquery_buildWhereBoolean" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>query._buildWhereBoolean <small></small></h2></div>
 					
 					
 						<p>Parses the comparisonMethod value and returns a string suitable as a delimiter.</p>
@@ -3396,7 +3396,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 						<h3>Usage:</h3>
 							
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">_buildWhereBoolean()</div></div>
+							<div class="panel-heading"><div class="panel-title">query._buildWhereBoolean()</div></div>
 							<ol class="list-group">
 								
 							</ol>
@@ -3409,7 +3409,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#method_buildWhereBoolean + .piece .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquery_buildWhereBoolean + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
