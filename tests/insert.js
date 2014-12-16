@@ -139,6 +139,19 @@ exports['set overwrites'] = function (test) {
 	test.done();
 };
 
+exports['set raw value'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	q.set({lastlogin: {raw:'NOW()'}});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET lastlogin = NOW()',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['insert called with arguments'] = function (test) {
 	var q = queryize().insert({value: false}).into('users', 'u');
 
