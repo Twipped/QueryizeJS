@@ -21,6 +21,8 @@ exports['basic insert'] = function (test) {
 		data: ['bob']
 	});
 
+	test.deepEqual(q._attributes.columns, ['name']);
+
 	test.done();
 };
 
@@ -34,6 +36,8 @@ exports['basic insert with database'] = function (test) {
 		data: ['bob']
 	});
 
+	test.deepEqual(q._attributes.columns, ['name']);
+
 	test.done();
 };
 
@@ -46,6 +50,26 @@ exports['basic insert with object to set'] = function (test) {
 		query: 'INSERT INTO `users` u SET name = ?',
 		data: ['bob']
 	});
+
+	test.deepEqual(q._attributes.columns, ['name']);
+
+	test.done();
+};
+
+exports['basic insert with multiple-keyed object to set'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	q.set({
+		firstname: 'Bojack',
+		lastname: 'Horseman'
+	});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET firstname = ?, lastname = ?',
+		data: ['Bojack', 'Horseman']
+	});
+
+	test.deepEqual(q._attributes.columns, ['firstname', 'lastname']);
 
 	test.done();
 };
@@ -70,6 +94,8 @@ exports['insert with a date value'] = function (test) {
 		data: ['2012-01-01 00:00:00']
 	});
 
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
+
 	test.done();
 };
 
@@ -83,6 +109,8 @@ exports['insert with a number value'] = function (test) {
 		data: [6]
 	});
 
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
+
 	test.done();
 };
 
@@ -95,6 +123,8 @@ exports['insert with a boolean value'] = function (test) {
 		query: 'INSERT INTO `users` u SET lastlogin = TRUE',
 		data: []
 	});
+
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
 
 	test.done();
 };
@@ -116,6 +146,8 @@ exports['insert called with arguments'] = function (test) {
 		query: 'INSERT INTO `users` u SET value = FALSE',
 		data: []
 	});
+
+	test.deepEqual(q._attributes.columns, ['value']);
 
 	test.done();
 };
