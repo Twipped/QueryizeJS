@@ -77,6 +77,19 @@ exports['basic insert from shortcut'] = function (test) {
 	test.done();
 };
 
+exports['basic replace from shortcut'] = function (test) {
+	var q = queryize.replace().into('users', 'u');
+	
+	q.set('name', 'bob');
+
+	test.deepEqual(q.compile(), {
+		query: 'REPLACE INTO `users` u SET name = ?',
+		data: ['bob']
+	});
+
+	test.done();
+};
+
 exports['basic delete from shortcut'] = function (test) {
 	var q = queryize.delete().from('users', 'u');
 	

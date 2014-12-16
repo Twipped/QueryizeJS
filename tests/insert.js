@@ -163,6 +163,17 @@ exports['insert called with arguments'] = function (test) {
 	test.done();
 };
 
+exports['replace into'] = function (test) {
+	var q = queryize().replace({value: false}).into('users', 'u');
+
+	test.deepEqual(q.compile(), {
+		query: 'REPLACE INTO `users` u SET value = FALSE',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['multi-insert'] = function (test) {
 	var q = queryize().insert().into('users', 'u');
 	
@@ -178,6 +189,23 @@ exports['multi-insert'] = function (test) {
 
 	test.done();
 };
+
+exports['multi-insert replace'] = function (test) {
+	var q = queryize().replace().into('users', 'u');
+	
+	q.addRow({lastlogin: 6});
+	q.addRow({lastlogin: 10});
+
+	test.deepEqual(q.compile(), {
+		query: 'REPLACE INTO `users` u ( lastlogin ) VALUES (?), (?)',
+		data: [6, 10]
+	});
+
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
+
+	test.done();
+};
+
 
 exports['multi-insert, multi-column'] = function (test) {
 	var q = queryize().insert().into('users');
