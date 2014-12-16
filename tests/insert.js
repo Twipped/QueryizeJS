@@ -125,6 +125,20 @@ exports['set throws an error if no parameters provided'] = function (test) {
 	test.done();
 };
 
+exports['set overwrites'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	q.set({lastlogin: 6});
+	q.set({lastlogin: 7});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET lastlogin = ?',
+		data: [7]
+	});
+
+	test.done();
+};
+
 exports['insert called with arguments'] = function (test) {
 	var q = queryize().insert({value: false}).into('users', 'u');
 
