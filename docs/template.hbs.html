@@ -24,6 +24,17 @@
 				padding: 10px;
 			}
 
+			.changelog-header {
+				background-color: #333;
+				color: white;
+				padding: 50px 0 10px;
+			}
+
+			.changelog ul + h3 {
+				border-top: 1px solid #333;
+				padding-top: 20px;
+			}
+
 			pre {
 				box-shadow: 0 1px 2px rgba(100,100,100,0.2);
 				background-color: #f8f8f8;
@@ -206,6 +217,7 @@
 				<div class="navbar-header"><a class="navbar-brand" href="#">Queryize.js</a></div>
 				<ul class="nav navbar-nav">
 					<li><a href="#reference">API Reference</a></li>
+					<li><a href="#changelog">Change Log</a></li>
 				</ul>
 				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
 				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
@@ -370,10 +382,19 @@ queryize.deleteFrom('eventlog')
 				</div>
 			</div>
 
-			<footer>
-				Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
-			</footer>
 		</div>
+
+		<div  id="changelog" class="changelog-header"><h2 class="container">Change Log</h2></div>
+		<div class="changelog">
+			<div class="container">
+				{{{changelog}}}
+			</div>
+		</div>
+
+		<footer class="container">
+			Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
+		</footer>
+
 
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>

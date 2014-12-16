@@ -1,8 +1,23 @@
 var fs = require('fs');
 var dox = require('dox');
 var Handlebars = require('handlebars');
+var commonmark = require('commonmark');
 
 var template = Handlebars.compile(fs.readFileSync(__dirname + '/template.hbs.html').toString('utf8'));
+
+/** Build Changelog
+*******************************************************************************************/
+var changelog = fs.readFileSync(__dirname + '/../History.md').toString('utf8');
+changelog = (new commonmark.DocParser()).parse(changelog);
+changelog.children.forEach(function (node) {
+	if (node.t === 'SetextHeader' && node.level === 1) {
+		node.level = 3;
+	}
+});
+changelog = (new commonmark.HtmlRenderer()).render(changelog);
+
+/** Build Docs
+*******************************************************************************************/
 
 var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../lib/queryize.js').toString('utf8'));
 
@@ -180,4 +195,4 @@ parsed.forEach(function (item) {
 // Save the documentation data for reference
 fs.writeFileSync(__dirname + '/queryize.json', JSON.stringify(parsed, undefined, 2));
 
-fs.writeFileSync(__dirname + '/index.html', template({pieces: parsed, parents: parents, parentless: parentless}));
+fs.writeFileSync(__dirname + '/index.html', template({pieces: parsed, parents: parents, parentless: parentless, changelog: changelog}));

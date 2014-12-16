@@ -24,6 +24,17 @@
 				padding: 10px;
 			}
 
+			.changelog-header {
+				background-color: #333;
+				color: white;
+				padding: 60px 0 10px;
+			}
+
+			.changelog ul + h3 {
+				border-top: 1px solid #333;
+				padding-top: 20px;
+			}
+
 			pre {
 				box-shadow: 0 1px 2px rgba(100,100,100,0.2);
 				background-color: #f8f8f8;
@@ -206,6 +217,7 @@
 				<div class="navbar-header"><a class="navbar-brand" href="#">Queryize.js</a></div>
 				<ul class="nav navbar-nav">
 					<li><a href="#reference">API Reference</a></li>
+					<li><a href="#changelog">Change Log</a></li>
 				</ul>
 				<p class="navbar-right gh-link"><a href="http://github.com/chipersoft/queryizejs" class="ico-github"></a></p>
 				<p class="navbar-text navbar-right">Created by <a href="http://chipersoft.com" class="navbar-link">Jarvis Badgley</a></p>
@@ -305,6 +317,8 @@ queryize.deleteFrom('eventlog')
 						
 							<li class=""><a href="#methodqueryizeinsert"><span class="name">queryize.insert</span></a></li>
 						
+							<li class=""><a href="#methodqueryizereplace"><span class="name">queryize.replace</span></a></li>
+						
 							<li class=""><a href="#methodqueryizedelete"><span class="name">queryize.delete</span></a></li>
 						
 							<li class="alias "><a href="#methodqueryizedelete"><i class="ico-arrow-up"></i><span class="name">queryize.deleteFrom</span></a></li>
@@ -375,6 +389,8 @@ queryize.deleteFrom('eventlog')
 							
 										<li class=""><a href="#methodqueryinsert"><span class="name">query.insert</span></a></li>
 							
+										<li class=""><a href="#methodqueryreplace"><span class="name">query.replace</span></a></li>
+							
 										<li class=""><a href="#methodqueryupdate"><span class="name">query.update</span></a></li>
 							
 									</ul>
@@ -396,6 +412,8 @@ queryize.deleteFrom('eventlog')
 										<li class="alias "><a href="#propertyquerydatabase"><i class="ico-arrow-up"></i><span class="name">query.fromDatabase</span></a></li>
 							
 										<li class=""><a href="#methodquerycolumns"><span class="name">query.columns</span></a></li>
+							
+										<li class=""><a href="#methodqueryaddColumn"><span class="name">query.addColumn</span></a></li>
 							
 									</ul>
 								</li>
@@ -438,6 +456,8 @@ queryize.deleteFrom('eventlog')
 									<ul class="nav subnav">
 							
 										<li class=""><a href="#methodqueryset"><span class="name">query.set</span></a></li>
+							
+										<li class=""><a href="#methodqueryaddRow"><span class="name">query.addRow</span></a></li>
 							
 									</ul>
 								</li>
@@ -545,6 +565,7 @@ var query = queryize();</code></pre>
     where: [],
     whereBoolean: null,
     set: [],
+    setKeys: {},
     columns: ['*'],
     joins: [],
     orderBy: false,
@@ -678,6 +699,44 @@ var query = queryize();</code></pre>
 								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert = function () {
   var q = queryize();
   q.insert.apply(q, arguments);
+  return q;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryizereplace" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>queryize.replace <small></small></h2></div>
+					
+					
+						<p>Shortcut for creating a new replace query</p><p>See <code>query.replace()</code> for details.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">queryize.replace()</div></div>
+							<ol class="list-group">
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Returns a &#x60;query&#x60; instance.</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryizereplace + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.replace = function () {
+  var q = queryize();
+  q.replace.apply(q, arguments);
   return q;
 };</code></pre>
 							</div>
@@ -1110,6 +1169,60 @@ query.createBinding('2013-06-18', 'DATE');
 					
 					</div>
 				
+					<div id="methodqueryreplace" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.replace <small></small></h2></div>
+					
+					
+						<p>Marks the query as being a REPLACE statement</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.replace([values])</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>values</strong> mixed
+									<em>Optional </em>
+									<br>All arguments received are passed to a &#x60;query.set()&#x60; call
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
+  .replace({name: 'joe'})
+  .into('users')
+  .exec(mysqlConnection, function (result) {
+    var id = result.insertId;
+  })</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryreplace + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace () {
+  this._attributes.builder = 'insert';
+  this._attributes.replace = true;
+  if (arguments.length) {
+    this.set.apply(this, arguments);
+  }
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
 					<div id="methodqueryupdate" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.update <small></small></h2></div>
@@ -1394,32 +1507,93 @@ query.createBinding('2013-06-18', 'DATE');
   var args = flatten(arrayFromArguments.apply(null, arguments));
   var self = this;
 
-  args = args.map(function (column) {
-    if (typeof column === 'string') {
-      return column;
-    }
+  this._attributes.columns = null;
 
-    if (typeof column === 'number' || column instanceof Date) {
-      return self.createBinding(column);
-    }
-
-    if (isQueryizeObject(column)) {
-      if (column._attributes.columns.length > 1 || column._attributes.columns[0] === '*') {
-        throw new Error('Column level subqueries can only return a single column.');
-      }
-      return self._mergeSubquery(column);
-    }
-
-    if (typeof column === 'object' && isDefined(column.data)) {
-      return self.createBinding(column.data, column.modifier);
-    }
-
-    throw new TypeError('Unknown column type: ' + JSON.stringify(column));
+  args.forEach(function (column) {
+    self.addColumn(column);
   });
 
-  this._attributes.columns = args;
-
   return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryaddColumn" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.addColumn <small></small></h2></div>
+					
+					
+						<p>Adds a single column to the columns list.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.addColumn(column, [avoidDuplicates])</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>column</strong> string
+									
+									<br>Column to add.
+								</li>
+								
+								<li class="list-group-item">
+									<strong>avoidDuplicates</strong> boolean
+									<em>Optional </em>
+									<br>If truthy, duplicate columns will be skipped. This value is ignored for non-string columns.
+								</li>
+								
+							</ol>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining</em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryaddColumn + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.addColumn = function addColumn (column, avoidDuplicates) {
+  // if the current columns list is only a '*' wildcard, reset the array.
+  // The expected use case in this scenario is that a new queryize object was made and they want to define columns individually.
+  if (this._attributes.columns && this._attributes.columns.length === 1 && this._attributes.columns[0] === '*') {
+    this._attributes.columns = null;
+  }
+
+  if (typeof column === 'number' || column instanceof Date) {
+    avoidDuplicates = false;
+    column = this.createBinding(column);
+
+  } else if (isQueryizeObject(column)) {
+    avoidDuplicates = false;
+    if (column._attributes.columns.length > 1 || column._attributes.columns[0] === '*') {
+      throw new Error('Column level subqueries can only return a single column.');
+    }
+    column = this._mergeSubquery(column);
+
+  } else if (typeof column === 'object' && isDefined(column.data)) {
+    avoidDuplicates = false;
+    column = this.createBinding(column.data, column.modifier);
+  }
+
+  if (typeof column !== 'string') {
+    throw new TypeError('Unknown column type: ' + JSON.stringify(column));
+  }
+
+  if (Array.isArray(this._attributes.columns)) {
+    if (!avoidDuplicates || this._attributes.columns.indexOf(column) === -1) {
+      this._attributes.columns.push(column);
+    }
+  } else {
+    this._attributes.columns = [column];
+  }
 };</code></pre>
 							</div>
 						</div>
@@ -2440,7 +2614,7 @@ query.where()</code></pre>
 						<div class="page-header"><h2>query.set <small></small></h2></div>
 					
 					
-						<p>Defines what data to set the specified columns to during INSERT and UPDATE queries</p>
+						<p>Defines what data to set the specified columns to during INSERT and UPDATE queries</p><p>Any data provided via <code>query.set</code> is ignored in Multi-Insert Mode. See <code>query.addRow</code> for more details.</p>
 						
 						<h3>Usage:</h3>
 							
@@ -2513,6 +2687,9 @@ query.where()</code></pre>
 // SET firstname = ?, lastname = ?
 // DATA: ['Susan', 'Sto Helet']</code></pre>
 								
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('lastLogin', {raw:'NOW()'});
+// SET lastLogin = NOW()</code></pre>
+								
 								
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
 								
@@ -2539,13 +2716,129 @@ query.where()</code></pre>
 
   // if we received a value, create a set clause
   if (isDefined(value)) {
-    if (!isValidPrimative(value)) {
-      throw new TypeError('Unknown data type in set clause');
+    var column = clause;
+    if (typeof value === 'object' && typeof value.raw === 'string') {
+      clause = clause + ' = ' + value.raw;
+    } else {
+      if (!isValidPrimative(value)) {
+        throw new TypeError('Unknown data type in set clause');
+      }
+
+      clause = clause + ' = ' + this.createBinding(value, modifier);
     }
-    clause = [clause, '=', this.createBinding(value, modifier)].join(' ');
+
+    // if we've previously created a clause for this column, overwrite it.
+    var key = this._attributes.setKeys[column];
+    if (isDefined(key)) {
+      this._attributes.set[key] = clause;
+    } else {
+      this._attributes.setKeys[column] = this._attributes.set.length;
+      this._attributes.set.push(clause);
+    }
+
+  } else {
+    this._attributes.set.push(clause);
   }
 
-  this._attributes.set.push(clause);
+  return this;
+};</code></pre>
+							</div>
+						</div>
+						
+					
+					</div>
+				
+					<div id="methodqueryaddRow" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.addRow <small></small></h2></div>
+					
+					
+						<p>Adds a row of data for a multi-row insert. Activates Multi-Insert Mode for the query.</p><p><strong>About Multi-Insert Mode:</strong></p><p>Single row inserts are performed using <em>INSERT SET</em> queries, where each column value is defined one at a time.<br />Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p><p>This is more efficient for query generation and less prone to mistakes, but can only insert a single row at a time. When in Multi-Insert Mode, Queryize will construct an <em>INSERT VALUES</em> query where all columns are defined up front and preceded by multiple data sets.</p><p>Example: <code>INSERT INTO user (firstname, lastname) VALUES (?,?), (?,?)</code></p><p>This format is more performant for inserting multiple uniform data sets, but is less flexible as all the columns must be known upfront. If row contents are provided as arrays, the column order must be defined before calling <code>query.addRow</code>.  If keyed objects are provided then Queryize will use the keys to identify the column names to use.</p><p>Any rows with missing columns will receive <code>NULL</code> for the column&#39;s contents.</p>
+						
+						<h3>Usage:</h3>
+							
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.addRow(data)</div></div>
+							<ol class="list-group">
+								
+								<li class="list-group-item">
+									<strong>data</strong> Array, Object
+									
+									<br>May be an object where the keys represent all columns, or an array that matches the number of columns already defined.
+								</li>
+								
+							</ol>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize
+  .insert()
+  .into('users')
+  .columns('name', 'email')
+  .addRow(['John Smith', 'jsmith@example.com'])
+  .addRow(['Jane Doe', 'jdoe@example.com'])
+  .compile()
+// INSERT INTO users (name, email) VALUES (?, ?), (?, ?)
+// DATA: ['John Smith', 'jsmith@example.com', 'Jane Doe', 'jdoe@example.com']</code></pre>
+								
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize
+  .insert()
+  .into('users')
+  .addRow({name: 'John Smith', email: 'jsmith@example.com'})
+  .addRow({name: 'Jane Doe', email: 'jdoe@example.com', date_created: {raw:'NOW()'}})
+  .compile()
+// INSERT INTO users (name, email, date_created) VALUES (?, ?, NULL), (?, ?, NOW())
+// DATA: ['John Smith', 'jsmith@example.com', 'Jane Doe', 'jdoe@example.com']</code></pre>
+								
+								
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">Exports &#x60;this&#x60; for chaining </em></div>
+								
+						</div>
+							
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryaddRow + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.addRow = function addRow (data) {
+  var row, columns;
+  var self = this;
+
+  // make sure the rows property exists
+  if (!this._attributes.rows) {
+    this._attributes.rows = [];
+  }
+
+  if (Array.isArray(data)) {
+    columns = this._attributes.columns || [];
+
+    // if the current columns list is only a '*' wildcard, then the developer has not defined any columns yet and we can't take array data.
+    if (!this._attributes.columns || this._attributes.columns.length === 1 && this._attributes.columns[0] === '*') {
+      throw new Error('You must define the insert columns first in order to pass rows as array.');
+    }
+
+    if (columns.length !== data.length) {
+      throw new Error('Row does not contain the same number of entries (' + data.length + ') as the number of defined columns (' + columns.length + ').');
+    }
+
+    row = {};
+    columns.forEach(function (column, i) {
+      row[column] = data[i];
+    });
+
+    this._attributes.rows.push(row);
+
+  } else if (typeof data === 'object') {
+    columns = Object.keys(data);
+
+    columns.forEach(function (column) {
+      self.addColumn(column, true);
+    });
+
+    this._attributes.rows.push(data);
+  } else {
+    throw new TypeError("Row is not of the expected data type.");
+  }
 
   return this;
 };</code></pre>
@@ -2792,7 +3085,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
     if (isQueryizeObject(clause)) {
 
-      if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.')
+      if (typeof options !== 'object') throw new Error('You must define join options when joining against a queryize subquery.');
         
       options = Object.create(options);
       options.table = clause;
@@ -3453,9 +3746,18 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
   if (!this._attributes.builder || !builders[this._attributes.builder]) throw new Error('Query operation undefined, must identify if performing a select/update/insert/delete query.');
   if (!this._attributes.tableName && !this._attributes.fromSubquery) throw new Error('No table name has been defined');
 
-  var queryString = builders[this._attributes.builder].call(this);
+  if (this._attributes.builder === 'insert' && this._attributes.rows) {
+    this._attributes.builder = 'insertMultiple';
+  }
 
-  return this._convertNamedParameters(queryString);
+  var query = builders[this._attributes.builder].call(this);
+
+  if (typeof query === 'string') {
+    return this._convertNamedParameters(query);
+  } else {
+    if (typeof query !== 'object' || !query.query) throw new Error('INTERNAL ERROR: Query builder returned unrecognized output.');
+    return query;
+  }
 };</code></pre>
 							</div>
 						</div>
@@ -4225,10 +4527,105 @@ findCompleted.exec(connection, function (results) {
 				</div>
 			</div>
 
-			<footer>
-				Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
-			</footer>
 		</div>
+
+		<div  id="changelog" class="changelog-header"><h2 class="container">Change Log</h2></div>
+		<div class="changelog">
+			<div class="container">
+				<h3>1.0.0 / 2014-12-16</h3>
+<ul>
+<li>Added Multi-Insert Mode
+<ul>
+<li>Causes Queryize to create insert queries in the format of <code>INSERT INTO table (columnA, columnB) VALUES (valueA, valueB)</code>, supporting multiple rows of data to be inserted.</li>
+<li>Activated first time <code>query.addRow</code> is used.</li>
+</ul></li>
+<li>Added support for REPLACE INTO queries via <code>query.replace()</code> as an alternative to <code>query.insert()</code></li>
+<li>Added support for passing raw query functions as <code>query.set()</code> values
+<ul>
+<li>Example: `query.set('dts', {raw:'NOW()'});</li>
+</ul></li>
+<li>Added <code>query.addColumn</code> to append extra columns outside of the <code>query.column</code> full set.</li>
+<li>Fixed <code>query.set()</code> not properly overwriting a previously defined key/value pair.</li>
+<li>INTERNAL: Query builders can now return a fully formed query object instead of a string.</li>
+</ul>
+<h3>0.6.0 / 2014-09-12</h3>
+<ul>
+<li>Added <code>query.emitted()</code> as an alternative to <code>query.exec()</code>.
+<ul>
+<li>node-mysql does not return a row emitter if a callback is provided. Since a callback is always provided as
+part of the promise extension, this made it impossible to receive a row emitter when using node-mysql
+(node-mysql2 does not have this limitation). This new function works around that limitation.</li>
+</ul></li>
+</ul>
+<h3>0.5.1 / 2014-09-13</h3>
+<ul>
+<li>Removed a console.log that slipped in.</li>
+</ul>
+<h3>0.5.0 / 2014-09-12</h3>
+<ul>
+<li>Added ability to provide a queryize object as a compound where condition.</li>
+</ul>
+<h3>0.4.0 / 2014-09-03</h3>
+<ul>
+<li>Added support for using queryize objects as subqueries in columns, joins and select from.
+<ul>
+<li>Use <code>query.as(name)</code> to define the name for the subquery. If omitted, queryize will create a random name.</li>
+</ul></li>
+<li>Fixed bug in <code>query.debug()</code> that prevented it from enabling without passing true.</li>
+<li>Added documentation examples for all possible ways you can use <code>query.exec()</code></li>
+</ul>
+<h3>0.3.0 / 2014-09-02</h3>
+<ul>
+<li>Major internal refactor to make the query object more externally extensible
+<ul>
+<li>Query state is now stored on <code>this._attributes</code> instead of in a local variable.</li>
+<li><code>queryize.fn</code> now contains the prototype of the queryize query object. See lib/mutators.js for the contents.</li>
+</ul></li>
+<li>Added <code>query.clone()</code> to duplicate a query state inline</li>
+<li>Changed <code>query.deleet()</code> to <code>query.delete()</code></li>
+<li>Switched to using lodash clone and assign functions instead of local versions.</li>
+<li>Added <code>query.disableBoundParameters</code> and deprecated <code>query.useBoundParameters</code></li>
+<li>Fixed several V8 optimization killers</li>
+<li>Fixed bugs in <code>query.limit()</code> and <code>query.distinct()</code></li>
+<li>Fixed edge case in <code>query.where()</code></li>
+<li>Increased test coverage</li>
+<li>Improved documentation</li>
+</ul>
+<h3>0.2.0 / 2014-08-22</h3>
+<ul>
+<li>Added support for node-mysql2 <code>connection.execute()</code> functions. Prefers over <code>connection.query()</code></li>
+<li><code>query.exec()</code> now extends the node-mysql(2) query emitter object with <code>.then()</code> and <code>.catch()</code>, allowing use as a promise.</li>
+<li>Lots and lots of new documentation in code</li>
+<li>Switched to using a custom dox based documentation generator</li>
+<li>Added Travis-CI testing</li>
+<li>Launched http://queryizejs.com</li>
+</ul>
+<h3>0.1.3 / 2014-02-17</h3>
+<ul>
+<li>Added <code>query.exec()</code> and deprecated <code>query.run()</code> to be more consistent with other database libraries (eg, Mongoose)</li>
+</ul>
+<h3>0.1.2 / 2014-02-17</h3>
+<ul>
+<li>Fixed showstopper bug in <code>query.run()</code></li>
+</ul>
+<h3>0.1.1 / 2014-02-03</h3>
+<ul>
+<li>Changed query builders into a function map so that attributes is storing a name instead of a function. This makes it serializable and easier to duplicate.</li>
+<li>Added run() function as shortcut for node-mysql query command.</li>
+<li>Started documenting</li>
+</ul>
+<h3>0.1.1 / 2014-01-14</h3>
+<ul>
+<li>Initial release</li>
+</ul>
+
+			</div>
+		</div>
+
+		<footer class="container">
+			Queryize is copyright &copy; 2014 Jarvis Badgley and released under an MIT license.
+		</footer>
+
 
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>

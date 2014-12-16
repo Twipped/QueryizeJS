@@ -1,3 +1,17 @@
+1.0.0 / 2014-12-16
+==================
+
+  * Added Multi-Insert Mode
+    - Causes Queryize to create insert queries in the format of `INSERT INTO table (columnA, columnB) VALUES (valueA, valueB)`, supporting multiple rows of data to be inserted.
+    - Activated first time `query.addRow` is used.
+  * Added support for REPLACE INTO queries via `query.replace()` as an alternative to `query.insert()`
+  * Added support for passing raw query functions as `query.set()` values
+    - Example: `query.set('dts', {raw:'NOW()'});
+  * Added `query.addColumn` to append extra columns outside of the `query.column` full set.
+  * Fixed `query.set()` not properly overwriting a previously defined key/value pair.
+  * INTERNAL: Query builders can now return a fully formed query object instead of a string.
+
+
 0.6.0 / 2014-09-12
 ==================
 
