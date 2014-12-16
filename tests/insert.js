@@ -162,3 +162,78 @@ exports['insert called with arguments'] = function (test) {
 
 	test.done();
 };
+
+exports['multi-insert'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	q.addRow({lastlogin: 6});
+	q.addRow({lastlogin: 10});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u ( lastlogin ) VALUES (?), (?)',
+		data: [6, 10]
+	});
+
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
+
+	test.done();
+};
+
+exports['multi-insert, multi-column'] = function (test) {
+	var q = queryize().insert().into('users');
+	
+	q.addRow({name: 'John Doe', age: 26});
+	q.addRow({name: 'Bob Smith', age: 32});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` ( name, age ) VALUES (?, ?), (?, ?)',
+		data: ['John Doe', 26, 'Bob Smith', 32]
+	});
+
+	test.deepEqual(q._attributes.columns, ['name', 'age']);
+
+	test.done();
+};
+
+exports['multi-insert w/ raw value'] = function (test) {
+	var q = queryize().insert().into('users', 'u');
+	
+	q.addRow({lastlogin: {raw:'NOW()'}});
+	q.addRow({lastlogin: 10});
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u ( lastlogin ) VALUES (NOW()), (?)',
+		data: [10]
+	});
+
+	test.deepEqual(q._attributes.columns, ['lastlogin']);
+
+	test.done();
+};
+
+exports['multi-insert, adding arrays'] = function (test) {
+	var q = queryize().insert().into('users');
+	
+	q.columns('name', 'age');
+	q.addRow(['John Doe', 26]);
+	q.addRow(['Bob Smith', 32]);
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` ( name, age ) VALUES (?, ?), (?, ?)',
+		data: ['John Doe', 26, 'Bob Smith', 32]
+	});
+
+	test.deepEqual(q._attributes.columns, ['name', 'age']);
+
+	test.done();
+};
+
+exports['multi-insert, adding arrays w/o columns throws'] = function (test) {
+	var q = queryize().insert().into('users');
+	
+	test.throws(function () {
+		q.addRow(['John Doe', 26]);
+	});
+
+	test.done();
+};
