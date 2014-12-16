@@ -23,6 +23,50 @@ exports['basic select with database'] = function (test) {
 	test.done();
 };
 
+exports['basic select with added columns'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.columns('columnA');
+	q.addColumn('columnB');
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT columnA, columnB FROM `users`',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['basic select with added columns, with duplicates'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.columns('columnA');
+	q.addColumn('columnB');
+	q.addColumn('columnB');
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT columnA, columnB, columnB FROM `users`',
+		data: []
+	});
+
+	test.done();
+};
+
+exports['basic select with added columns, without duplicates'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.columns('columnA');
+	q.addColumn('columnB', true);
+	q.addColumn('columnB', true);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT columnA, columnB FROM `users`',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['basic select with multiple columns'] = function (test) {
 	var q = queryize().select().from('users');
 
@@ -48,6 +92,37 @@ exports['basic select with value in columns'] = function (test) {
 
 	test.done();
 };
+
+exports['basic select with added value column'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.columns('columnA');
+	q.addColumn(3);
+	q.addColumn('columnC');
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT columnA, ?, columnC FROM `users`',
+		data: [3]
+	});
+
+	test.done();
+};
+
+exports['basic select with duplicate added value column, filtering duplicates'] = function (test) {
+	var q = queryize().select().from('users');
+
+	q.columns('columnA');
+	q.addColumn(3, true);
+	q.addColumn(3, true);
+		
+	test.deepEqual(q.compile(), {
+		query: 'SELECT columnA, ?, ? FROM `users`',
+		data: [3, 3]
+	});
+
+	test.done();
+};
+
 
 exports['basic select with value object in columns'] = function (test) {
 	var q = queryize().select().from('users');
