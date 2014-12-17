@@ -1,6 +1,6 @@
 {
   "name": "queryize",
-  "version": "0.6.0",
+  "version": "1.0.1",
   "description": "A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.",
   "main": "queryize.js",
   "scripts": {
@@ -37,5 +37,15 @@
     "lodash.clone": "^2.4.1",
     "lodash.mapvalues": "^2.4.1",
     "proxmis": "^0.2.0"
-  }
+  },
+  "files": [
+    "lib",
+    "History.md",
+    "LICENSE.txt",
+    "queryize.js",
+    "docs/index.html",
+    "docs/fonts.css",
+    "docs/fonts",
+    "tests"
+  ]
 }
