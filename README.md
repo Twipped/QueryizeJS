@@ -10,7 +10,7 @@ A no-frills chainable/fluent interface for constructing mutable MySQL queries wi
 [![Coverage Status](https://img.shields.io/coveralls/ChiperSoft/QueryizeJS.svg)](https://coveralls.io/r/ChiperSoft/QueryizeJS)
 [![Gittip](http://img.shields.io/gittip/chipersoft.svg)](https://www.gittip.com/chipersoft/)
 
-#Installation
+##Installation
 
 NPM: `npm install queryize`
 
