@@ -92,6 +92,19 @@ exports['joining subquery'] = function (test) {
 	test.done();
 };
 
+exports['joining raw subquery'] = function (test) {
+	var q = queryize().select().from('users', 'u');
+
+	q.innerJoin('(SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` JOIN invoices ON (invoices.orderid = order.id) GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)');
+
+	test.deepEqual(q.compile(), {
+		query: 'SELECT * FROM `users` u INNER JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` JOIN invoices ON (invoices.orderid = order.id) GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
+		data: []
+	});
+
+	test.done();
+};
+
 exports['left joining subquery'] = function (test) {
 	var q = queryize().select().from('users', 'u');
 	
