@@ -1,3 +1,8 @@
+1.0.2 / 2015-02-06
+==================
+
+  * Fixed a bug where using a raw subquery as a join target could lose part of the subquery.
+
 1.0.0 / 2014-12-16
 ==================
 
