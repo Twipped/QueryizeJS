@@ -1,3 +1,8 @@
+1.1.0 / 2015-02-06
+==================
+
+  * Date objects are now converted to MySQL DATETIME using the timezone on the date instead of always being UTC.
+
 1.0.2 / 2015-02-06
 ==================
 
