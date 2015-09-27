@@ -173,3 +173,20 @@ exports['update with object where clause'] = function (test) {
 
 	test.done();
 };
+
+exports['update with a null value'] = function (test) {
+	var q = queryize().update().database('test', 'users', 'u');
+		
+	q.set({
+		firstname: 'bob',
+		lastname: null
+	});
+	q.where('name', null);
+
+	test.deepEqual(q.compile(), {
+		query: 'UPDATE `test`.`users` u SET firstname = ?, lastname = NULL WHERE name = NULL',
+		data: ['bob']
+	});
+
+	test.done();
+};
