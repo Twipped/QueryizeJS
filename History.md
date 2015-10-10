@@ -1,3 +1,8 @@
+1.1.1 / 2015-10-10
+==================
+
+  * Fixed a bug that would create a malformed query when inserting or updating a null value.
+
 1.1.0 / 2015-02-06
 ==================
 
