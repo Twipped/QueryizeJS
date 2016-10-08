@@ -33,7 +33,6 @@
     "nodeunit": "~0.8.2"
   },
   "dependencies": {
-    "lodash.assign": "^2.4.1",
     "lodash.clone": "^2.4.1",
     "lodash.mapvalues": "^2.4.1",
     "proxmis": "^0.2.0"
