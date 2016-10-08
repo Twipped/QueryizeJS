@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('basic select with value in columns', (test) => {
 	var q = queryize().disableBoundParameters().select().from('users');

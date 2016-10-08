@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('update without set throws error', (test) => {
 	var q = queryize().update().table('users', 'u');

@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('where without parameters erases the where clauses', (test) => {
 	var q = queryize().select().from('users');

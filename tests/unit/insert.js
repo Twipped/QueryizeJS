@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('insert without set throws error', (test) => {
 	var q = queryize().insert().into('users', 'u');

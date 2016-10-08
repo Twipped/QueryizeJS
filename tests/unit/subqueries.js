@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('from subquery', (test) => {
 	var s = queryize().from('users').columns('MIN(date_created)').as('firstsignup');

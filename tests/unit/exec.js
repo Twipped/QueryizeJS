@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue, fails) {
 	return {

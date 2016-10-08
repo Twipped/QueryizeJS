@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('delete without where throws error', (test) => {
 	var q = queryize().delete().from('users', 'u');

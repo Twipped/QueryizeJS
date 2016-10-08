@@ -7,9 +7,9 @@
     "node": ">=4.2"
   },
   "scripts": {
-    "test": "tap tests",
-    "test:cover": "tap --coverage --coverage-report=html tests",
-    "test:travis": "tap --reporter=tap tests",
+    "test": "tap tests/unit",
+    "test:cover": "tap --coverage --coverage-report=html tests/unit",
+    "test:travis": "tap --reporter=tap tests/unit",
     "lint": "eslint ./",
     "docs": "node docs/index.js"
   },

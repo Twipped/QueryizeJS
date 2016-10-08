@@ -1,6 +1,6 @@
 
 var test = require('tap').test;
-var queryize = require('../');
+var queryize = require('../../');
 
 test('exports correctly', (test) => {
 	test.strictEqual(typeof queryize, 'function', 'queryize is a function');
