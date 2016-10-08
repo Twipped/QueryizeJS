@@ -195,3 +195,13 @@ test('debug toggles the correct flag', (test) => {
 
 	test.end();
 });
+
+test('casting to a string produces a query', (test) => {
+	var q = queryize.select()
+		.from('users')
+		.where({ id: 63, type: 'h\'fan' });
+
+	test.strictEqual('' + q, 'SELECT * FROM `users` WHERE (id = 63 AND type = \'h\\\'fan\')');
+
+	test.end();
+});
