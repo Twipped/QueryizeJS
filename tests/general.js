@@ -59,7 +59,7 @@ test('basic update from shortcut', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET name = ? WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -72,7 +72,7 @@ test('basic insert from shortcut', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'INSERT INTO `users` u SET name = ?',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -85,7 +85,7 @@ test('basic replace from shortcut', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'REPLACE INTO `users` u SET name = ?',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();

@@ -18,7 +18,7 @@ test('basic select with value in columns', (test) => {
 test('select with 2 item object where clause', (test) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
-	q.where({id: 1, name: 'bob'});
+	q.where({ id: 1, name: 'bob' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = 1 AND name = \'bob\')',
@@ -31,7 +31,7 @@ test('select with 2 item object where clause', (test) => {
 test('select with injection attempt', (test) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
-	q.where({name: 'x\' AND email IS NULL; --'});
+	q.where({ name: 'x\' AND email IS NULL; --' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name = \'x\\\' AND email IS NULL; --\'',
@@ -44,7 +44,7 @@ test('select with injection attempt', (test) => {
 test('select with injection attempt, part 2', (test) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
-	q.where({name: 'x" AND email IS NULL; --'});
+	q.where({ name: 'x" AND email IS NULL; --' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name = \'x\\" AND email IS NULL; --\'',
@@ -58,7 +58,7 @@ test('select with object, throws error', (test) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
 	test.throws(function () {
-		q.where({name: {}});
+		q.where({ name: {} });
 	});
 
 	test.end();

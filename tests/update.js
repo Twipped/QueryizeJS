@@ -32,7 +32,7 @@ test('basic update', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET name = ? WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -46,7 +46,7 @@ test('basic update with database', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `test`.`users` u SET name = ? WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -55,12 +55,12 @@ test('basic update with database', (test) => {
 test('basic update with object to set', (test) => {
 	var q = queryize().update().table('users', 'u');
 
-	q.set({name: 'bob'});
+	q.set({ name: 'bob' });
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET name = ? WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -69,12 +69,12 @@ test('basic update with object to set', (test) => {
 test('basic update with object to set + modifier', (test) => {
 	var q = queryize().update().table('users', 'u');
 
-	q.set({name: 'bob'}, 'UPPER');
+	q.set({ name: 'bob' }, 'UPPER');
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET name = UPPER(?) WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();
@@ -84,7 +84,7 @@ test('update with set value of object throws error', (test) => {
 	var q = queryize().update().table('users', 'u');
 
 	test.throws(function () {
-		q.set({name: {blah: 1}});
+		q.set({ name: { blah: 1 } });
 	});
 
 	test.end();
@@ -93,12 +93,12 @@ test('update with set value of object throws error', (test) => {
 test('update with a date value', (test) => {
 	var q = queryize().update().table('users', 'u');
 
-	q.set({lastlogin: new Date('2012-01-01')});
+	q.set({ lastlogin: new Date('2012-01-01') });
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET lastlogin = ? WHERE name = NULL',
-		data: ['2012-01-01 00:00:00']
+		data: [ '2012-01-01 00:00:00' ]
 	});
 
 	test.end();
@@ -107,12 +107,12 @@ test('update with a date value', (test) => {
 test('update with a number value', (test) => {
 	var q = queryize().update().table('users', 'u');
 
-	q.set({lastlogin: 6});
+	q.set({ lastlogin: 6 });
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET lastlogin = ? WHERE name = NULL',
-		data: [6]
+		data: [ 6 ]
 	});
 
 	test.end();
@@ -121,7 +121,7 @@ test('update with a number value', (test) => {
 test('update with a boolean value', (test) => {
 	var q = queryize().update().table('users', 'u');
 
-	q.set({lastlogin: true});
+	q.set({ lastlogin: true });
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
@@ -154,7 +154,7 @@ test('update with two argument where clause', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` SET lastlogin = NOW() WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -168,7 +168,7 @@ test('update with object where clause', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` SET lastlogin = NOW() WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -185,7 +185,7 @@ test('update with a null value', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `test`.`users` u SET firstname = ?, lastname = NULL WHERE name = NULL',
-		data: ['bob']
+		data: [ 'bob' ]
 	});
 
 	test.end();

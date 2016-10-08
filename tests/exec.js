@@ -16,11 +16,11 @@ var mockConnection = function (test, expectedQuery, expectedData, returnValue, f
 test('exec with callback, calls query', (test) => {
 	test.plan(5);
 	var q = queryize.select().from('test_table');
-	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}]);
+	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [ { name: 'John' } ]);
 
 	q.exec(conn, function (err, results) {
 		test.error(err);
-		test.deepEqual(results, [{name: 'John'}], 'expected results');
+		test.deepEqual(results, [ { name: 'John' } ], 'expected results');
 		test.end();
 	});
 });
@@ -38,7 +38,7 @@ test('exec with callback and options, calls query with options', (test) => {
 				bar: 42
 			}, 'with the correct options object');
 
-			callback(false, [{name: 'John'}]);
+			callback(false, [ { name: 'John' } ]);
 		}
 	};
 
@@ -49,7 +49,7 @@ test('exec with callback and options, calls query with options', (test) => {
 
 	q.exec(conn, options, function (err, results) {
 		test.error(err);
-		test.deepEqual(results, [{name: 'John'}]);
+		test.deepEqual(results, [ { name: 'John' } ]);
 		test.end();
 	});
 });
@@ -57,16 +57,16 @@ test('exec with callback and options, calls query with options', (test) => {
 test('exec with promise (resolves)', (test) => {
 	test.plan(4);
 	var q = queryize.select().from('test_table');
-	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}]);
+	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [ { name: 'John' } ]);
 
 	return q.exec(conn)
-		.then((results) => test.deepEqual(results, [{name: 'John'}]));
+		.then((results) => test.deepEqual(results, [ { name: 'John' } ]));
 });
 
 test('exec with promise (rejects)', (test) => {
 	test.plan(4);
 	var q = queryize.select().from('test_table');
-	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}], 'FAIL');
+	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [ { name: 'John' } ], 'FAIL');
 
 	var thenable = q.exec(conn);
 

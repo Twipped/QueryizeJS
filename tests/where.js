@@ -63,7 +63,7 @@ test('select with string where clause', (test) => {
 test('select with string where clause in array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where(['id = 1']);
+	q.where([ 'id = 1' ]);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
@@ -76,7 +76,7 @@ test('select with string where clause in array', (test) => {
 test('select with string where clause in array, opening AND', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where(['AND', 'id = 1']);
+	q.where([ 'AND', 'id = 1' ]);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
@@ -93,7 +93,7 @@ test('select with two argument where clause', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -106,7 +106,7 @@ test('select with two argument where clause and operator', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -115,11 +115,11 @@ test('select with two argument where clause and operator', (test) => {
 test('select with two argument where clause containing value array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where('name', ['bob', 'jane']);
+	q.where('name', [ 'bob', 'jane' ]);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name IN (?,?)',
-		data: ['bob', 'jane']
+		data: [ 'bob', 'jane' ]
 	});
 
 	test.end();
@@ -128,11 +128,11 @@ test('select with two argument where clause containing value array', (test) => {
 test('select with two argument where clause containing value array and !=', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where('name', ['bob', 'jane'], '!=');
+	q.where('name', [ 'bob', 'jane' ], '!=');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT IN (?,?)',
-		data: ['bob', 'jane']
+		data: [ 'bob', 'jane' ]
 	});
 
 	test.end();
@@ -141,11 +141,11 @@ test('select with two argument where clause containing value array and !=', (tes
 test('select with two argument where clause containing value array and non-equality operator', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where('name', ['bob', 'jane'], 'LIKE');
+	q.where('name', [ 'bob', 'jane' ], 'LIKE');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (name LIKE ? OR name LIKE ?)',
-		data: ['bob', 'jane']
+		data: [ 'bob', 'jane' ]
 	});
 
 	test.end();
@@ -154,11 +154,11 @@ test('select with two argument where clause containing value array and non-equal
 test('select with two argument where clause containing field array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where(['firstname', 'lastname'], 'bob');
+	q.where([ 'firstname', 'lastname' ], 'bob');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (firstname = ? OR lastname = ?)',
-		data: ['bob', 'bob']
+		data: [ 'bob', 'bob' ]
 	});
 
 	test.end();
@@ -167,11 +167,11 @@ test('select with two argument where clause containing field array', (test) => {
 test('select with object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1});
+	q.where({ id: 1 });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -180,11 +180,11 @@ test('select with object where clause', (test) => {
 test('select with object where clause in array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where([{id: 1}]);
+	q.where([ { id: 1 } ]);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -193,11 +193,11 @@ test('select with object where clause in array', (test) => {
 test('select with 2 item object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1, name: 'bob'});
+	q.where({ id: 1, name: 'bob' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name = ?)',
-		data: [1, 'bob']
+		data: [ 1, 'bob' ]
 	});
 
 	test.end();
@@ -206,11 +206,11 @@ test('select with 2 item object where clause', (test) => {
 test('select with object where clause containing value array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({name: ['bob', 'jane']});
+	q.where({ name: [ 'bob', 'jane' ] });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name IN (?,?)',
-		data: ['bob', 'jane']
+		data: [ 'bob', 'jane' ]
 	});
 
 	test.end();
@@ -219,11 +219,11 @@ test('select with object where clause containing value array', (test) => {
 test('select with 2 item object where clause with negation', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1, not: true, name: 'bob'});
+	q.where({ id: 1, not: true, name: 'bob' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name != ?)',
-		data: [1, 'bob']
+		data: [ 1, 'bob' ]
 	});
 
 	test.end();
@@ -232,11 +232,11 @@ test('select with 2 item object where clause with negation', (test) => {
 test('select with object where clause with negation and a value array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({not: true, name: ['bob', 'jane']});
+	q.where({ not: true, name: [ 'bob', 'jane' ] });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT IN (?,?)',
-		data: ['bob', 'jane']
+		data: [ 'bob', 'jane' ]
 	});
 
 	test.end();
@@ -245,12 +245,12 @@ test('select with object where clause with negation and a value array', (test) =
 test('select with double 2 item object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1, name: 'bob'});
-	q.where({active: true, email: 'bob@bob.com'});
+	q.where({ id: 1, name: 'bob' });
+	q.where({ active: true, email: 'bob@bob.com' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name = ?) AND (active = TRUE AND email = ?)',
-		data: [1, 'bob', 'bob@bob.com']
+		data: [ 1, 'bob', 'bob@bob.com' ]
 	});
 
 	test.end();
@@ -259,11 +259,11 @@ test('select with double 2 item object where clause', (test) => {
 test('select with object where clause and operator', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1}, '>');
+	q.where({ id: 1 }, '>');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -276,7 +276,7 @@ test('select with whereNot', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id != ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -285,11 +285,11 @@ test('select with whereNot', (test) => {
 test('select with whereNot using object', (test) => {
 	var q = queryize().select().from('users');
 
-	q.whereNot({'id': 1});
+	q.whereNot({ 'id': 1 });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id != ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -302,7 +302,7 @@ test('select with whereLike', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name LIKE ?',
-		data: ['bob%']
+		data: [ 'bob%' ]
 	});
 
 	test.end();
@@ -311,11 +311,11 @@ test('select with whereLike', (test) => {
 test('select with whereLike object', (test) => {
 	var q = queryize().select().from('users');
 
-	q.whereLike({'name': 'bob%'});
+	q.whereLike({ 'name': 'bob%' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name LIKE ?',
-		data: ['bob%']
+		data: [ 'bob%' ]
 	});
 
 	test.end();
@@ -328,7 +328,7 @@ test('select with whereNotLike', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT LIKE ?',
-		data: ['bob%']
+		data: [ 'bob%' ]
 	});
 
 	test.end();
@@ -337,11 +337,11 @@ test('select with whereNotLike', (test) => {
 test('select with whereNotLike object', (test) => {
 	var q = queryize().select().from('users');
 
-	q.whereNotLike({'name': 'bob%'});
+	q.whereNotLike({ 'name': 'bob%' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT LIKE ?',
-		data: ['bob%']
+		data: [ 'bob%' ]
 	});
 
 	test.end();
@@ -354,7 +354,7 @@ test('select with whereBetween', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id BETWEEN ? AND ?',
-		data: [5, 10]
+		data: [ 5, 10 ]
 	});
 
 	test.end();
@@ -367,7 +367,7 @@ test('select with whereInRange', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id BETWEEN ? AND ?',
-		data: [5, 10]
+		data: [ 5, 10 ]
 	});
 
 	test.end();
@@ -380,7 +380,7 @@ test('select with whereInRange, without end', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id >= ?',
-		data: [5]
+		data: [ 5 ]
 	});
 
 	test.end();
@@ -393,7 +393,7 @@ test('select with whereInRange, without beginning', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id <= ?',
-		data: [10]
+		data: [ 10 ]
 	});
 
 	test.end();
@@ -406,7 +406,7 @@ test('select with whereInRange using dates', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE lastlogin BETWEEN ? AND ?',
-		data: ['2013-01-01 00:00:00', '2014-01-01 00:00:00']
+		data: [ '2013-01-01 00:00:00', '2014-01-01 00:00:00' ]
 	});
 
 	test.end();

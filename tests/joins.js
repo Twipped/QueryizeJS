@@ -33,7 +33,7 @@ test('select with string join and custom binding', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN orders o ON o.userid = u.id AND o.type = ?',
-		data: ['express']
+		data: [ 'express' ]
 	});
 
 	test.end();
@@ -182,7 +182,7 @@ test('select with object join, missing table, throws error', (test) => {
 test('select with object join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join({table: 'passwords', alias: 'p'});
+	q.join({ table: 'passwords', alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p',
@@ -195,7 +195,7 @@ test('select with object join', (test) => {
 test('select with object left join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.leftJoin({table: 'passwords', alias: 'p'});
+	q.leftJoin({ table: 'passwords', alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u LEFT JOIN passwords p',
@@ -208,7 +208,7 @@ test('select with object left join', (test) => {
 test('select with object right join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.rightJoin({table: 'passwords', alias: 'p'});
+	q.rightJoin({ table: 'passwords', alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u RIGHT JOIN passwords p',
@@ -221,7 +221,7 @@ test('select with object right join', (test) => {
 test('select with object inner join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.innerJoin({table: 'passwords', alias: 'p'});
+	q.innerJoin({ table: 'passwords', alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u INNER JOIN passwords p',
@@ -234,7 +234,7 @@ test('select with object inner join', (test) => {
 test('select with name+options join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p'});
+	q.join('passwords', { alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p',
@@ -247,7 +247,7 @@ test('select with name+options join', (test) => {
 test('select with name+options inner join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.innerJoin('passwords', {alias: 'p'});
+	q.innerJoin('passwords', { alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u INNER JOIN passwords p',
@@ -260,7 +260,7 @@ test('select with name+options inner join', (test) => {
 test('select with name+options left join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.leftJoin('passwords', {alias: 'p'});
+	q.leftJoin('passwords', { alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u LEFT JOIN passwords p',
@@ -273,7 +273,7 @@ test('select with name+options left join', (test) => {
 test('select with name+options right join', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.rightJoin('passwords', {alias: 'p'});
+	q.rightJoin('passwords', { alias: 'p' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u RIGHT JOIN passwords p',
@@ -286,7 +286,7 @@ test('select with name+options right join', (test) => {
 test('select with name+options join using', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', using: 'id'});
+	q.join('passwords', { alias: 'p', using: 'id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p USING (id)',
@@ -299,7 +299,7 @@ test('select with name+options join using', (test) => {
 test('select with name+options join using array', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', using: ['id', 'valid']});
+	q.join('passwords', { alias: 'p', using: [ 'id', 'valid' ] });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p USING (id, valid)',
@@ -312,7 +312,7 @@ test('select with name+options join using array', (test) => {
 test('select with name+options join on string', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: 'p.userid = id'});
+	q.join('passwords', { alias: 'p', on: 'p.userid = id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = id)',
@@ -325,7 +325,7 @@ test('select with name+options join on string', (test) => {
 test('select with name+options join on array of strings', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: ['p.userid = u.id', 'p.hash IS NOT NULL']});
+	q.join('passwords', { alias: 'p', on: [ 'p.userid = u.id', 'p.hash IS NOT NULL' ] });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.hash IS NOT NULL)',
@@ -338,7 +338,7 @@ test('select with name+options join on array of strings', (test) => {
 test('select with name+options join on object', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.hash': 'NULL'}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.hash': 'NULL' } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.hash = NULL)',
@@ -351,7 +351,7 @@ test('select with name+options join on object', (test) => {
 test('select with name+options join on object with negation', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', not: true, 'p.hash': "''"}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', not: true, 'p.hash': "''" } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.hash != \'\')',
@@ -364,7 +364,7 @@ test('select with name+options join on object with negation', (test) => {
 test('select with name+options join on mixed array', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: [{'p.userid': 'u.id'}, 'p.hash IS NOT NULL']});
+	q.join('passwords', { alias: 'p', on: [ { 'p.userid': 'u.id' }, 'p.hash IS NOT NULL' ] });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.hash IS NOT NULL)',
@@ -377,11 +377,11 @@ test('select with name+options join on mixed array', (test) => {
 test('select with name+options join on object with date', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.dateset': new Date('2013-01-01')}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.dateset': new Date('2013-01-01') } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.dateset = ?)',
-		data: [ '2013-01-01 00:00:00']
+		data: [ '2013-01-01 00:00:00' ]
 	});
 
 	test.end();
@@ -390,7 +390,7 @@ test('select with name+options join on object with date', (test) => {
 test('select with name+options join on object with null', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.dateset': null}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.dateset': null } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.dateset = NULL)',
@@ -403,11 +403,11 @@ test('select with name+options join on object with null', (test) => {
 test('select with name+options join on object with data object', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.dateset': {data: 2}}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.dateset': { data: 2 } } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.dateset = ?)',
-		data: [2]
+		data: [ 2 ]
 	});
 
 	test.end();
@@ -416,7 +416,7 @@ test('select with name+options join on object with data object', (test) => {
 test('select with name+options join on object with data object containing null', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.dateset': {data: null}}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.dateset': { data: null } } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.dateset = NULL)',
@@ -429,25 +429,25 @@ test('select with name+options join on object with data object containing null',
 test('select with name+options join on object with array', (test) => {
 	var q = queryize().select().from('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id', 'p.dateset': [1, 2]}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id', 'p.dateset': [ 1, 2 ] } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN passwords p ON (p.userid = u.id AND p.dateset IN ( ?, ? ))',
-		data: [1, 2]
+		data: [ 1, 2 ]
 	});
 
 	test.end();
 });
 
 test('delete with name+options join on object', (test) => {
-	var q = queryize().deleteFrom(['users', 'p'], 'u');
+	var q = queryize().deleteFrom([ 'users', 'p' ], 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id'}});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id' } });
 	q.where('u.id', 2);
 
 	test.deepEqual(q.compile(), {
 		query: 'DELETE u, p FROM `users` u JOIN passwords p ON (p.userid = u.id) WHERE u.id = ?',
-		data: [2]
+		data: [ 2 ]
 	});
 
 	test.end();
@@ -456,13 +456,13 @@ test('delete with name+options join on object', (test) => {
 test('update with name+options join on object', (test) => {
 	var q = queryize().update('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id'}});
-	q.set({'u.active': true, 'p.hash': 'fakehashdata'});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id' } });
+	q.set({ 'u.active': true, 'p.hash': 'fakehashdata' });
 	q.where('name', null);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u JOIN passwords p ON (p.userid = u.id) SET u.active = TRUE, p.hash = ? WHERE name = NULL',
-		data: ['fakehashdata']
+		data: [ 'fakehashdata' ]
 	});
 
 	test.end();
@@ -471,12 +471,12 @@ test('update with name+options join on object', (test) => {
 test('insert with name+options join on object does not display join', (test) => {
 	var q = queryize().insert().into('users', 'u');
 
-	q.join('passwords', {alias: 'p', on: {'p.userid': 'u.id'}});
-	q.set({'u.active': true, 'p.hash': 'fakehashdata'});
+	q.join('passwords', { alias: 'p', on: { 'p.userid': 'u.id' } });
+	q.set({ 'u.active': true, 'p.hash': 'fakehashdata' });
 
 	test.deepEqual(q.compile(), {
 		query: 'INSERT INTO `users` u SET u.active = TRUE, p.hash = ?',
-		data: ['fakehashdata']
+		data: [ 'fakehashdata' ]
 	});
 
 	test.end();
@@ -485,8 +485,8 @@ test('insert with name+options join on object does not display join', (test) => 
 test('select with multiple joins', (test) => {
 	var q = queryize().select('COUNT(c.id)').from('users', 'u');
 
-	q.join('posts', {alias: 'p', on: {'p.userid': 'u.id'}});
-	q.leftJoin('comments', {alias: 'c', on: {'c.postid': 'p.id'}});
+	q.join('posts', { alias: 'p', on: { 'p.userid': 'u.id' } });
+	q.leftJoin('comments', { alias: 'c', on: { 'c.postid': 'p.id' } });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT COUNT(c.id) FROM `users` u JOIN posts p ON (p.userid = u.id) LEFT JOIN comments c ON (c.postid = p.id)',
@@ -499,13 +499,13 @@ test('select with multiple joins', (test) => {
 test('update with join', (test) => {
 	var q = queryize().update('tablea');
 
-	q.join('tableb', {on: {'tablea.id': 'tableb.id'}});
+	q.join('tableb', { on: { 'tablea.id': 'tableb.id' } });
 	q.set('tablea.foo = tableb.foo');
 	q.where('tablea.batch', 10);
 
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `tablea` JOIN tableb ON (tablea.id = tableb.id) SET tablea.foo = tableb.foo WHERE tablea.batch = ?',
-		data: [10]
+		data: [ 10 ]
 	});
 
 	test.end();

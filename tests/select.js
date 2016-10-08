@@ -71,7 +71,7 @@ test('basic select with added columns, without duplicates', (test) => {
 test('basic select with multiple columns', (test) => {
 	var q = queryize().select().from('users');
 
-	q.columns('columnA', ['columnB', 'columnC']);
+	q.columns('columnA', [ 'columnB', 'columnC' ]);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, columnB, columnC FROM `users`',
@@ -88,7 +88,7 @@ test('basic select with value in columns', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: [3]
+		data: [ 3 ]
 	});
 
 	test.end();
@@ -103,7 +103,7 @@ test('basic select with added value column', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: [3]
+		data: [ 3 ]
 	});
 
 	test.end();
@@ -118,7 +118,7 @@ test('basic select with duplicate added value column, filtering duplicates', (te
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, ? FROM `users`',
-		data: [3, 3]
+		data: [ 3, 3 ]
 	});
 
 	test.end();
@@ -127,11 +127,11 @@ test('basic select with duplicate added value column, filtering duplicates', (te
 test('basic select with value object in columns', (test) => {
 	var q = queryize().select().from('users');
 
-	q.columns('columnA', {data: 'foo'}, 'columnC');
+	q.columns('columnA', { data: 'foo' }, 'columnC');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: ['foo']
+		data: [ 'foo' ]
 	});
 
 	test.end();
@@ -140,11 +140,11 @@ test('basic select with value object in columns', (test) => {
 test('basic select with modified date value object in columns', (test) => {
 	var q = queryize().select().from('users');
 
-	q.columns('columnA', {data: new Date('2014-01-01'), modifier: 'DATE'}, 'columnC');
+	q.columns('columnA', { data: new Date('2014-01-01'), modifier: 'DATE' }, 'columnC');
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT columnA, DATE(?), columnC FROM `users`',
-		data: ['2014-01-01 00:00:00']
+		data: [ '2014-01-01 00:00:00' ]
 	});
 
 	test.end();
@@ -170,7 +170,7 @@ test('select with two argument where clause', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();
@@ -179,11 +179,11 @@ test('select with two argument where clause', (test) => {
 test('select with object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id: 1});
+	q.where({ id: 1 });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [1]
+		data: [ 1 ]
 	});
 
 	test.end();

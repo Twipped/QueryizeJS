@@ -68,7 +68,7 @@ test('from subquery with data', (test) => {
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT * FROM `users` WHERE type = ?) as `subquery` WHERE name LIKE ?',
-		data: ['Admin', 'Bob%']
+		data: [ 'Admin', 'Bob%' ]
 	});
 
 	test.end();
@@ -82,7 +82,7 @@ test('joining subquery', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{on: 'order_totals.userid = u.id'});
+		{ on: 'order_totals.userid = u.id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
@@ -113,7 +113,7 @@ test('left joining subquery', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{on: 'order_totals.userid = u.id'});
+		{ on: 'order_totals.userid = u.id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u LEFT JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
@@ -145,7 +145,7 @@ test('joining subquery with options alias', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{on: 'ot.userid = u.id', alias: 'ot'});
+		{ on: 'ot.userid = u.id', alias: 'ot' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `ot` ON (ot.userid = u.id)',
@@ -213,13 +213,13 @@ test('compound where clause', (test) => {
 
 	q.where('name', 'John');
 	q.where(queryize()
-		.where({type: [15, 23]})
+		.where({ type: [ 15, 23 ] })
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
-		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
 	});
 
 	test.end();
@@ -231,13 +231,13 @@ test('compound where clause w/ compound AND', (test) => {
 	q.where('name', 'John');
 	q.where(queryize()
 		.comparisonMethod('and')
-		.where({type: [15, 23]})
+		.where({ type: [ 15, 23 ] })
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) AND date_created BETWEEN ? AND ?)',
-		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
 	});
 
 	test.end();
@@ -249,13 +249,13 @@ test('compound where clause w/ compound OR', (test) => {
 	q.where('name', 'John');
 	q.where(queryize()
 		.comparisonMethod('or')
-		.where({type: [15, 23]})
+		.where({ type: [ 15, 23 ] })
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
-		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
 	});
 
 	test.end();
