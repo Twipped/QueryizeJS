@@ -1,58 +1,59 @@
 
-var queryize = require('../queryize');
+var test = require('tap').test;
+var queryize = require('../');
 
-exports['exports correctly'] = function (test) {
+test('exports correctly', (test) => {
 	test.strictEqual(typeof queryize, 'function', 'queryize is a function');
-	test.done();
-};
+	test.end();
+});
 
-exports['compile without method throws error'] = function (test) {
+test('compile without method throws error', (test) => {
 	var q = queryize();
 
 	test.throws(function () {
 		q.compile();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['compile without table throws error'] = function (test) {
+test('compile without table throws error', (test) => {
 	var q = queryize().select();
 
 	test.throws(function () {
 		q.compile();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic select, copied'] = function (test) {
+test('basic select, copied', (test) => {
 	var a = queryize().select().from('users', 'u');
 
 	var b = queryize(a);
-		
+
 	test.deepEqual(b.compile(), {
 		query: 'SELECT * FROM `users` u',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic select from shortcut'] = function (test) {
+test('basic select from shortcut', (test) => {
 	var q = queryize.select().from('users', 'u');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic update from shortcut'] = function (test) {
+test('basic update from shortcut', (test) => {
 	var q = queryize.update().table('users', 'u');
-	
+
 	q.set('name', 'bob');
 	q.where('name', null);
 
@@ -61,12 +62,12 @@ exports['basic update from shortcut'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic insert from shortcut'] = function (test) {
+test('basic insert from shortcut', (test) => {
 	var q = queryize.insert().into('users', 'u');
-	
+
 	q.set('name', 'bob');
 
 	test.deepEqual(q.compile(), {
@@ -74,12 +75,12 @@ exports['basic insert from shortcut'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic replace from shortcut'] = function (test) {
+test('basic replace from shortcut', (test) => {
 	var q = queryize.replace().into('users', 'u');
-	
+
 	q.set('name', 'bob');
 
 	test.deepEqual(q.compile(), {
@@ -87,12 +88,12 @@ exports['basic replace from shortcut'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic delete from shortcut'] = function (test) {
+test('basic delete from shortcut', (test) => {
 	var q = queryize.delete().from('users', 'u');
-	
+
 	q.where('id = 1');
 
 	test.deepEqual(q.compile(), {
@@ -100,12 +101,12 @@ exports['basic delete from shortcut'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic deleteFrom from shortcut'] = function (test) {
+test('basic deleteFrom from shortcut', (test) => {
 	var q = queryize.deleteFrom('users', 'u');
-	
+
 	q.where('id = 1');
 
 	test.deepEqual(q.compile(), {
@@ -113,15 +114,15 @@ exports['basic deleteFrom from shortcut'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['query duplication'] = function (test) {
-	test.expect(3);
+test('query duplication', (test) => {
+	test.plan(3);
 	var a = queryize.deleteFrom('users', 'u');
 	var b = queryize(a);
 	var c = b.clone();
-	
+
 	a.where('id = 1');
 	c.where('id = 2');
 
@@ -139,32 +140,32 @@ exports['query duplication'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['pre-seeded query'] = function (test) {
-	test.expect(1);
+test('pre-seeded query', (test) => {
+	test.plan(1);
 
 	var q = queryize({
 		tableName: 'users',
 		alias: 'u',
 		builder: 'select'
 	});
-	
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['confirm pre-bound mutators'] = function (test) {
+test('confirm pre-bound mutators', (test) => {
 	var q = queryize();
-	var from = q.from,
-	    select = q.select,
-	    where = q.where;
-	
+	var from = q.from;
+	var select = q.select;
+	var where = q.where;
+
 	select();
 	from('users');
 	where('id = 12');
@@ -175,12 +176,11 @@ exports['confirm pre-bound mutators'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-
-exports['debug toggles the correct flag'] = function (test) {
-	test.expect(3);
+test('debug toggles the correct flag', (test) => {
+	test.plan(3);
 	var q = queryize();
 
 	test.strictEqual(q._attributes.debugEnabled, false);
@@ -193,6 +193,5 @@ exports['debug toggles the correct flag'] = function (test) {
 
 	test.strictEqual(q._attributes.debugEnabled, false);
 
-	test.done();
-};
-
+	test.end();
+});

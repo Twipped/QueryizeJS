@@ -1,47 +1,44 @@
 
-var queryize = require('../queryize');
-var EventEmitter = require('events').EventEmitter;
+var test = require('tap').test;
+var queryize = require('../');
 
 var mockConnection = function (test, expectedQuery, expectedData, returnValue, fails) {
 	return {
 		query: function (query, data, callback) {
-			if (expectedQuery !== undefined) {test.strictEqual(query, expectedQuery);}
-			if (expectedData !== undefined) {test.deepEqual(data, expectedData);}
-			test.ok(true);
+			test.pass('connection.query was called');
+			if (expectedQuery !== undefined) { test.strictEqual(query, expectedQuery, 'with expected query text'); }
+			if (expectedData !== undefined) { test.deepEqual(data, expectedData, 'and expected query data'); }
 			callback(fails, returnValue);
-			return new EventEmitter();
 		}
 	};
 };
 
-exports['exec with callback, calls query'] = function (test) {
-	test.expect(4);
+test('exec with callback, calls query', (test) => {
+	test.plan(5);
 	var q = queryize.select().from('test_table');
 	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}]);
 
 	q.exec(conn, function (err, results) {
-		test.deepEqual(results, [{name: 'John'}]);
-		test.done();
+		test.error(err);
+		test.deepEqual(results, [{name: 'John'}], 'expected results');
+		test.end();
 	});
-};
+});
 
-exports['exec with callback and options, calls query'] = function (test) {
-	test.expect(4);
+test('exec with callback and options, calls query with options', (test) => {
+	test.plan(4);
 	var q = queryize.select().from('test_table');
 
 	var conn = {
 		query: function (options, callback) {
+			test.pass('connection.query was called');
 			test.deepEqual(options, {
 				sql: 'SELECT * FROM `test_table`',
-				values: []
-			});
-			test.deepEqual(options.__proto__, {
-				sql: 'FOO',
+				values: [],
 				bar: 42
-			});
-			test.ok(true);
+			}, 'with the correct options object');
+
 			callback(false, [{name: 'John'}]);
-			return new EventEmitter();
 		}
 	};
 
@@ -51,66 +48,29 @@ exports['exec with callback and options, calls query'] = function (test) {
 	};
 
 	q.exec(conn, options, function (err, results) {
+		test.error(err);
 		test.deepEqual(results, [{name: 'John'}]);
-		test.done();
+		test.end();
 	});
-};
+});
 
-exports['exec with callback, calls execute'] = function (test) {
-	test.expect(4);
+test('exec with promise (resolves)', (test) => {
+	test.plan(4);
 	var q = queryize.select().from('test_table');
 	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}]);
 
-	conn.execute = conn.query;
-	conn.query = function () {
-		test.ok(false, 'called .query instead of .execute');
-	};
+	return q.exec(conn)
+		.then((results) => test.deepEqual(results, [{name: 'John'}]));
+});
 
-	q.exec(conn, function (err, results) {
-		test.deepEqual(results, [{name: 'John'}]);
-		test.done();
-	});
-};
-
-exports['exec with promise (resolves), calls query'] = function (test) {
-	test.expect(4);
-	var q = queryize.select().from('test_table');
-	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}]);
-
-	var thenable = q.exec(conn);
-
-	// test.strictEqual(typeof thenable.then, 'function');
-	// test.strictEqual(typeof thenable.catch, 'function');
-	// test.notEqual(thenable.then, thenable.catch);
-	thenable.then(function (results) {
-		test.deepEqual(results, [{name: 'John'}]);
-		test.done();
-	}).catch(function (err) {
-		test.ok(false, 'promise rejected');
-		test.done();
-	});
-};
-
-exports['exec with promise (rejects), calls execute'] = function (test) {
-	test.expect(4);
+test('exec with promise (rejects)', (test) => {
+	test.plan(4);
 	var q = queryize.select().from('test_table');
 	var conn = mockConnection(test, 'SELECT * FROM `test_table`', [], [{name: 'John'}], 'FAIL');
 
-	conn.execute = conn.query;
-	conn.query = function () {
-		test.ok(false, 'called .query instead of .execute');
-	};
-
 	var thenable = q.exec(conn);
 
-	// test.strictEqual(typeof thenable.then, 'function');
-	// test.strictEqual(typeof thenable.catch, 'function');
-	// test.notEqual(thenable.then, thenable.catch);
-	thenable.then(function (results) {
-		test.ok(false, 'promise resolves');
-		test.done();
-	}).catch(function (err) {
-		test.strictEqual(err, 'FAIL');
-		test.done();
-	});
-};
+	return thenable
+		.then((results) => test.fail('promise resolved'))
+		.catch((err) => test.equal(err, 'FAIL'));
+});

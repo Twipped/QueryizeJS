@@ -1,31 +1,32 @@
 
-var queryize = require('../queryize');
+var test = require('tap').test;
+var queryize = require('../');
 
-exports['update without set throws error'] = function (test) {
+test('update without set throws error', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	test.throws(function () {
 		q.compile();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update without where throws error'] = function (test) {
+test('update without where throws error', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set('name', 'bob');
 
 	test.throws(function () {
 		q.compile();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic update'] = function (test) {
+test('basic update', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set('name', 'bob');
 	q.where('name', null);
 
@@ -34,12 +35,12 @@ exports['basic update'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic update with database'] = function (test) {
+test('basic update with database', (test) => {
 	var q = queryize().update().database('test', 'users', 'u');
-		
+
 	q.set('name', 'bob');
 	q.where('name', null);
 
@@ -48,12 +49,12 @@ exports['basic update with database'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic update with object to set'] = function (test) {
+test('basic update with object to set', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set({name: 'bob'});
 	q.where('name', null);
 
@@ -62,12 +63,12 @@ exports['basic update with object to set'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic update with object to set + modifier'] = function (test) {
+test('basic update with object to set + modifier', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set({name: 'bob'}, 'UPPER');
 	q.where('name', null);
 
@@ -76,22 +77,22 @@ exports['basic update with object to set + modifier'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with set value of object throws error'] = function (test) {
+test('update with set value of object throws error', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	test.throws(function () {
 		q.set({name: {blah: 1}});
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with a date value'] = function (test) {
+test('update with a date value', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set({lastlogin: new Date('2012-01-01')});
 	q.where('name', null);
 
@@ -100,12 +101,12 @@ exports['update with a date value'] = function (test) {
 		data: ['2012-01-01 00:00:00']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with a number value'] = function (test) {
+test('update with a number value', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set({lastlogin: 6});
 	q.where('name', null);
 
@@ -114,12 +115,12 @@ exports['update with a number value'] = function (test) {
 		data: [6]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with a boolean value'] = function (test) {
+test('update with a boolean value', (test) => {
 	var q = queryize().update().table('users', 'u');
-	
+
 	q.set({lastlogin: true});
 	q.where('name', null);
 
@@ -128,55 +129,54 @@ exports['update with a boolean value'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with string where clause'] = function (test) {
+test('update with string where clause', (test) => {
 	var q = queryize().update().from('users');
 
 	q.set('lastlogin = NOW()');
 	q.where('id = 1');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` SET lastlogin = NOW() WHERE id = 1',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with two argument where clause'] = function (test) {
+test('update with two argument where clause', (test) => {
 	var q = queryize().update().from('users');
 
 	q.set('lastlogin = NOW()');
 	q.where('id', 1);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` SET lastlogin = NOW() WHERE id = ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-
-exports['update with object where clause'] = function (test) {
+test('update with object where clause', (test) => {
 	var q = queryize().update().from('users');
 
 	q.set('lastlogin = NOW()');
-	q.where({id:1});
-		
+	q.where({ id: 1 });
+
 	test.deepEqual(q.compile(), {
 		query: 'UPDATE `users` SET lastlogin = NOW() WHERE id = ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['update with a null value'] = function (test) {
+test('update with a null value', (test) => {
 	var q = queryize().update().database('test', 'users', 'u');
-		
+
 	q.set({
 		firstname: 'bob',
 		lastname: null
@@ -188,5 +188,5 @@ exports['update with a null value'] = function (test) {
 		data: ['bob']
 	});
 
-	test.done();
-};
+	test.end();
+});

@@ -1,9 +1,10 @@
 
-var queryize = require('../queryize');
+var test = require('tap').test;
+var queryize = require('../');
 
-exports['where without parameters erases the where clauses'] = function (test) {
+test('where without parameters erases the where clauses', (test) => {
 	var q = queryize().select().from('users');
-	
+
 	q.where('id = 1');
 	q.where();
 	q.where('id = 20');
@@ -13,12 +14,12 @@ exports['where without parameters erases the where clauses'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['multiple where clauses with AND condition'] = function (test) {
+test('multiple where clauses with AND condition', (test) => {
 	var q = queryize().select().from('users');
-	
+
 	q.where('id = 1');
 	q.where('active', true);
 	q.comparisonMethod(true);
@@ -28,12 +29,12 @@ exports['multiple where clauses with AND condition'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['multiple where clauses with OR condition'] = function (test) {
+test('multiple where clauses with OR condition', (test) => {
 	var q = queryize().select().from('users');
-	
+
 	q.where('id = 1');
 	q.where('active', true);
 	q.comparisonMethod(false);
@@ -43,372 +44,370 @@ exports['multiple where clauses with OR condition'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with string where clause'] = function (test) {
+test('select with string where clause', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('id = 1');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with string where clause in array'] = function (test) {
+test('select with string where clause in array', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where(['id = 1']);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with string where clause in array, opening AND'] = function (test) {
+test('select with string where clause in array, opening AND', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where(['AND', 'id = 1']);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause'] = function (test) {
+test('select with two argument where clause', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('id', 1);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause and operator'] = function (test) {
+test('select with two argument where clause and operator', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('id', 1, '>');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause containing value array'] = function (test) {
+test('select with two argument where clause containing value array', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('name', ['bob', 'jane']);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name IN (?,?)',
 		data: ['bob', 'jane']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause containing value array and !='] = function (test) {
+test('select with two argument where clause containing value array and !=', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('name', ['bob', 'jane'], '!=');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT IN (?,?)',
 		data: ['bob', 'jane']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause containing value array and non-equality operator'] = function (test) {
+test('select with two argument where clause containing value array and non-equality operator', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where('name', ['bob', 'jane'], 'LIKE');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (name LIKE ? OR name LIKE ?)',
 		data: ['bob', 'jane']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with two argument where clause containing field array'] = function (test) {
+test('select with two argument where clause containing field array', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where(['firstname', 'lastname'], 'bob');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (firstname = ? OR lastname = ?)',
 		data: ['bob', 'bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with object where clause'] = function (test) {
+test('select with object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id:1});
-		
+	q.where({id: 1});
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with object where clause in array'] = function (test) {
+test('select with object where clause in array', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where([{id:1}]);
-		
+	q.where([{id: 1}]);
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with 2 item object where clause'] = function (test) {
+test('select with 2 item object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id:1, name: 'bob'});
-		
+	q.where({id: 1, name: 'bob'});
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name = ?)',
 		data: [1, 'bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with object where clause containing value array'] = function (test) {
+test('select with object where clause containing value array', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where({name: ['bob', 'jane']});
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name IN (?,?)',
 		data: ['bob', 'jane']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with 2 item object where clause with negation'] = function (test) {
+test('select with 2 item object where clause with negation', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id:1, not: true, name: 'bob'});
-		
+	q.where({id: 1, not: true, name: 'bob'});
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name != ?)',
 		data: [1, 'bob']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with object where clause with negation and a value array'] = function (test) {
+test('select with object where clause with negation and a value array', (test) => {
 	var q = queryize().select().from('users');
 
 	q.where({not: true, name: ['bob', 'jane']});
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT IN (?,?)',
 		data: ['bob', 'jane']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with double 2 item object where clause'] = function (test) {
+test('select with double 2 item object where clause', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id:1, name: 'bob'});
+	q.where({id: 1, name: 'bob'});
 	q.where({active: true, email: 'bob@bob.com'});
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = ? AND name = ?) AND (active = TRUE AND email = ?)',
 		data: [1, 'bob', 'bob@bob.com']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-
-exports['select with object where clause and operator'] = function (test) {
+test('select with object where clause and operator', (test) => {
 	var q = queryize().select().from('users');
 
-	q.where({id:1}, '>');
-		
+	q.where({id: 1}, '>');
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id > ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereNot'] = function (test) {
+test('select with whereNot', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereNot('id', 1);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id != ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereNot using object'] = function (test) {
+test('select with whereNot using object', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereNot({'id': 1});
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id != ?',
 		data: [1]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereLike'] = function (test) {
+test('select with whereLike', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereLike('name', 'bob%');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name LIKE ?',
 		data: ['bob%']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereLike object'] = function (test) {
+test('select with whereLike object', (test) => {
 	var q = queryize().select().from('users');
 
-	q.whereLike({'name':'bob%'});
-		
+	q.whereLike({'name': 'bob%'});
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name LIKE ?',
 		data: ['bob%']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereNotLike'] = function (test) {
+test('select with whereNotLike', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereNotLike('name', 'bob%');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT LIKE ?',
 		data: ['bob%']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereNotLike object'] = function (test) {
+test('select with whereNotLike object', (test) => {
 	var q = queryize().select().from('users');
 
-	q.whereNotLike({'name':'bob%'});
-		
+	q.whereNotLike({'name': 'bob%'});
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name NOT LIKE ?',
 		data: ['bob%']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereBetween'] = function (test) {
+test('select with whereBetween', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereBetween('id', 5, 10);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id BETWEEN ? AND ?',
 		data: [5, 10]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereInRange'] = function (test) {
+test('select with whereInRange', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereInRange('id', 5, 10);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id BETWEEN ? AND ?',
 		data: [5, 10]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-
-exports['select with whereInRange, without end'] = function (test) {
+test('select with whereInRange, without end', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereInRange('id', 5, null);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id >= ?',
 		data: [5]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereInRange, without beginning'] = function (test) {
+test('select with whereInRange, without beginning', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereInRange('id', null, 10);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id <= ?',
 		data: [10]
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['select with whereInRange using dates'] = function (test) {
+test('select with whereInRange using dates', (test) => {
 	var q = queryize().select().from('users');
 
 	q.whereInRange('lastlogin', new Date('2013-01-01'), new Date('2014-01-01'));
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE lastlogin BETWEEN ? AND ?',
 		data: ['2013-01-01 00:00:00', '2014-01-01 00:00:00']
 	});
 
-	test.done();
-};
+	test.end();
+});

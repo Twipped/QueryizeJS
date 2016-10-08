@@ -1,19 +1,20 @@
 
-var queryize = require('../queryize');
+var test = require('tap').test;
+var queryize = require('../');
 
-exports['delete without where throws error'] = function (test) {
+test('delete without where throws error', (test) => {
 	var q = queryize().delete().from('users', 'u');
-	
+
 	test.throws(function () {
 		q.compile();
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic delete'] = function (test) {
+test('basic delete', (test) => {
 	var q = queryize().delete().from('users', 'u');
-	
+
 	q.where('id = 1');
 
 	test.deepEqual(q.compile(), {
@@ -21,12 +22,12 @@ exports['basic delete'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic delete with database'] = function (test) {
+test('basic delete with database', (test) => {
 	var q = queryize().delete().fromDatabase('test', 'users', 'u');
-		
+
 	q.where('id = 1');
 
 	test.deepEqual(q.compile(), {
@@ -34,12 +35,12 @@ exports['basic delete with database'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['basic delete using deleteFrom'] = function (test) {
+test('basic delete using deleteFrom', (test) => {
 	var q = queryize().deleteFrom('users', 'u');
-	
+
 	q.where('id = 1');
 
 	test.deepEqual(q.compile(), {
@@ -47,5 +48,5 @@ exports['basic delete using deleteFrom'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});

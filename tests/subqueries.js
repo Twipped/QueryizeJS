@@ -1,19 +1,20 @@
 
-var queryize = require('../queryize');
+var test = require('tap').test;
+var queryize = require('../');
 
-exports['from subquery'] = function (test) {
+test('from subquery', (test) => {
 	var s = queryize().from('users').columns('MIN(date_created)').as('firstsignup');
 	var q = queryize().select().from(s);
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT MIN(date_created) FROM `users`) as `firstsignup`',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['from subquery, with missing table name'] = function (test) {
+test('from subquery, with missing table name', (test) => {
 	var s = queryize();
 	var q = queryize().select();
 
@@ -21,13 +22,13 @@ exports['from subquery, with missing table name'] = function (test) {
 		q.from(s);
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['from subquery without name'] = function (test) {
+test('from subquery without name', (test) => {
 	var s = queryize().from('users').columns('MIN(date_created)');
 	var q = queryize().select().from(s);
-	
+
 	var result = q.compile();
 
 	// since the name is pseudo-random, I'm regex matching against the random structure and
@@ -40,22 +41,22 @@ exports['from subquery without name'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['from subquery, overriding name'] = function (test) {
+test('from subquery, overriding name', (test) => {
 	var s = queryize().from('users').columns('MIN(date_created)').as('firstsignup');
 	var q = queryize().select().from(s, 'startdate');
-		
+
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT MIN(date_created) FROM `users`) as `startdate`',
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['from subquery with data'] = function (test) {
+test('from subquery with data', (test) => {
 	var q = queryize()
 		.select()
 		.from(queryize()
@@ -65,18 +66,17 @@ exports['from subquery with data'] = function (test) {
 			.where('type', 'Admin'))
 		.whereLike('name', 'Bob%');
 
-		
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT * FROM `users` WHERE type = ?) as `subquery` WHERE name LIKE ?',
 		data: ['Admin', 'Bob%']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['joining subquery'] = function (test) {
+test('joining subquery', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	q.join(queryize()
 		.select('userid', 'SUM(total_invoice) AS total_invoiced')
 		.from('orders')
@@ -89,10 +89,10 @@ exports['joining subquery'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['joining raw subquery'] = function (test) {
+test('joining raw subquery', (test) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.innerJoin('(SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` JOIN invoices ON (invoices.orderid = order.id) GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)');
@@ -102,12 +102,12 @@ exports['joining raw subquery'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['left joining subquery'] = function (test) {
+test('left joining subquery', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	q.leftJoin(queryize()
 		.select('userid', 'SUM(total_invoice) AS total_invoiced')
 		.from('orders')
@@ -120,12 +120,12 @@ exports['left joining subquery'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['joining subquery without options'] = function (test) {
+test('joining subquery without options', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	test.throws(function () {
 		q.join(queryize()
 			.select('userid', 'SUM(total_invoice) AS total_invoiced')
@@ -134,12 +134,12 @@ exports['joining subquery without options'] = function (test) {
 			.as('order_totals'));
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['joining subquery with options alias'] = function (test) {
+test('joining subquery with options alias', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	q.join(queryize()
 		.select('userid', 'SUM(total_invoice) AS total_invoiced')
 		.from('orders')
@@ -152,12 +152,12 @@ exports['joining subquery with options alias'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['column as subquery'] = function (test) {
+test('column as subquery', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	q.columns(
 		'id',
 		queryize()
@@ -172,12 +172,12 @@ exports['column as subquery'] = function (test) {
 		data: []
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['column as subquery w/ too many columns'] = function (test) {
+test('column as subquery w/ too many columns', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	test.throws(function () {
 		q.columns(
 			'id',
@@ -189,12 +189,12 @@ exports['column as subquery w/ too many columns'] = function (test) {
 		);
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['column as subquery w/ default columns'] = function (test) {
+test('column as subquery w/ default columns', (test) => {
 	var q = queryize().select().from('users', 'u');
-	
+
 	test.throws(function () {
 		q.columns(
 			'id',
@@ -205,15 +205,15 @@ exports['column as subquery w/ default columns'] = function (test) {
 		);
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['compound where clause'] = function (test) {
+test('compound where clause', (test) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
 	q.where(queryize()
-		.where({type: [15,23]})
+		.where({type: [15, 23]})
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
@@ -222,16 +222,16 @@ exports['compound where clause'] = function (test) {
 		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['compound where clause w/ compound AND'] = function (test) {
+test('compound where clause w/ compound AND', (test) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
 	q.where(queryize()
 		.comparisonMethod('and')
-		.where({type: [15,23]})
+		.where({type: [15, 23]})
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
@@ -240,16 +240,16 @@ exports['compound where clause w/ compound AND'] = function (test) {
 		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
 	});
 
-	test.done();
-};
+	test.end();
+});
 
-exports['compound where clause w/ compound OR'] = function (test) {
+test('compound where clause w/ compound OR', (test) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
 	q.where(queryize()
 		.comparisonMethod('or')
-		.where({type: [15,23]})
+		.where({type: [15, 23]})
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
@@ -258,5 +258,5 @@ exports['compound where clause w/ compound OR'] = function (test) {
 		data: ['John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00']
 	});
 
-	test.done();
-};
+	test.end();
+});
