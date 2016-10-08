@@ -34,7 +34,7 @@
   },
   "dependencies": {
     "lodash.clone": "^2.4.1",
-    "lodash.mapvalues": "^2.4.1",
+    "lodash.mapvalues": "^4.5.0",
     "proxmis": "^0.2.0"
   },
   "files": [
