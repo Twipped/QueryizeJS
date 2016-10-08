@@ -4,11 +4,9 @@ A no-frills chainable/fluent interface for constructing mutable MySQL queries wi
 
 [![NPM version](https://img.shields.io/npm/v/queryize.svg)](http://badge.fury.io/js/queryize)
 [![Licensed MIT](https://img.shields.io/npm/l/queryize.svg)](https://github.com/ChiperSoft/QueryizeJS/blob/master/LICENSE.txt)
-[![Nodejs 0.10+](https://img.shields.io/badge/node.js-%3E=_0.10-brightgreen.svg)](http://nodejs.org)
+[![Nodejs 4+](https://img.shields.io/badge/node.js-%3E=_4 LTS-brightgreen.svg)](http://nodejs.org)
 [![Downloads](http://img.shields.io/npm/dm/queryize.svg)](http://npmjs.org/queryize)
 [![Build Status](https://img.shields.io/travis/ChiperSoft/QueryizeJS.svg)](https://travis-ci.org/ChiperSoft/QueryizeJS)
-[![Coverage Status](https://img.shields.io/coveralls/ChiperSoft/QueryizeJS.svg)](https://coveralls.io/r/ChiperSoft/QueryizeJS)
-[![Gittip](http://img.shields.io/gittip/chipersoft.svg)](https://www.gittip.com/chipersoft/)
 
 ##Installation
 
@@ -81,6 +79,6 @@ var q = queryize()
 
 ##Running Unit Tests
 
-From inside the repository root, run `npm install` to install the NodeUnit dependency.
+From inside the repository root, run `npm install` to install the node-tap dependency.
 
 Run `npm test` to execute the complete test suite.

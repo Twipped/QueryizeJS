@@ -1,3 +1,25 @@
+2.0.0-dev / 2016-10-09
+==================
+  * BREAKING CHANGES:
+    * Now only supports Node 4 and later
+    * Removed `query.emitted()`
+    * Removed `query.run()` alias for `query.exec()`
+    * `query.exec()` now always uses the `connection.query` function instead of `connection.execute`.
+
+  * New: Casting a query object to a string now produces a query with escaped values.
+  
+  * Fixed: `query.clone()` will now properly clone all attributes.
+  
+  * Dependencies:
+    * Replaced `lodash.assign` with ES6 `Object.assign`
+    * Replaced `lodash.clone` with `lodash.clonedeep`.
+    * Updated `lodash.mapvalues` to 4.5.0
+    * Now using the `sqlstring` package to handle data escapement
+
+  * Internal changes:
+    * Tests are now built using node-tap instead of nodeunit
+    * Library is now linted using eslint
+
 1.1.1 / 2015-10-10
 ==================
 
