@@ -10,22 +10,21 @@ var pool;
 test('mysql2 integration', (t) => mktmpio.create().then((db) => {
 	t.comment(`Database created: --user=root --password=${db.password} --host=${db.host} --port=${db.port}`);
 
-	t.tearDown(() => {
-		return new Promise((resolve) => {
-			t.comment('Disconnecting');
-			if (!pool) return resolve();
-			pool.end(resolve);
-		})
-			.then(() => mktmpio.destroy())
-			.then(() => t.comment('Database destroyed'));
-	});
-
 	pool = mysql2.createPool({
 		host: db.host,
 		port: db.port,
 		user: 'root',
 		password: db.password,
 		database: 'test_data'
+	});
+
+	t.tearDown(() => {
+		return new Promise((resolve) => {
+			t.comment('Disconnecting');
+			pool.end(resolve);
+		})
+			.then(() => mktmpio.destroy())
+			.then(() => t.comment('Database destroyed'));
 	});
 
 	return mktmpio.populate().then(() => {

@@ -15,7 +15,7 @@ exports.create = function () {
 			current = result;
 			return resolve(result);
 		});
-	});
+	}).delay(500);
 };
 
 exports.populate = function () {
@@ -24,11 +24,10 @@ exports.populate = function () {
 		port: current.port,
 		user: 'root',
 		password: current.password
-	})
-		.then((connection) =>
-			Promise.each(schema, (sql) => connection.query(sql))
-				.then(() => connection.end())
-		);
+	}).then((connection) =>
+		Promise.each(schema, (sql) => connection.query(sql))
+			.then(() => connection.end())
+	);
 };
 
 exports.destroy = function () {
