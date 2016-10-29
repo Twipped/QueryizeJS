@@ -14,6 +14,7 @@
     * Replaced `lodash.assign` with ES6 `Object.assign`
     * Replaced `lodash.clone` with `lodash.clonedeep`.
     * Updated `lodash.mapvalues` to 4.5.0
+    * Updated `proxmis` to 1.0.0
     * Now using the `sqlstring` package to handle data escapement
 
   * Internal changes:
