@@ -1,6 +1,6 @@
 {
   "name": "queryize",
-  "version": "1.1.1",
+  "version": "2.0.0",
   "description": "A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.",
   "main": "lib/queryize.js",
   "engines": {
