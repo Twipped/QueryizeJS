@@ -1,4 +1,4 @@
-2.0.0-dev / 2016-10-09
+2.0.0 / 2016-10-28
 ==================
   * BREAKING CHANGES:
     * Now only supports Node 4 and later
