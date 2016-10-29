@@ -1,27 +1,44 @@
+'use strict';
+
 var fs = require('fs');
 var dox = require('dox');
 var Handlebars = require('handlebars');
 var commonmark = require('commonmark');
+var path = require('path');
 
-var template = Handlebars.compile(fs.readFileSync(__dirname + '/template.hbs.html').toString('utf8'));
+var template = Handlebars.compile(fs.readFileSync(path.join(__dirname, '/template.hbs.html')).toString('utf8'));
 
 /** Build Changelog
 *******************************************************************************************/
-var changelog = fs.readFileSync(__dirname + '/../History.md').toString('utf8');
-changelog = (new commonmark.DocParser()).parse(changelog);
-changelog.children.forEach(function (node) {
+var changelog = fs.readFileSync(path.join(__dirname, '/../CHANGELOG.md')).toString('utf8');
+changelog = (new commonmark.Parser()).parse(changelog);
+var walker = changelog.walker();
+var event;
+var node;
+while (event = walker.next()) {
+	node = event.node;
 	if (node.t === 'SetextHeader' && node.level === 1) {
 		node.level = 3;
 	}
-});
+};
 changelog = (new commonmark.HtmlRenderer()).render(changelog);
 
 /** Build Docs
 *******************************************************************************************/
 
-var parsed = dox.parseComments(fs.readFileSync(__dirname + '/../lib/queryize.js').toString('utf8'));
+var parsed = dox.parseComments(
+	fs.readFileSync(
+		path.join(__dirname, '/../lib/queryize.js')
+	).toString('utf8')
+);
 
-parsed = parsed.concat( dox.parseComments(fs.readFileSync(__dirname + '/../lib/mutators.js').toString('utf8')) );
+parsed = parsed.concat(
+	dox.parseComments(
+		fs.readFileSync(
+			path.join(__dirname, '/../lib/mutators.js')
+		).toString('utf8')
+	)
+);
 
 var parents = {};
 var parentless = {
@@ -42,13 +59,13 @@ parsed.forEach(function (item) {
 	var currentSignature;
 
 	function addSignature () {
-		if (!currentSignature) {return;} //nothing to add
+		if (!currentSignature) return; // nothing to add
 
 		if (!currentSignature.signature) {
 			currentSignature.signature =
 				(item.ctx.parent && item.ctx.parent + '.' || '') +
 				item.ctx.name + '(' +
-				currentSignature.params.map(function (p) {return p.optional ? '[' + p.name + ']' : p.name;}).join(', ') +
+				currentSignature.params.map((p) => p.optional ? '[' + p.name + ']' : p.name).join(', ') +
 				')';
 		}
 
@@ -96,7 +113,7 @@ parsed.forEach(function (item) {
 			ensureSignature();
 
 			if ((tag.optional = tag.name[0] === '[')) {
-				tag.name = tag.name.substring(1, tag.name.length -1);
+				tag.name = tag.name.substring(1, tag.name.length - 1);
 			}
 
 			i = tag.name.indexOf('=');
@@ -191,8 +208,7 @@ parsed.forEach(function (item) {
 	item.aliases = item.aliases.join(', ');
 });
 
-
 // Save the documentation data for reference
-fs.writeFileSync(__dirname + '/queryize.json', JSON.stringify(parsed, undefined, 2));
+fs.writeFileSync(path.join(__dirname, '/queryize.json'), JSON.stringify(parsed, undefined, 2));
 
-fs.writeFileSync(__dirname + '/index.html', template({pieces: parsed, parents: parents, parentless: parentless, changelog: changelog}));
+fs.writeFileSync(path.join(__dirname, '/index.html'), template({ pieces: parsed, parents, parentless, changelog }));
