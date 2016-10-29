@@ -15,12 +15,12 @@ changelog = (new commonmark.Parser()).parse(changelog);
 var walker = changelog.walker();
 var event;
 var node;
-while (event = walker.next()) {
+while ((event = walker.next())) {
 	node = event.node;
 	if (node.t === 'SetextHeader' && node.level === 1) {
 		node.level = 3;
 	}
-};
+}
 changelog = (new commonmark.HtmlRenderer()).render(changelog);
 
 /** Build Docs
