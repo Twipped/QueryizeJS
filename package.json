@@ -33,14 +33,14 @@
   },
   "homepage": "http://queryizejs.com/",
   "devDependencies": {
-    "eslint": "~3.7.1",
     "commonmark": "^0.26.0",
     "dox": "^0.9.0",
+    "eslint": "~3.9.0",
     "handlebars": "^4.0.5",
     "mktmpio": "~1.0.0-9",
     "mysql": "*",
     "mysql2": "*",
-    "tap": "~7.1.2"
+    "tap": "^8.0.0"
   },
   "dependencies": {
     "bluebird": "~3.4.6",
