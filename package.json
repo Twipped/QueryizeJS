@@ -43,7 +43,7 @@
     "tap": "^9.0.2"
   },
   "dependencies": {
-    "bluebird": "~3.4.6",
+    "bluebird": "~3.5.0",
     "lodash.clonedeep": "^4.5.0",
     "lodash.mapvalues": "^4.5.0",
     "proxmis": "^1.0.0",
