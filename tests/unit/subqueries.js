@@ -82,7 +82,7 @@ test('joining subquery', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{ on: 'order_totals.userid = u.id' });
+	{ on: 'order_totals.userid = u.id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
@@ -113,7 +113,7 @@ test('left joining subquery', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{ on: 'order_totals.userid = u.id' });
+	{ on: 'order_totals.userid = u.id' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u LEFT JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
@@ -145,7 +145,7 @@ test('joining subquery with options alias', (test) => {
 		.from('orders')
 		.groupBy('userid')
 		.as('order_totals'),
-		{ on: 'ot.userid = u.id', alias: 'ot' });
+	{ on: 'ot.userid = u.id', alias: 'ot' });
 
 	test.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `ot` ON (ot.userid = u.id)',
