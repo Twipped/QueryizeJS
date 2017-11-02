@@ -10,7 +10,7 @@
     "test": "tap tests/unit",
     "test:unit": "tap tests/unit",
     "test:int": "tap tests/integration",
-    "test:cover": "tap --coverage --coverage-report=html tests/unit",
+    "test:cover": "tap --coverage tests/unit",
     "test:travis": "tap --reporter=tap tests/unit",
     "lint": "eslint ./",
     "docs": "node docs/index.js"
@@ -58,5 +58,14 @@
     "docs/fonts.css",
     "docs/fonts",
     "tests"
-  ]
+  ],
+  "nyc": {
+    "exclude": [
+      "tests"
+    ],
+    "reporter": [
+      "lcov",
+      "text"
+    ]
+  }
 }
