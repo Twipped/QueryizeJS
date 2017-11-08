@@ -17,7 +17,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/ChiperSoft/QueryizeJS.git"
+    "url": "https://github.com/Twipped/QueryizeJS.git"
   },
   "keywords": [
     "sql",
@@ -26,10 +26,10 @@
     "query-builder",
     "parameter"
   ],
-  "author": "Jarvis Badgley <chiper@chipersoft.com> (http://chipersoft.com/)",
+  "author": "Jocelyn Badgley <joc@twipped.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/ChiperSoft/QueryizeJS/issues"
+    "url": "https://github.com/Twipped/QueryizeJS/issues"
   },
   "homepage": "http://queryizejs.com/",
   "devDependencies": {
