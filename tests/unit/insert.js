@@ -175,6 +175,17 @@ test('replace into', (test) => {
 	test.end();
 });
 
+test('insert with ignore', (test) => {
+	var q = queryize().insertIgnore({ value: false }).into('users', 'u');
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT IGNORE INTO `users` u SET value = FALSE',
+		data: []
+	});
+
+	test.end();
+});
+
 test('multi-insert', (test) => {
 	var q = queryize().insert().into('users', 'u');
 

@@ -380,6 +380,8 @@ queryize.deleteFrom('eventlog')
 							
 										<li class=""><a href="#methodqueryreplace"><span class="name">query.replace</span></a></li>
 							
+										<li class=""><a href="#methodqueryinsertIgnore"><span class="name">query.insertIgnore</span></a></li>
+							
 										<li class=""><a href="#methodqueryupdate"><span class="name">query.update</span></a></li>
 							
 									</ul>
@@ -997,6 +999,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.insert = function insert () {
   this._attributes.builder = 'insert';
+  this._attributes.insertMode = 'INSERT';
   if (arguments.length) {
     this.set.apply(this, arguments);
   }
@@ -1038,7 +1041,49 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace () {
   this._attributes.builder = 'insert';
-  this._attributes.replace = true;
+  this._attributes.insertMode = 'REPLACE';
+  if (arguments.length) {
+    this.set.apply(this, arguments);
+  }
+  return this;
+};</code></pre>
+							</div>
+						</div>
+					</div>
+				
+					<div id="methodqueryinsertIgnore" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.insertIgnore <small></small></h2></div>
+					
+						<p>Marks the query as being an INSERT IGNORE statement</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.insertIgnore([values])</div></div>
+							<ol class="list-group">
+								<li class="list-group-item">
+									<strong>values</strong> mixed
+									<em>Optional </em>
+									<br>&lt;p&gt;All arguments received are passed to a &lt;code&gt;query.set()&lt;/code&gt; call&lt;/p&gt;
+								</li>
+							</ol>
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
+  .insertIgnore({name: 'joe'})
+  .into('users')
+  .exec(mysqlConnection, function (result) {
+    var id = result.insertId;
+  })</code></pre>
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
+						</div>
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryinsertIgnore + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.insertIgnore = function replace () {
+  this._attributes.builder = 'insert';
+  this._attributes.insertMode = 'INSERT IGNORE';
   if (arguments.length) {
     this.set.apply(this, arguments);
   }
