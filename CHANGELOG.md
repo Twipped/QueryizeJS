@@ -1,3 +1,8 @@
+2.1.0 / 2017-12-07
+==================
+
+ * Added support for INSERT IGNORE via the `insertIgnore` function.
+
 2.0.0 / 2016-10-28
 ==================
   * BREAKING CHANGES:
