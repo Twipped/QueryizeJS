@@ -1,5 +1,4 @@
-queryize.js
-Copyright (c) 2013-2016, Jarvis Badgley - chiper[at]chipersoft[dot]com
+Copyright (c) 2017 Jocelyn Badgley
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
