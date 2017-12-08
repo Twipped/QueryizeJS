@@ -378,9 +378,9 @@ queryize.deleteFrom('eventlog')
 							
 										<li class=""><a href="#methodqueryinsert"><span class="name">query.insert</span></a></li>
 							
-										<li class=""><a href="#methodqueryreplace"><span class="name">query.replace</span></a></li>
-							
 										<li class=""><a href="#methodqueryinsertIgnore"><span class="name">query.insertIgnore</span></a></li>
+							
+										<li class=""><a href="#methodqueryreplace"><span class="name">query.replace</span></a></li>
 							
 										<li class=""><a href="#methodqueryupdate"><span class="name">query.update</span></a></li>
 							
@@ -497,7 +497,7 @@ and provides the methods to manipulate that query.</p>
 								<li class="list-group-item">
 									<strong>original</strong> query, Object
 									<em>Optional </em>
-									<br>&lt;p&gt;An existing query object to duplicate.&lt;/p&gt;
+									<p>An existing query object to duplicate.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var queryize = require('queryize');
@@ -742,7 +742,7 @@ queryize.useBoundParameters = false;</code></pre>
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -776,12 +776,12 @@ This allows for explicit usage of bindings within query strings.</p>
 								<li class="list-group-item">
 									<strong>key</strong> string
 									
-									<br>&lt;p&gt;The binding name to store the value under&lt;/p&gt;
+									<p>The binding name to store the value under</p>
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
-									<br>&lt;p&gt;The data to be stored&lt;/p&gt;
+									<p>The data to be stored</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -830,12 +830,12 @@ the query is compiled, with the values appended to the data array.</p>
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
-									<br>&lt;p&gt;The data to be stored&lt;/p&gt;
+									<p>The data to be stored</p>
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;A MySQL function to wrap the binding in when it is inserted into SQL.&lt;/p&gt;
+									<p>A MySQL function to wrap the binding in when it is inserted into SQL.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.createBinding('name@example.com');
@@ -881,7 +881,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array.&lt;string&gt;
 									<em>Optional </em>
-									<br>&lt;p&gt;All arguments received are passed to a &lt;code&gt;query.columns()&lt;/code&gt; call&lt;/p&gt;
+									<p>All arguments received are passed to a <code>query.columns()</code> call</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
@@ -922,12 +922,12 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<li class="list-group-item">
 									<strong>tablename</strong> string, Array.&lt;string&gt;
 									<em>Optional </em>
-									<br>&lt;p&gt;Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.&lt;/p&gt;
+									<p>Table to delete from. If an array is passed, defines the tables that will be deleted from in a multi-table delete.</p>
 								</li>
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;An alias to use for the table&lt;/p&gt;
+									<p>An alias to use for the table</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
@@ -979,7 +979,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<li class="list-group-item">
 									<strong>values</strong> mixed
 									<em>Optional </em>
-									<br>&lt;p&gt;All arguments received are passed to a &lt;code&gt;query.set()&lt;/code&gt; call&lt;/p&gt;
+									<p>All arguments received are passed to a <code>query.set()</code> call</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
@@ -1009,48 +1009,6 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 						</div>
 					</div>
 				
-					<div id="methodqueryreplace" style="position:relative;top:-60px;"></div>
-					<div class="piece  ">
-						<div class="page-header"><h2>query.replace <small></small></h2></div>
-					
-						<p>Marks the query as being a REPLACE statement</p>
-						<h3>Usage:</h3>
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.replace([values])</div></div>
-							<ol class="list-group">
-								<li class="list-group-item">
-									<strong>values</strong> mixed
-									<em>Optional </em>
-									<br>&lt;p&gt;All arguments received are passed to a &lt;code&gt;query.set()&lt;/code&gt; call&lt;/p&gt;
-								</li>
-							</ol>
-							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
-  .replace({name: 'joe'})
-  .into('users')
-  .exec(mysqlConnection, function (result) {
-    var id = result.insertId;
-  })</code></pre>
-							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
-						</div>
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryreplace + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace () {
-  this._attributes.builder = 'insert';
-  this._attributes.insertMode = 'REPLACE';
-  if (arguments.length) {
-    this.set.apply(this, arguments);
-  }
-  return this;
-};</code></pre>
-							</div>
-						</div>
-					</div>
-				
 					<div id="methodqueryinsertIgnore" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.insertIgnore <small></small></h2></div>
@@ -1063,7 +1021,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<li class="list-group-item">
 									<strong>values</strong> mixed
 									<em>Optional </em>
-									<br>&lt;p&gt;All arguments received are passed to a &lt;code&gt;query.set()&lt;/code&gt; call&lt;/p&gt;
+									<p>All arguments received are passed to a <code>query.set()</code> call</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
@@ -1093,6 +1051,48 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 						</div>
 					</div>
 				
+					<div id="methodqueryreplace" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.replace <small></small></h2></div>
+					
+						<p>Marks the query as being a REPLACE statement</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.replace([values])</div></div>
+							<ol class="list-group">
+								<li class="list-group-item">
+									<strong>values</strong> mixed
+									<em>Optional </em>
+									<p>All arguments received are passed to a <code>query.set()</code> call</p>
+								</li>
+							</ol>
+							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
+  .replace({name: 'joe'})
+  .into('users')
+  .exec(mysqlConnection, function (result) {
+    var id = result.insertId;
+  })</code></pre>
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
+						</div>
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryreplace + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace () {
+  this._attributes.builder = 'insert';
+  this._attributes.insertMode = 'REPLACE';
+  if (arguments.length) {
+    this.set.apply(this, arguments);
+  }
+  return this;
+};</code></pre>
+							</div>
+						</div>
+					</div>
+				
 					<div id="methodqueryupdate" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.update <small></small></h2></div>
@@ -1105,12 +1105,12 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;Table to update&lt;/p&gt;
+									<p>Table to update</p>
 								</li>
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;An alias to use for the table&lt;/p&gt;
+									<p>An alias to use for the table</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
@@ -1151,12 +1151,12 @@ Can be called directly but is better called via the syntactically correct aliase
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;An alias to use for the table&lt;/p&gt;
+									<p>An alias to use for the table</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update()
@@ -1179,12 +1179,12 @@ Can be called directly but is better called via the syntactically correct aliase
 								<li class="list-group-item">
 									<strong>subquery</strong> query
 									
-									<br>&lt;p&gt;A query object to use as a subquery&lt;/p&gt;
+									<p>A query object to use as a subquery</p>
 								</li>
 								<li class="list-group-item">
 									<strong>as</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;Name to use for the subquery (overrides query.as() value)&lt;/p&gt;
+									<p>Name to use for the subquery (overrides query.as() value)</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
@@ -1237,17 +1237,17 @@ currently in use.</p>
 								<li class="list-group-item">
 									<strong>dbname</strong> string
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>alias</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;An alias to use for the table&lt;/p&gt;
+									<p>An alias to use for the table</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1290,12 +1290,12 @@ a DELETE statement should delete from.</p>
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array.&lt;string&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>column2</strong> string
 									
-									<br>
+									
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var query = queryize.select()
@@ -1348,12 +1348,12 @@ a DELETE statement should delete from.</p>
 								<li class="list-group-item">
 									<strong>column</strong> string
 									
-									<br>&lt;p&gt;Column to add.&lt;/p&gt;
+									<p>Column to add.</p>
 								</li>
 								<li class="list-group-item">
 									<strong>avoidDuplicates</strong> boolean
 									<em>Optional </em>
-									<br>&lt;p&gt;If truthy, duplicate columns will be skipped. This value is ignored for non-string columns.&lt;/p&gt;
+									<p>If truthy, duplicate columns will be skipped. This value is ignored for non-string columns.</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1415,7 +1415,7 @@ a DELETE statement should delete from.</p>
 								<li class="list-group-item">
 									<strong>condition</strong> string
 									
-									<br>&lt;p&gt;&amp;quot;AND&amp;quot; or &amp;quot;OR&amp;quot;&lt;/p&gt;
+									<p>&quot;AND&quot; or &quot;OR&quot;</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1474,7 +1474,7 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>clause</strong> string
 									
-									<br>&lt;p&gt;A pre-written WHERE statement for direct insertion into the query&lt;/p&gt;
+									<p>A pre-written WHERE statement for direct insertion into the query</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('password IS NOT NULL')
@@ -1487,7 +1487,7 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>clause</strong> Array.&lt;string&gt;
 									
-									<br>&lt;p&gt;Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.&lt;/p&gt;
+									<p>Multiple pre-written WHERE statements for direct insertion into the query as OR conditions unless otherwise defined.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where(['account.balance > 0', 'account.gratis IS TRUE'])
@@ -1502,22 +1502,22 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;
 									
-									<br>&lt;p&gt;The table field(s) to match against&lt;/p&gt;
+									<p>The table field(s) to match against</p>
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, Array.&lt;string&gt;
 									
-									<br>&lt;p&gt;The value(s) to match with (if more than one, performs an OR comparison of each)&lt;/p&gt;
+									<p>The value(s) to match with (if more than one, performs an OR comparison of each)</p>
 								</li>
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional  (Default: &#x27;&#x3D;&#x27;)</em>
-									<br>&lt;p&gt;The operator to use when performing the comparison (e.g. &#x3D;, !&#x3D;, &amp;gt;, LIKE, IS NOT, etc)&lt;/p&gt;
+									<p>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)</p>
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;A MySQL function to wrap the binding in when it is inserted into SQL.&lt;/p&gt;
+									<p>A MySQL function to wrap the binding in when it is inserted into SQL.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where('age', 21, '<')
@@ -1534,17 +1534,17 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>pairs</strong> Object
 									
-									<br>&lt;p&gt;Collection of field/value pairs to match against&lt;/p&gt;
+									<p>Collection of field/value pairs to match against</p>
 								</li>
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional  (Default: &#x27;&#x3D;&#x27;)</em>
-									<br>&lt;p&gt;The operator to use when performing the comparison (e.g. &#x3D;, !&#x3D;, &amp;gt;, LIKE, IS NOT, etc)&lt;/p&gt;
+									<p>The operator to use when performing the comparison (e.g. =, !=, &gt;, LIKE, IS NOT, etc)</p>
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;A MySQL function to wrap the binding in when it is inserted into SQL.&lt;/p&gt;
+									<p>A MySQL function to wrap the binding in when it is inserted into SQL.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.where({studio:'Paramount', franchise: 'Star Trek' });
@@ -1564,7 +1564,7 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>query</strong> query
 									
-									<br>&lt;p&gt;A subquery to be used as a compound where clause.&lt;/p&gt;
+									<p>A subquery to be used as a compound where clause.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query
@@ -1666,22 +1666,22 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, Array.&lt;string&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1736,17 +1736,17 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>clause</strong> Object
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>operator</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1798,22 +1798,22 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>from</strong> string, number
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>to</strong> string, number
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									
-									<br>
+									
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereBetween('profile.income', 18000, 60000)
@@ -1849,17 +1849,17 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;, Object
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array.&lt;string|number&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select()
@@ -1898,17 +1898,17 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;, Object
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array.&lt;string|number&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select()
@@ -1947,17 +1947,17 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;, Object
 									
-									<br>&lt;p&gt;[description]&lt;/p&gt;
+									<p>[description]</p>
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, number, Array.&lt;string|number&gt;
 									
-									<br>&lt;p&gt;[description]&lt;/p&gt;
+									<p>[description]</p>
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>&lt;p&gt;[description]&lt;/p&gt;
+									<p>[description]</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -1994,22 +1994,22 @@ query.where()</code></pre>
 								<li class="list-group-item">
 									<strong>field</strong> string, Array.&lt;string&gt;
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>from</strong> string, number, Date
 									<em>Optional </em>
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>to</strong> string, number, Date
 									<em>Optional </em>
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.whereInRange('profile.income', 18000, 60000)
@@ -2058,7 +2058,7 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array.&lt;string&gt;
 									
-									<br>&lt;p&gt;Column names can be in any format allowed in a MySQL statement.&lt;/p&gt;
+									<p>Column names can be in any format allowed in a MySQL statement.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.orderBy('category', 'DATE(date_posted) DESC');</code></pre>
@@ -2096,7 +2096,7 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>columns</strong> string, Array.&lt;string&gt;
 									
-									<br>&lt;p&gt;Column names can be in any format allowed in a MySQL statement.&lt;/p&gt;
+									<p>Column names can be in any format allowed in a MySQL statement.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.groupBy('user.id', 'DATE(dts)');</code></pre>
@@ -2132,7 +2132,7 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2164,12 +2164,12 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>max</strong> number
 									
-									<br>&lt;p&gt;Total results to return&lt;/p&gt;
+									<p>Total results to return</p>
 								</li>
 								<li class="list-group-item">
 									<strong>offset</strong> number
 									<em>Optional </em>
-									<br>&lt;p&gt;Starting offset of first row within the results&lt;/p&gt;
+									<p>Starting offset of first row within the results</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2214,7 +2214,7 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>statement</strong> string
 									
-									<br>&lt;p&gt;A fully written set condition&lt;/p&gt;
+									<p>A fully written set condition</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2225,12 +2225,12 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>column</strong> string
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>value</strong> string, number
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2241,12 +2241,12 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<li class="list-group-item">
 									<strong>data</strong> Object
 									
-									<br>&lt;p&gt;A plain object collection of column/value pairs&lt;/p&gt;
+									<p>A plain object collection of column/value pairs</p>
 								</li>
 								<li class="list-group-item">
 									<strong>modifier</strong> string
 									
-									<br>&lt;p&gt;[description]&lt;/p&gt;
+									<p>[description]</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('user.lastlogin = NOW()')
@@ -2330,7 +2330,7 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
 								<li class="list-group-item">
 									<strong>data</strong> Array, Object
 									
-									<br>&lt;p&gt;May be an object where the keys represent all columns, or an array that matches the number of columns already defined.&lt;/p&gt;
+									<p>May be an object where the keys represent all columns, or an array that matches the number of columns already defined.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize
@@ -2417,7 +2417,7 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
 								<li class="list-group-item">
 									<strong>statement</strong> string
 									
-									<br>&lt;p&gt;Fully formed join statement&lt;/p&gt;
+									<p>Fully formed join statement</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders o ON o.client_id = c.id')
@@ -2431,12 +2431,12 @@ query.join('LEFT JOIN orders o ON o.client_id = c.id')</code></pre>
 								<li class="list-group-item">
 									<strong>tablename</strong> string
 									
-									<br>
+									
 								</li>
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									
-									<br>&lt;p&gt;Plain object containing options for the join&lt;/p&gt;
+									<p>Plain object containing options for the join</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join('orders', {alias: 'o', on: 'o.client_id = c.id'})
@@ -2458,7 +2458,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									
-									<br>&lt;p&gt;Plain object containing options for the join&lt;/p&gt;
+									<p>Plain object containing options for the join</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.join({table: 'orders', alias: 'o', on: {'o.client_id':'c.id'})</code></pre>
@@ -2475,12 +2475,12 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>subquery</strong> query
 									
-									<br>&lt;p&gt;A query object to use as a subquery&lt;/p&gt;
+									<p>A query object to use as a subquery</p>
 								</li>
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									
-									<br>&lt;p&gt;Plain object containing options for the join&lt;/p&gt;
+									<p>Plain object containing options for the join</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
@@ -2565,7 +2565,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>type</strong> string
 									
-									<br>&lt;p&gt;Join type&lt;/p&gt;
+									<p>Join type</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> function <em class="pull-right"></em></div>
@@ -2769,7 +2769,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>name</strong> string
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2876,7 +2876,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>query</strong> query
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">&lt;p&gt;Returns the query string to be used as a subquery&lt;/p&gt;</em></div>
@@ -2913,7 +2913,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<li class="list-group-item">
 									<strong>query</strong> query
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">&lt;p&gt;Returns the query string to be used as a subquery&lt;/p&gt;</em></div>
@@ -2952,7 +2952,7 @@ This is not recommended and should only be used for debugging purposes.</p>
 								<li class="list-group-item">
 									<strong>enable</strong> boolean
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -2984,7 +2984,7 @@ This is not recommended and should only be used for debugging purposes.</p>
 								<li class="list-group-item">
 									<strong>bool</strong> Boolean
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
@@ -3127,7 +3127,7 @@ If useBoundParameters is turned off, it replaces the placeholders with their esc
 								<li class="list-group-item">
 									<strong>queryString</strong> string
 									
-									<br>&lt;p&gt;The query string to be processed&lt;/p&gt;
+									<p>The query string to be processed</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> compiledQuery <em class="pull-right">&lt;p&gt;The processed query&lt;/p&gt;</em></div>
@@ -3171,7 +3171,7 @@ If useBoundParameters is turned off, it replaces the placeholders with their esc
 								<li class="list-group-item">
 									<strong>queryString</strong> string
 									
-									<br>&lt;p&gt;The query string to be processed&lt;/p&gt;
+									<p>The query string to be processed</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> Object <em class="pull-right">&lt;p&gt;A hash table of binding values&lt;/p&gt;</em></div>
@@ -3213,17 +3213,17 @@ If the connection provided is a node-mysql2 connection, then the query will be e
 								<li class="list-group-item">
 									<strong>connection</strong> Object
 									
-									<br>&lt;p&gt;node-mysql(2) connection(Pool)&lt;/p&gt;
+									<p>node-mysql(2) connection(Pool)</p>
 								</li>
 								<li class="list-group-item">
 									<strong>options</strong> Object
 									<em>Optional </em>
-									<br>&lt;p&gt;Options object to be passed to &lt;code&gt;connection.query&lt;/code&gt; with the query string and data mixed in.&lt;/p&gt;
+									<p>Options object to be passed to <code>connection.query</code> with the query string and data mixed in.</p>
 								</li>
 								<li class="list-group-item">
 									<strong>callback</strong> Function
 									<em>Optional </em>
-									<br>&lt;p&gt;Callback function to be invoked when the query completes.&lt;/p&gt;
+									<p>Callback function to be invoked when the query completes.</p>
 								</li>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');</code></pre>
@@ -3412,7 +3412,7 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>prefix</strong> string
 									<em>Optional </em>
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right"></em></div>
@@ -3444,7 +3444,7 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
@@ -3475,7 +3475,7 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
@@ -3510,7 +3510,7 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>value</strong> mixed
 									
-									<br>
+									
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> Boolean <em class="pull-right"></em></div>
@@ -3541,12 +3541,12 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>input</strong> Array
 									
-									<br>&lt;p&gt;The top level array to flatten&lt;/p&gt;
+									<p>The top level array to flatten</p>
 								</li>
 								<li class="list-group-item">
 									<strong>includingObjects</strong> boolean
 									<em>Optional  (Default: false)</em>
-									<br>&lt;p&gt;If an object is encountered and this argument is truthy, the object will also be flattened by its property values.&lt;/p&gt;
+									<p>If an object is encountered and this argument is truthy, the object will also be flattened by its property values.</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> Array <em class="pull-right"></em></div>
@@ -3593,7 +3593,7 @@ findCompleted.exec(connection, function (results) {
 								<li class="list-group-item">
 									<strong>date</strong> Date
 									
-									<br>&lt;p&gt;[description]&lt;/p&gt;
+									<p>[description]</p>
 								</li>
 							</ol>
 							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">&lt;p&gt;[description]&lt;/p&gt;</em></div>
@@ -3662,7 +3662,11 @@ MUST be called via .apply</p>
 		<div  id="changelog" class="changelog-header"><h2 class="container">Change Log</h2></div>
 		<div class="changelog">
 			<div class="container">
-				<h1>2.0.0 / 2016-10-28</h1>
+				<h1>2.1.0 / 2017-12-07</h1>
+<ul>
+<li>Added support for INSERT IGNORE via the <code>insertIgnore</code> function.</li>
+</ul>
+<h1>2.0.0 / 2016-10-28</h1>
 <ul>
 <li>
 <p>BREAKING CHANGES:</p>

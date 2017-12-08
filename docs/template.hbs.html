@@ -341,7 +341,7 @@ queryize.deleteFrom('eventlog')
 								<li class="list-group-item">
 									<strong>{{name}}</strong> {{types}}
 									{{#if optional}}<em>Optional {{#if default}} (Default: {{default}}){{/if}}</em>{{/if}}
-									<br>{{description}}
+									{{{description}}}
 								</li>
 								{{/each}}
 							</ol>
