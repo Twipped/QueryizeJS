@@ -1,9 +1,10 @@
-
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('insert without set throws error', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('insert without set throws error', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	test.throws(function () {
 		q.compile();
@@ -12,8 +13,10 @@ test('insert without set throws error', (test) => {
 	test.end();
 });
 
-test('basic insert', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('basic insert', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set('name', 'bob');
 
@@ -25,8 +28,10 @@ test('basic insert', (test) => {
 	test.end();
 });
 
-test('basic insert with database', (test) => {
-	var q = queryize().insert().intoDatabase('test', 'users', 'u');
+test('basic insert with database', test => {
+	var q = queryize()
+		.insert()
+		.intoDatabase('test', 'users', 'u');
 
 	q.set('name', 'bob');
 
@@ -38,8 +43,10 @@ test('basic insert with database', (test) => {
 	test.end();
 });
 
-test('basic insert with object to set', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('basic insert with object to set', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ name: 'bob' });
 
@@ -51,8 +58,10 @@ test('basic insert with object to set', (test) => {
 	test.end();
 });
 
-test('basic insert with multiple-keyed object to set', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('basic insert with multiple-keyed object to set', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({
 		firstname: 'Bojack',
@@ -67,8 +76,10 @@ test('basic insert with multiple-keyed object to set', (test) => {
 	test.end();
 });
 
-test('insert with set value of object throws error', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('insert with set value of object throws error', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	test.throws(function () {
 		q.set({ name: { blah: 1 } });
@@ -77,8 +88,10 @@ test('insert with set value of object throws error', (test) => {
 	test.end();
 });
 
-test('insert with a date value', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('insert with a date value', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ lastlogin: new Date('2012-01-01') });
 
@@ -90,8 +103,10 @@ test('insert with a date value', (test) => {
 	test.end();
 });
 
-test('insert with a number value', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('insert with a number value', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ lastlogin: 6 });
 
@@ -103,8 +118,10 @@ test('insert with a number value', (test) => {
 	test.end();
 });
 
-test('insert with a boolean value', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('insert with a boolean value', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ lastlogin: true });
 
@@ -116,8 +133,10 @@ test('insert with a boolean value', (test) => {
 	test.end();
 });
 
-test('set throws an error if no parameters provided', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('set throws an error if no parameters provided', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	test.throws(function () {
 		q.set();
@@ -126,8 +145,10 @@ test('set throws an error if no parameters provided', (test) => {
 	test.end();
 });
 
-test('set overwrites', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('set overwrites', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ lastlogin: 6 });
 	q.set({ lastlogin: 7 });
@@ -140,8 +161,10 @@ test('set overwrites', (test) => {
 	test.end();
 });
 
-test('set raw value', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('set raw value', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.set({ lastlogin: { raw: 'NOW()' } });
 
@@ -153,8 +176,40 @@ test('set raw value', (test) => {
 	test.end();
 });
 
-test('insert called with arguments', (test) => {
-	var q = queryize().insert({ value: false }).into('users', 'u');
+test('set raw value with prepared parameter', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
+
+	q.set({ lastlogin: { raw: 'CONV(?, 16, 2)', data: 'ffaaff' } });
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET lastlogin = CONV(?, 16, 2)',
+		data: [ 'ffaaff' ]
+	});
+
+	test.end();
+});
+
+test('set raw value with prepared parameter', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
+
+	q.set({ lastlogin: { raw: 'CONV(?, ?, 2)', data: [ 'abcd', 25, 'ignored' ] } });
+
+	test.deepEqual(q.compile(), {
+		query: 'INSERT INTO `users` u SET lastlogin = CONV(?, ?, 2)',
+		data: [ 'abcd', 25 ]
+	});
+
+	test.end();
+});
+
+test('insert called with arguments', test => {
+	var q = queryize()
+		.insert({ value: false })
+		.into('users', 'u');
 
 	test.deepEqual(q.compile(), {
 		query: 'INSERT INTO `users` u SET value = FALSE',
@@ -164,8 +219,10 @@ test('insert called with arguments', (test) => {
 	test.end();
 });
 
-test('replace into', (test) => {
-	var q = queryize().replace({ value: false }).into('users', 'u');
+test('replace into', test => {
+	var q = queryize()
+		.replace({ value: false })
+		.into('users', 'u');
 
 	test.deepEqual(q.compile(), {
 		query: 'REPLACE INTO `users` u SET value = FALSE',
@@ -175,8 +232,10 @@ test('replace into', (test) => {
 	test.end();
 });
 
-test('insert with ignore', (test) => {
-	var q = queryize().insertIgnore({ value: false }).into('users', 'u');
+test('insert with ignore', test => {
+	var q = queryize()
+		.insertIgnore({ value: false })
+		.into('users', 'u');
 
 	test.deepEqual(q.compile(), {
 		query: 'INSERT IGNORE INTO `users` u SET value = FALSE',
@@ -186,8 +245,10 @@ test('insert with ignore', (test) => {
 	test.end();
 });
 
-test('multi-insert', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('multi-insert', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.addRow({ lastlogin: 6 });
 	q.addRow({ lastlogin: 10 });
@@ -202,8 +263,10 @@ test('multi-insert', (test) => {
 	test.end();
 });
 
-test('multi-insert replace', (test) => {
-	var q = queryize().replace().into('users', 'u');
+test('multi-insert replace', test => {
+	var q = queryize()
+		.replace()
+		.into('users', 'u');
 
 	q.addRow({ lastlogin: 6 });
 	q.addRow({ lastlogin: 10 });
@@ -218,8 +281,10 @@ test('multi-insert replace', (test) => {
 	test.end();
 });
 
-test('multi-insert, multi-column', (test) => {
-	var q = queryize().insert().into('users');
+test('multi-insert, multi-column', test => {
+	var q = queryize()
+		.insert()
+		.into('users');
 
 	q.addRow({ name: 'John Doe', age: 26 });
 	q.addRow({ name: 'Bob Smith', age: 32 });
@@ -234,8 +299,10 @@ test('multi-insert, multi-column', (test) => {
 	test.end();
 });
 
-test('multi-insert w/ raw value', (test) => {
-	var q = queryize().insert().into('users', 'u');
+test('multi-insert w/ raw value', test => {
+	var q = queryize()
+		.insert()
+		.into('users', 'u');
 
 	q.addRow({ lastlogin: { raw: 'NOW()' } });
 	q.addRow({ lastlogin: 10 });
@@ -250,8 +317,10 @@ test('multi-insert w/ raw value', (test) => {
 	test.end();
 });
 
-test('multi-insert, adding arrays', (test) => {
-	var q = queryize().insert().into('users');
+test('multi-insert, adding arrays', test => {
+	var q = queryize()
+		.insert()
+		.into('users');
 
 	q.columns('name', 'age');
 	q.addRow([ 'John Doe', 26 ]);
@@ -267,8 +336,10 @@ test('multi-insert, adding arrays', (test) => {
 	test.end();
 });
 
-test('multi-insert, adding arrays w/o columns throws', (test) => {
-	var q = queryize().insert().into('users');
+test('multi-insert, adding arrays w/o columns throws', test => {
+	var q = queryize()
+		.insert()
+		.into('users');
 
 	test.throws(function () {
 		q.addRow([ 'John Doe', 26 ]);
