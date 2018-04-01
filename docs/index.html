@@ -303,6 +303,8 @@ queryize.deleteFrom('eventlog')
 						
 						<li class="private "><a href="#functionarrayFromArguments"><span class="name">arrayFromArguments</span></a></li>
 						
+						<li class="private "><a href="#method_handleRawSubquery"><span class="name">_handleRawSubquery</span></a></li>
+						
 							<li class=""><a href="#constructorqueryize"><span class="name">queryize</span></a></li>
 						<li><ul class="nav ">
 						
@@ -2236,6 +2238,22 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.set(column, rawValue)</div></div>
+							<ol class="list-group">
+								<li class="list-group-item">
+									<strong>column</strong> string
+									
+									
+								</li>
+								<li class="list-group-item">
+									<strong>rawValue</strong> [object Object]
+									
+									<p>{raw: string, data?: Array&lt;string|number&gt;|string|number}</p>
+								</li>
+							</ol>
+							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
+						</div>
+						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.set(data, [modifier])</div></div>
 							<ol class="list-group">
 								<li class="list-group-item">
@@ -2259,6 +2277,9 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 // DATA: ['Susan', 'Sto Helet']</code></pre>
 							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('lastLogin', {raw:'NOW()'});
 // SET lastLogin = NOW()</code></pre>
+							<pre class="panel-body prettyprint"><code class="language-javascript">query.set('bgColour', {raw:'CONV(?, 16, 2)', data:'fff'});
+// SET bgColour = CONV(?, 16, 2)
+// DATA: ['fff']</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -2284,7 +2305,7 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
   if (typeof value !== 'undefined') {
     var column = clause;
     if (value && typeof value === 'object' && typeof value.raw === 'string') {
-      clause = clause + ' = ' + value.raw;
+      clause += ' = ' + self._handleRawSubquery(value);
     } else {
       if (!isValidPrimative(value)) {
         throw new TypeError('Unknown data type in set clause');
@@ -2323,6 +2344,7 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
 <p>Example: <code>INSERT INTO user (firstname, lastname) VALUES (?,?), (?,?)</code></p>
 <p>This format is more performant for inserting multiple uniform data sets, but is less flexible as all the columns must be known upfront. If row contents are provided as arrays, the column order must be defined before calling <code>query.addRow</code>.  If keyed objects are provided then Queryize will use the keys to identify the column names to use.</p>
 <p>Any rows with missing columns will receive <code>NULL</code> for the column's contents.</p>
+<p>You can use SQL functions with the use of raw subqueries. If you want to pass untrusted data within a subquery, replace it with a question mark (?) and pass the untrusted data outside of the query, as the example below shows.</p>
 						<h3>Usage:</h3>
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.addRow(data)</div></div>
@@ -2347,9 +2369,10 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
   .into('users')
   .addRow({name: 'John Smith', email: 'jsmith@example.com'})
   .addRow({name: 'Jane Doe', email: 'jdoe@example.com', date_created: {raw:'NOW()'}})
+  .addRow({name: {raw: 'UPPER(?)', data : 'Alice Fox'}, email: {raw:'CONCAT(?, "@", ?)', data: ['afox', 'example.com', 'ignored']}})
   .compile()
-// INSERT INTO users (name, email, date_created) VALUES (?, ?, NULL), (?, ?, NOW())
-// DATA: ['John Smith', 'jsmith@example.com', 'Jane Doe', 'jdoe@example.com']</code></pre>
+// INSERT INTO users (name, email, date_created) VALUES (?, ?, NULL), (?, ?, NOW()), (UPPER(?), CONCAT(?, "@", ?), NULL)
+// DATA: ['John Smith', 'jsmith@example.com', 'Jane Doe', 'jdoe@example.com', 'Alice Fox', 'afox', 'example.com']</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -3650,6 +3673,45 @@ MUST be called via .apply</p>
   }
   return args;
 }</code></pre>
+							</div>
+						</div>
+					</div>
+				
+					<div id="method_handleRawSubquery" style="position:relative;top:-60px;"></div>
+					<div class="piece private ">
+						<div class="page-header"><h2>_handleRawSubquery <small></small></h2></div>
+					
+						<p>Helper function to handle raw subqueries</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">_handleRawSubquery(value)</div></div>
+							<ol class="list-group">
+								<li class="list-group-item">
+									<strong>value</strong> [object Object]
+									
+									
+								</li>
+							</ol>
+						</div>
+
+
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#method_handleRawSubquery + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._handleRawSubquery = function (value) {
+  var self = this;
+  if ('data' in value) {
+    if (!Array.isArray(value.data)) {
+      value.data = [ value.data ];
+    }
+    value.raw = value.data.reduce(function (raw, data) {
+      return raw.replace('?', self.createBinding(data));
+    }, value.raw);
+  }
+  return value.raw;
+};</code></pre>
 							</div>
 						</div>
 					</div>
