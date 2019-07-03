@@ -1,3 +1,13 @@
+3.0.0 / 2019-07-08
+==================
+ * BREAKING CHANGES:
+   * No longer supports Node versions prior to 8.12
+   * `query.exec` has now been removed
+
+ * New: Added `query.eval([options])` and `query.then()`, which executes the query using a method defined on `queryize.evalFunction`
+
+ * Dependencies: Bluebird, proxmis and Lodash have been removed.
+
 2.1.0 / 2017-12-07
 ==================
 
