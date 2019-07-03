@@ -2,123 +2,123 @@
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('exports correctly', (test) => {
-	test.strictEqual(typeof queryize, 'function', 'queryize is a function');
-	test.end();
+test('exports correctly', (t) => {
+	t.strictEqual(typeof queryize, 'function', 'queryize is a function');
+	t.end();
 });
 
-test('compile without method throws error', (test) => {
+test('compile without method throws error', (t) => {
 	var q = queryize();
 
-	test.throws(function () {
+	t.throws(() => {
 		q.compile();
 	});
 
-	test.end();
+	t.end();
 });
 
-test('compile without table throws error', (test) => {
+test('compile without table throws error', (t) => {
 	var q = queryize().select();
 
-	test.throws(function () {
+	t.throws(() => {
 		q.compile();
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select, copied', (test) => {
+test('basic select, copied', (t) => {
 	var a = queryize().select().from('users', 'u');
 
 	var b = queryize(a);
 
-	test.deepEqual(b.compile(), {
+	t.deepEqual(b.compile(), {
 		query: 'SELECT * FROM `users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select from shortcut', (test) => {
+test('basic select from shortcut', (t) => {
 	var q = queryize.select().from('users', 'u');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic update from shortcut', (test) => {
+test('basic update from shortcut', (t) => {
 	var q = queryize.update().table('users', 'u');
 
 	q.set('name', 'bob');
 	q.where('name', null);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'UPDATE `users` u SET name = ? WHERE name = NULL',
-		data: [ 'bob' ]
+		data: [ 'bob' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic insert from shortcut', (test) => {
+test('basic insert from shortcut', (t) => {
 	var q = queryize.insert().into('users', 'u');
 
 	q.set('name', 'bob');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'INSERT INTO `users` u SET name = ?',
-		data: [ 'bob' ]
+		data: [ 'bob' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic replace from shortcut', (test) => {
+test('basic replace from shortcut', (t) => {
 	var q = queryize.replace().into('users', 'u');
 
 	q.set('name', 'bob');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'REPLACE INTO `users` u SET name = ?',
-		data: [ 'bob' ]
+		data: [ 'bob' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic delete from shortcut', (test) => {
+test('basic delete from shortcut', (t) => {
 	var q = queryize.delete().from('users', 'u');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic deleteFrom from shortcut', (test) => {
+test('basic deleteFrom from shortcut', (t) => {
 	var q = queryize.deleteFrom('users', 'u');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('query duplication', (test) => {
-	test.plan(3);
+test('query duplication', (t) => {
+	t.plan(3);
 	var a = queryize.deleteFrom('users', 'u');
 	var b = queryize(a);
 	var c = b.clone();
@@ -126,41 +126,41 @@ test('query duplication', (test) => {
 	a.where('id = 1');
 	c.where('id = 2');
 
-	test.deepEqual(a.compile(), {
+	t.deepEqual(a.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.throws(function () {
+	t.throws(() => {
 		b.compile();
 	});
 
-	test.deepEqual(c.compile(), {
+	t.deepEqual(c.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 2',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('pre-seeded query', (test) => {
-	test.plan(1);
+test('pre-seeded query', (t) => {
+	t.plan(1);
 
 	var q = queryize({
 		tableName: 'users',
 		alias: 'u',
-		builder: 'select'
+		builder: 'select',
 	});
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('confirm pre-bound mutators', (test) => {
+test('confirm pre-bound mutators', (t) => {
 	var q = queryize();
 	var from = q.from;
 	var select = q.select;
@@ -171,37 +171,37 @@ test('confirm pre-bound mutators', (test) => {
 	where('id = 12');
 	where('name IS NOT NULL');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 12 AND name IS NOT NULL',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('debug toggles the correct flag', (test) => {
-	test.plan(3);
+test('debug toggles the correct flag', (t) => {
+	t.plan(3);
 	var q = queryize();
 
-	test.strictEqual(q._attributes.debugEnabled, false);
+	t.strictEqual(q._attributes.debugEnabled, false);
 
 	q.debug();
 
-	test.strictEqual(q._attributes.debugEnabled, true);
+	t.strictEqual(q._attributes.debugEnabled, true);
 
 	q.debug(false);
 
-	test.strictEqual(q._attributes.debugEnabled, false);
+	t.strictEqual(q._attributes.debugEnabled, false);
 
-	test.end();
+	t.end();
 });
 
-test('casting to a string produces a query', (test) => {
+test('casting to a string produces a query', (t) => {
 	var q = queryize.select()
 		.from('users')
 		.where({ id: 63, type: 'h\'fan' });
 
-	test.strictEqual('' + q, 'SELECT * FROM `users` WHERE (id = 63 AND type = \'h\\\'fan\')');
+	t.strictEqual('' + q, 'SELECT * FROM `users` WHERE (id = 63 AND type = \'h\\\'fan\')');
 
-	test.end();
+	t.end();
 });

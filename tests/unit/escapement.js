@@ -2,64 +2,64 @@
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('basic select with value in columns', (test) => {
+test('basic select with value in columns', (t) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
 	q.columns('columnA', 3, 'columnC');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, 3, columnC FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.done();
+	t.done();
 });
 
-test('select with 2 item object where clause', (test) => {
+test('select with 2 item object where clause', (t) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
 	q.where({ id: 1, name: 'bob' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE (id = 1 AND name = \'bob\')',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with injection attempt', (test) => {
+test('select with injection attempt', (t) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
 	q.where({ name: 'x\' AND email IS NULL; --' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name = \'x\\\' AND email IS NULL; --\'',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with injection attempt, part 2', (test) => {
+test('select with injection attempt, part 2', (t) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
 	q.where({ name: 'x" AND email IS NULL; --' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE name = \'x\\" AND email IS NULL; --\'',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with object, throws error', (test) => {
+test('select with object, throws error', (t) => {
 	var q = queryize().disableBoundParameters().select().from('users');
 
-	test.throws(function () {
+	t.throws(() => {
 		q.where({ name: {} });
 	});
 
-	test.end();
+	t.end();
 });

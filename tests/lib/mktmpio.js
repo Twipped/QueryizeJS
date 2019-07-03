@@ -23,7 +23,7 @@ exports.populate = function () {
 		host: current.host,
 		port: current.port,
 		user: 'root',
-		password: current.password
+		password: current.password,
 	}).then((connection) =>
 		Promise.each(schema, (sql) => connection.query(sql))
 			.then(() => connection.end())

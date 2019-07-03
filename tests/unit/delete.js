@@ -2,51 +2,51 @@
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('delete without where throws error', (test) => {
+test('delete without where throws error', (t) => {
 	var q = queryize().delete().from('users', 'u');
 
-	test.throws(function () {
+	t.throws(() => {
 		q.compile();
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic delete', (test) => {
+test('basic delete', (t) => {
 	var q = queryize().delete().from('users', 'u');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic delete with database', (test) => {
-	var q = queryize().delete().fromDatabase('test', 'users', 'u');
+test('basic delete with database', (t) => {
+	var q = queryize().delete().fromDatabase('t', 'users', 'u');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
-		query: 'DELETE FROM `test`.`users` u WHERE id = 1',
-		data: []
+	t.deepEqual(q.compile(), {
+		query: 'DELETE FROM `t`.`users` u WHERE id = 1',
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic delete using deleteFrom', (test) => {
+test('basic delete using deleteFrom', (t) => {
 	var q = queryize().deleteFrom('users', 'u');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'DELETE FROM `users` u WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });

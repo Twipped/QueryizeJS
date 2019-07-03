@@ -1,7 +1,8 @@
-module.exports = [
-	`CREATE DATABASE test_data;`,
 
-	`USE test_data;`,
+module.exports = exports = [
+	'CREATE DATABASE test_data;',
+
+	'USE test_data;',
 
 	`CREATE TABLE employees (
 		emp_no      INT             NOT NULL,
@@ -85,5 +86,5 @@ module.exports = [
 	(10018,'d004','1992-07-29','9999-01-01'),
 	(10018,'d005','1987-04-03','1992-07-29'),
 	(10019,'d008','1999-04-30','9999-01-01'),
-	(10020,'d004','1997-12-30','9999-01-01');`
+	(10020,'d004','1997-12-30','9999-01-01');`,
 ];

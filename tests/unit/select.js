@@ -2,274 +2,274 @@
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('basic select', (test) => {
+test('basic select', (t) => {
 	var q = queryize().select().from('users', 'u');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with database', (test) => {
+test('basic select with database', (t) => {
 	var q = queryize().select().fromDatabase('test', 'users', 'u');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `test`.`users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with added columns', (test) => {
+test('basic select with added columns', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA');
 	q.addColumn('columnB');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, columnB FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with added columns, with duplicates', (test) => {
+test('basic select with added columns, with duplicates', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA');
 	q.addColumn('columnB');
 	q.addColumn('columnB');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, columnB, columnB FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with added columns, without duplicates', (test) => {
+test('basic select with added columns, without duplicates', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA');
 	q.addColumn('columnB', true);
 	q.addColumn('columnB', true);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, columnB FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with multiple columns', (test) => {
+test('basic select with multiple columns', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA', [ 'columnB', 'columnC' ]);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, columnB, columnC FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with value in columns', (test) => {
+test('basic select with value in columns', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA', 3, 'columnC');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: [ 3 ]
+		data: [ 3 ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with added value column', (test) => {
+test('basic select with added value column', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA');
 	q.addColumn(3);
 	q.addColumn('columnC');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: [ 3 ]
+		data: [ 3 ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with duplicate added value column, filtering duplicates', (test) => {
+test('basic select with duplicate added value column, filtering duplicates', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA');
 	q.addColumn(3, true);
 	q.addColumn(3, true);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, ? FROM `users`',
-		data: [ 3, 3 ]
+		data: [ 3, 3 ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with value object in columns', (test) => {
+test('basic select with value object in columns', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA', { data: 'foo' }, 'columnC');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, ?, columnC FROM `users`',
-		data: [ 'foo' ]
+		data: [ 'foo' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('basic select with modified date value object in columns', (test) => {
+test('basic select with modified date value object in columns', (t) => {
 	var q = queryize().select().from('users');
 
 	q.columns('columnA', { data: new Date('2014-01-01'), modifier: 'DATE' }, 'columnC');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT columnA, DATE(?), columnC FROM `users`',
-		data: [ '2014-01-01 00:00:00' ]
+		data: [ '2014-01-01 00:00:00' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with string where clause', (test) => {
+test('select with string where clause', (t) => {
 	var q = queryize().select().from('users');
 
 	q.where('id = 1');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = 1',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with two argument where clause', (test) => {
+test('select with two argument where clause', (t) => {
 	var q = queryize().select().from('users');
 
 	q.where('id', 1);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [ 1 ]
+		data: [ 1 ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with object where clause', (test) => {
+test('select with object where clause', (t) => {
 	var q = queryize().select().from('users');
 
 	q.where({ id: 1 });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` WHERE id = ?',
-		data: [ 1 ]
+		data: [ 1 ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with orderBy', (test) => {
+test('select with orderBy', (t) => {
 	var q = queryize().select().from('users');
 
 	q.orderBy('name');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` ORDER BY name',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with groupBy', (test) => {
+test('select with groupBy', (t) => {
 	var q = queryize().select().from('users');
 
 	q.groupBy('name');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` GROUP BY name',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with limit', (test) => {
+test('select with limit', (t) => {
 	var q = queryize().select().from('users');
 
 	q.limit(10);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` LIMIT 10',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with limit and offset', (test) => {
+test('select with limit and offset', (t) => {
 	var q = queryize().select().from('users');
 
 	q.limit(10, 20);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` LIMIT 20, 10',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with empty limit', (test) => {
+test('select with empty limit', (t) => {
 	var q = queryize().select().from('users');
 
 	q.limit(10);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` LIMIT 10',
-		data: []
+		data: [],
 	});
 
 	q.limit();
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('select with distinct', (test) => {
+test('select with distinct', (t) => {
 	var q = queryize().select().from('users');
 
 	q.distinct();
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT DISTINCT * FROM `users`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });

@@ -2,30 +2,30 @@
 var test = require('tap').test;
 var queryize = require('../../');
 
-test('from subquery', (test) => {
+test('from subquery', (t) => {
 	var s = queryize().from('users').columns('MIN(date_created)').as('firstsignup');
 	var q = queryize().select().from(s);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT MIN(date_created) FROM `users`) as `firstsignup`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('from subquery, with missing table name', (test) => {
+test('from subquery, with missing table name', (t) => {
 	var s = queryize();
 	var q = queryize().select();
 
-	test.throws(function () {
+	t.throws(() => {
 		q.from(s);
 	});
 
-	test.end();
+	t.end();
 });
 
-test('from subquery without name', (test) => {
+test('from subquery without name', (t) => {
 	var s = queryize().from('users').columns('MIN(date_created)');
 	var q = queryize().select().from(s);
 
@@ -36,27 +36,27 @@ test('from subquery without name', (test) => {
 	// the random name didn't work.
 	result.query = result.query.replace(/`subquery\w+`/, '`MATCHED`');
 
-	test.deepEqual(result, {
+	t.deepEqual(result, {
 		query: 'SELECT * FROM (SELECT MIN(date_created) FROM `users`) as `MATCHED`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('from subquery, overriding name', (test) => {
+test('from subquery, overriding name', (t) => {
 	var s = queryize().from('users').columns('MIN(date_created)').as('firstsignup');
 	var q = queryize().select().from(s, 'startdate');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT MIN(date_created) FROM `users`) as `startdate`',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('from subquery with data', (test) => {
+test('from subquery with data', (t) => {
 	var q = queryize()
 		.select()
 		.from(queryize()
@@ -66,15 +66,15 @@ test('from subquery with data', (test) => {
 			.where('type', 'Admin'))
 		.whereLike('name', 'Bob%');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM (SELECT * FROM `users` WHERE type = ?) as `subquery` WHERE name LIKE ?',
-		data: [ 'Admin', 'Bob%' ]
+		data: [ 'Admin', 'Bob%' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('joining subquery', (test) => {
+test('joining subquery', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.join(queryize()
@@ -84,28 +84,28 @@ test('joining subquery', (test) => {
 		.as('order_totals'),
 	{ on: 'order_totals.userid = u.id' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('joining raw subquery', (test) => {
+test('joining raw subquery', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.innerJoin('(SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` JOIN invoices ON (invoices.orderid = order.id) GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)');
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u INNER JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` JOIN invoices ON (invoices.orderid = order.id) GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('left joining subquery', (test) => {
+test('left joining subquery', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.leftJoin(queryize()
@@ -115,18 +115,18 @@ test('left joining subquery', (test) => {
 		.as('order_totals'),
 	{ on: 'order_totals.userid = u.id' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u LEFT JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `order_totals` ON (order_totals.userid = u.id)',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('joining subquery without options', (test) => {
+test('joining subquery without options', (t) => {
 	var q = queryize().select().from('users', 'u');
 
-	test.throws(function () {
+	t.throws(() => {
 		q.join(queryize()
 			.select('userid', 'SUM(total_invoice) AS total_invoiced')
 			.from('orders')
@@ -134,10 +134,10 @@ test('joining subquery without options', (test) => {
 			.as('order_totals'));
 	});
 
-	test.end();
+	t.end();
 });
 
-test('joining subquery with options alias', (test) => {
+test('joining subquery with options alias', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.join(queryize()
@@ -147,15 +147,15 @@ test('joining subquery with options alias', (test) => {
 		.as('order_totals'),
 	{ on: 'ot.userid = u.id', alias: 'ot' });
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u JOIN (SELECT userid, SUM(total_invoice) AS total_invoiced FROM `orders` GROUP BY userid) as `ot` ON (ot.userid = u.id)',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('column as subquery', (test) => {
+test('column as subquery', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.columns(
@@ -167,18 +167,18 @@ test('column as subquery', (test) => {
 			.as('total_invoiced')
 	);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT id, (SELECT SUM(total_invoice) FROM `orders` GROUP BY userid) as `total_invoiced` FROM `users` u',
-		data: []
+		data: [],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('column as subquery w/ too many columns', (test) => {
+test('column as subquery w/ too many columns', (t) => {
 	var q = queryize().select().from('users', 'u');
 
-	test.throws(function () {
+	t.throws(() => {
 		q.columns(
 			'id',
 			queryize()
@@ -189,13 +189,13 @@ test('column as subquery w/ too many columns', (test) => {
 		);
 	});
 
-	test.end();
+	t.end();
 });
 
-test('column as subquery w/ default columns', (test) => {
+test('column as subquery w/ default columns', (t) => {
 	var q = queryize().select().from('users', 'u');
 
-	test.throws(function () {
+	t.throws(() => {
 		q.columns(
 			'id',
 			queryize()
@@ -205,10 +205,10 @@ test('column as subquery w/ default columns', (test) => {
 		);
 	});
 
-	test.end();
+	t.end();
 });
 
-test('compound where clause', (test) => {
+test('compound where clause', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
@@ -217,15 +217,15 @@ test('compound where clause', (test) => {
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
-		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('compound where clause w/ compound AND', (test) => {
+test('compound where clause w/ compound AND', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
@@ -235,15 +235,15 @@ test('compound where clause w/ compound AND', (test) => {
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) AND date_created BETWEEN ? AND ?)',
-		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ],
 	});
 
-	test.end();
+	t.end();
 });
 
-test('compound where clause w/ compound OR', (test) => {
+test('compound where clause w/ compound OR', (t) => {
 	var q = queryize().select().from('users', 'u');
 
 	q.where('name', 'John');
@@ -253,10 +253,10 @@ test('compound where clause w/ compound OR', (test) => {
 		.whereInRange('date_created', new Date('2001-04-12'), new Date('2011-04-12'))
 	);
 
-	test.deepEqual(q.compile(), {
+	t.deepEqual(q.compile(), {
 		query: 'SELECT * FROM `users` u WHERE name = ? AND (type IN (?,?) OR date_created BETWEEN ? AND ?)',
-		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ]
+		data: [ 'John', 15, 23, '2001-04-12 00:00:00', '2011-04-12 00:00:00' ],
 	});
 
-	test.end();
+	t.end();
 });

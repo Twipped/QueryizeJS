@@ -15,33 +15,29 @@ test('mysql integration', (t) => mktmpio.create().then((db) => {
 		port: db.port,
 		user: 'root',
 		password: db.password,
-		database: 'test_data'
+		database: 'test_data',
 	});
 
-	t.tearDown(() => {
-		return new Promise((resolve) => {
-			t.comment('Disconnecting');
-			pool.end(resolve);
-		})
-			.then(() => mktmpio.destroy())
-			.then(() => t.comment('Database destroyed'));
-	});
+	t.tearDown(() => new Promise((resolve) => {
+		t.comment('Disconnecting');
+		pool.end(resolve);
+	})
+		.then(() => mktmpio.destroy())
+		.then(() => t.comment('Database destroyed')));
 
 	return mktmpio.populate().then(() => {
 		t.comment('Database populated');
 
-		t.test('simple select', (t) => {
-			return queryize
-				.select('first_name', 'last_name')
-				.from('employees')
-				.limit(1)
-				.orderBy('emp_no')
-				.exec(pool)
-				.then((results) => {
-					t.deepEqual([].concat(results), [
-						{ first_name: 'Georgi', last_name: 'Facello' }
-					]);
-				});
-		});
+		t.test('simple select', (t2) => queryize
+			.select('first_name', 'last_name')
+			.from('employees')
+			.limit(1)
+			.orderBy('emp_no')
+			.exec(pool)
+			.then((results) => {
+				t2.deepEqual([].concat(results), [
+					{ first_name: 'Georgi', last_name: 'Facello' },
+				]);
+			}));
 	});
 }));
