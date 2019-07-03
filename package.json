@@ -47,8 +47,6 @@
   },
   "dependencies": {
     "bluebird": "~3.5.5",
-    "lodash.clonedeep": "^4.5.0",
-    "lodash.mapvalues": "^4.5.0",
     "proxmis": "^1.0.0",
     "sqlstring": "~2.3.1"
   },
