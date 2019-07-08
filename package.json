@@ -51,13 +51,12 @@
   },
   "files": [
     "lib",
-    "History.md",
+    "CHANGELOG.md",
     "LICENSE.txt",
     "queryize.js",
     "docs/index.html",
     "docs/fonts.css",
-    "docs/fonts",
-    "tests"
+    "docs/fonts"
   ],
   "nyc": {
     "exclude": [
