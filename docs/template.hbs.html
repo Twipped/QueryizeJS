@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>QueryizeJS - API Reference</title>
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 		<link rel="stylesheet" href="fonts.css">
 		<style>
 
@@ -219,8 +219,8 @@
 					<li><a href="#reference">API Reference</a></li>
 					<li><a href="#changelog">Change Log</a></li>
 				</ul>
-				<p class="navbar-right gh-link"><a href="http://github.com/twipped/queryizejs" class="ico-github"></a></p>
-				<p class="navbar-text navbar-right">Created by <a href="http://twipped.com" class="navbar-link">Jocelyn Badgley</a></p>
+				<p class="navbar-right gh-link"><a href="https://github.com/twipped/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-text navbar-right">Created by <a href="https://twipped.com" class="navbar-link">Jocelyn Badgley</a></p>
 			</div>
 		</div>
 
@@ -229,15 +229,15 @@
 				<h1>Queryize.js</h1>
 				<p>A no-frills chainable interface for constructing mutable MySQL queries procedurally in Node.js</p>
 				<p>
-					<a href="http://npmjs.org/queryize" class="btn btn-default btn-code btn-success">npm install queryize</a>
-					<a href="http://github.com/twipped/queryizejs" class="btn btn-primary">View on GitHub</a>
-					<a href="http://github.com/twipped/queryizejs/issues" class="btn btn-danger">Report an Issue</a>
+					<a href="https://npmjs.org/queryize" class="btn btn-default btn-code btn-success">npm install queryize</a>
+					<a href="https://github.com/twipped/queryizejs" class="btn btn-primary">View on GitHub</a>
+					<a href="https://github.com/twipped/queryizejs/issues" class="btn btn-danger">Report an Issue</a>
 				</p>
 				<p>
-					<a href="http://badge.fury.io/js/queryize"><img src="https://img.shields.io/npm/v/queryize.svg?style=flat" alt="NPM Version" height="18"></a>
+					<a href="https://badge.fury.io/js/queryize"><img src="https://img.shields.io/npm/v/queryize.svg?style=flat" alt="NPM Version" height="18"></a>
 					<img src="https://img.shields.io/npm/l/queryize.svg?style=flat" alt="License: MIT" height="18">
-					<img src="https://img.shields.io/badge/node.js-%3E=_4 LTS-brightgreen.svg" alt="Node 4.2 or Later">
-					<a href="http://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
+					<img src="https://img.shields.io/badge/node.js-%3E=_8 LTS-brightgreen.svg" alt="Node 8.12 or Later">
+					<a href="https://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
 					<a href="https://travis-ci.org/Twipped/QueryizeJS"><img src="https://img.shields.io/travis/Twipped/QueryizeJS.svg?style=flat" alt="Build Status" height="18"></a>
 				</p>
 
@@ -249,30 +249,21 @@ var q = insert()
 
 //q.query contains INSERT INTO users SET u.name = ?, u.email = ?
 //q.data contains  ['John Doe', 'user@example.com']</code></pre>
-				<p>Supports node-mysql and node-mysql2 connections and connection pools for executing queries directly.</p>
+				<p>Supports extension for node-mysql and node-mysql2 for inline evaluation with promises.</p>
 				<pre class="prettyprint"><code class="language-javascript">var queryize = require('queryize');
-var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
+const mysql = require('mysql2/promise');
+const pool = mysql.createPool({database: test});
+queryize.evalFunction = (sql, data) => pool.query(sql, data);
 
 queryize()
   .from('employees').select()
   .where({city: ['Chicago', 'Miami', 'San Francisco']})
   .orderBy('lastname', 'firstname')
-  .exec(connection, function (err, results) {
-    if (err) console.error(err);
-    else console.log(results);
-  });</code></pre>
-				<p>Extends the node-mysql query object for use as a promise.</p>
-  				<pre class="prettyprint"><code class="language-javascript">var yesterday = new Date();
-yesterday.setDate(d.getDate() - 1);
-
-queryize.deleteFrom('eventlog')
-  .whereInRange('dts', null, yesterday)
-  .exec(connection)
-  .then(function () {
-  	console.log('Events Deleted');
+  .then((results) => {
+    console.log(results);
   })
-  .catch(function (err) {
-	console.error(err);
+  .catch((err) => {
+  	console.error(err);
   });</code></pre>
 			</div>
 			</div>
@@ -395,10 +386,10 @@ queryize.deleteFrom('eventlog')
 		</footer>
 
 
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
 
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -4,7 +4,7 @@
    * No longer supports Node versions prior to 8.12
    * `query.exec` has now been removed my default and is no longer supported.
 
- * New: Added `query.eval([options])` and `query.then()`, which executes the query using a method defined on `queryize.evalFunction`
+ * New: Added `query.eval([options])` and `query.then()`, which executes the query using a method defined on `queryize.evalFunction` and returns a promise
 
  * Dependencies: Bluebird, proxmis and Lodash have been removed.
 

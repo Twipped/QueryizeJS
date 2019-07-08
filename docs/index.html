@@ -3,9 +3,9 @@
 	<head>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<title>QueryizeJS - API Reference</title>
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
-		<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/css/bootstrap-theme.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.css">
 		<link rel="stylesheet" href="fonts.css">
 		<style>
 
@@ -219,8 +219,8 @@
 					<li><a href="#reference">API Reference</a></li>
 					<li><a href="#changelog">Change Log</a></li>
 				</ul>
-				<p class="navbar-right gh-link"><a href="http://github.com/twipped/queryizejs" class="ico-github"></a></p>
-				<p class="navbar-text navbar-right">Created by <a href="http://twipped.com" class="navbar-link">Jocelyn Badgley</a></p>
+				<p class="navbar-right gh-link"><a href="https://github.com/twipped/queryizejs" class="ico-github"></a></p>
+				<p class="navbar-text navbar-right">Created by <a href="https://twipped.com" class="navbar-link">Jocelyn Badgley</a></p>
 			</div>
 		</div>
 
@@ -229,15 +229,15 @@
 				<h1>Queryize.js</h1>
 				<p>A no-frills chainable interface for constructing mutable MySQL queries procedurally in Node.js</p>
 				<p>
-					<a href="http://npmjs.org/queryize" class="btn btn-default btn-code btn-success">npm install queryize</a>
-					<a href="http://github.com/twipped/queryizejs" class="btn btn-primary">View on GitHub</a>
-					<a href="http://github.com/twipped/queryizejs/issues" class="btn btn-danger">Report an Issue</a>
+					<a href="https://npmjs.org/queryize" class="btn btn-default btn-code btn-success">npm install queryize</a>
+					<a href="https://github.com/twipped/queryizejs" class="btn btn-primary">View on GitHub</a>
+					<a href="https://github.com/twipped/queryizejs/issues" class="btn btn-danger">Report an Issue</a>
 				</p>
 				<p>
-					<a href="http://badge.fury.io/js/queryize"><img src="https://img.shields.io/npm/v/queryize.svg?style=flat" alt="NPM Version" height="18"></a>
+					<a href="https://badge.fury.io/js/queryize"><img src="https://img.shields.io/npm/v/queryize.svg?style=flat" alt="NPM Version" height="18"></a>
 					<img src="https://img.shields.io/npm/l/queryize.svg?style=flat" alt="License: MIT" height="18">
-					<img src="https://img.shields.io/badge/node.js-%3E=_4 LTS-brightgreen.svg" alt="Node 4.2 or Later">
-					<a href="http://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
+					<img src="https://img.shields.io/badge/node.js-%3E=_8 LTS-brightgreen.svg" alt="Node 8.12 or Later">
+					<a href="https://npmjs.org/queryize"><img src="https://img.shields.io/npm/dm/queryize.svg?style=flat" alt="Downloads/Week" height="18"></a>
 					<a href="https://travis-ci.org/Twipped/QueryizeJS"><img src="https://img.shields.io/travis/Twipped/QueryizeJS.svg?style=flat" alt="Build Status" height="18"></a>
 				</p>
 
@@ -249,30 +249,21 @@ var q = insert()
 
 //q.query contains INSERT INTO users SET u.name = ?, u.email = ?
 //q.data contains  ['John Doe', 'user@example.com']</code></pre>
-				<p>Supports node-mysql and node-mysql2 connections and connection pools for executing queries directly.</p>
+				<p>Supports extension for node-mysql and node-mysql2 for inline evaluation with promises.</p>
 				<pre class="prettyprint"><code class="language-javascript">var queryize = require('queryize');
-var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');
+const mysql = require('mysql2/promise');
+const pool = mysql.createPool({database: test});
+queryize.evalFunction = (sql, data) => pool.query(sql, data);
 
 queryize()
   .from('employees').select()
   .where({city: ['Chicago', 'Miami', 'San Francisco']})
   .orderBy('lastname', 'firstname')
-  .exec(connection, function (err, results) {
-    if (err) console.error(err);
-    else console.log(results);
-  });</code></pre>
-				<p>Extends the node-mysql query object for use as a promise.</p>
-  				<pre class="prettyprint"><code class="language-javascript">var yesterday = new Date();
-yesterday.setDate(d.getDate() - 1);
-
-queryize.deleteFrom('eventlog')
-  .whereInRange('dts', null, yesterday)
-  .exec(connection)
-  .then(function () {
-  	console.log('Events Deleted');
+  .then((results) => {
+    console.log(results);
   })
-  .catch(function (err) {
-	console.error(err);
+  .catch((err) => {
+  	console.error(err);
   });</code></pre>
 			</div>
 			</div>
@@ -287,8 +278,6 @@ queryize.deleteFrom('eventlog')
 						
 						<li class="private "><a href="#function_makeJoiner"><span class="name">_makeJoiner</span></a></li>
 						
-						<li class=""><a href="#methodtoString"><span class="name">toString</span></a></li>
-						
 						<li class="private "><a href="#function_uniqueId"><span class="name">_uniqueId</span></a></li>
 						
 						<li class="private "><a href="#functionisDefined"><span class="name">isDefined</span></a></li>
@@ -296,12 +285,6 @@ queryize.deleteFrom('eventlog')
 						<li class="private "><a href="#functionisValidPrimative"><span class="name">isValidPrimative</span></a></li>
 						
 						<li class="private "><a href="#functionisQueryizeObject"><span class="name">isQueryizeObject</span></a></li>
-						
-						<li class="private "><a href="#functionflatten"><span class="name">flatten</span></a></li>
-						
-						<li class="private "><a href="#functionmysqlDate"><span class="name">mysqlDate</span></a></li>
-						
-						<li class="private "><a href="#functionarrayFromArguments"><span class="name">arrayFromArguments</span></a></li>
 						
 							<li class=""><a href="#constructorqueryize"><span class="name">queryize</span></a></li>
 						<li><ul class="nav ">
@@ -320,8 +303,15 @@ queryize.deleteFrom('eventlog')
 						
 							<li class=""><a href="#propertyqueryizeuseBoundParameters"><span class="name">queryize.useBoundParameters</span></a></li>
 						
-							<li class=""><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
-						
+								<li class="category"><a>Extension</a>
+									<ul class="nav subnav">
+							
+										<li class=""><a href="#propertyqueryizeevalFunction"><span class="name">queryize.evalFunction</span></a></li>
+							
+										<li class=""><a href="#propertyqueryizefn"><span class="name">queryize.fn</span></a></li>
+							
+									</ul>
+								</li>
 						</ul></li>
 							<li class=""><a>query</a></li>
 						<li><ul class="nav ">
@@ -473,7 +463,11 @@ queryize.deleteFrom('eventlog')
 							
 										<li class=""><a href="#methodquerycompile"><span class="name">query.compile</span></a></li>
 							
-										<li class=""><a href="#methodqueryexec"><span class="name">query.exec</span></a></li>
+										<li class=""><a href="#propertyqueryeval"><span class="name">query.eval</span></a></li>
+							
+										<li class=""><a href="#methodquerythen"><span class="name">query.then</span></a></li>
+							
+										<li class=""><a href="#methodquerytoString"><span class="name">query.toString</span></a></li>
 							
 									</ul>
 								</li>
@@ -515,13 +509,13 @@ var query = queryize();</code></pre>
   var query = {};
 
   // bind all mutators directly to query
-  var proto = mapValues(mutators, function (fn) { return typeof fn === 'function' ? fn.bind(query) : fn; });
-
-  // mix in the bound mutators
-  Object.assign(query, proto);
+  for (const [ key, fn ] of Object.entries(mutators)) {
+    query[key] = (typeof fn === 'function' ? fn.bind(query) : fn);
+  }
 
   query._constructor = queryize;
   query._isQueryizeObject = true;
+  query._evalFunction = queryize.evalFunction;
   query._attributes = {
     debugEnabled: false,
     database: false,
@@ -541,7 +535,7 @@ var query = queryize();</code></pre>
     distinct: false,
     limit: false,
     asName: false,
-    builder: false
+    builder: false,
   };
 
   if (original) {
@@ -578,9 +572,9 @@ var query = queryize();</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.select = function (...args) {
   var q = queryize();
-  q.select.apply(q, arguments);
+  q.select(...args);
   return q;
 };</code></pre>
 							</div>
@@ -607,9 +601,9 @@ var query = queryize();</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update = function (...args) {
   var q = queryize();
-  q.update.apply(q, arguments);
+  q.update(...args);
   return q;
 };</code></pre>
 							</div>
@@ -636,9 +630,9 @@ var query = queryize();</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert = function (...args) {
   var q = queryize();
-  q.insert.apply(q, arguments);
+  q.insert(...args);
   return q;
 };</code></pre>
 							</div>
@@ -665,9 +659,9 @@ var query = queryize();</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.replace = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.replace = function (...args) {
   var q = queryize();
-  q.replace.apply(q, arguments);
+  q.replace(...args);
   return q;
 };</code></pre>
 							</div>
@@ -694,9 +688,9 @@ var query = queryize();</code></pre>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.delete = function () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">queryize.delete = function (...args) {
   var q = queryize();
-  q.deleteFrom.apply(q, arguments);
+  q.deleteFrom(...args);
   return q;
 };
 
@@ -717,6 +711,19 @@ queryize.useBoundParameters = false;</code></pre>
 						</div>
 					</div>
 				
+					<div id="propertyqueryizeevalFunction" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>queryize.evalFunction <small></small></h2></div>
+					
+						<p>Globally defines the function to evoke when calling query.then() or query.eval()<br />
+The function on this property will be copied to query._evalFunction at instantiation.<br />
+Receives two parameters, the query string and the data array, plus anything passed to query.eval()<br />
+The return value will be passed on the promise produced by query.then() and query.eval()</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+						</div>
+					</div>
+				
 					<div id="propertyqueryizefn" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
 						<div class="page-header"><h2>queryize.fn <small></small></h2></div>
@@ -734,7 +741,7 @@ queryize.useBoundParameters = false;</code></pre>
 					<div class="piece  ">
 						<div class="page-header"><h2>query.debug <small></small></h2></div>
 					
-						<p>If passed a truthy value, <code>query.exec()</code> will output the compiled query to the console.</p>
+						<p>If passed a truthy value, <code>query.eval()</code> will output the compiled query to the console.</p>
 						<h3>Usage:</h3>
 						<div class="signature panel panel-default">
 							<div class="panel-heading"><div class="panel-title">query.debug(enable)</div></div>
@@ -898,10 +905,10 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.select = function select () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.select = function select (...args) {
   this._attributes.builder = 'select';
   if (arguments.length) {
-    this.columns(arrayFromArguments.apply(null, arguments));
+    this.columns(args);
   }
   return this;
 };</code></pre>
@@ -984,10 +991,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .insert({name: 'joe'})
-  .into('users')
-  .exec(mysqlConnection, function (result) {
-    var id = result.insertId;
-  })</code></pre>
+  .into('users')</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -997,11 +1001,11 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.insert = function insert () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.insert = function insert (...args) {
   this._attributes.builder = 'insert';
   this._attributes.insertMode = 'INSERT';
   if (arguments.length) {
-    this.set.apply(this, arguments);
+    this.set(...args);
   }
   return this;
 };</code></pre>
@@ -1026,10 +1030,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .insertIgnore({name: 'joe'})
-  .into('users')
-  .exec(mysqlConnection, function (result) {
-    var id = result.insertId;
-  })</code></pre>
+  .into('users')</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -1039,11 +1040,11 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.insertIgnore = function replace () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.insertIgnore = function replace (...args) {
   this._attributes.builder = 'insert';
   this._attributes.insertMode = 'INSERT IGNORE';
   if (arguments.length) {
-    this.set.apply(this, arguments);
+    this.set(...args);
   }
   return this;
 };</code></pre>
@@ -1068,10 +1069,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .replace({name: 'joe'})
-  .into('users')
-  .exec(mysqlConnection, function (result) {
-    var id = result.insertId;
-  })</code></pre>
+  .into('users')</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -1081,11 +1079,11 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace () {
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.replace = function replace (...args) {
   this._attributes.builder = 'insert';
   this._attributes.insertMode = 'REPLACE';
   if (arguments.length) {
-    this.set.apply(this, arguments);
+    this.set(...args);
   }
   return this;
 };</code></pre>
@@ -1116,8 +1114,7 @@ in as arguments.  See <code>query.columns()</code> for more details.</p>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize()
   .update('users')
   .set('name', 'bob')
-  .where('id', 234)
-  .exec(mysqlConnection) //fire and forget</code></pre>
+  .where('id', 234)</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 
@@ -1162,15 +1159,13 @@ Can be called directly but is better called via the syntactically correct aliase
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.update()
   .table('users')
   .set('name', 'bob')
-  .where('id', 234)
-  .exec(mysqlConnection) //fire and forget</code></pre>
+  .where('id', 234)</code></pre>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize.select()
   .from('users')
   .compile()</code></pre>
 							<pre class="panel-body prettyprint"><code class="language-javascript">queryize.insert()
   .into('orders')
-  .set(order)
-  .exec(mysqlConnection) //fire and forget</code></pre>
+  .set(order)</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right">&lt;p&gt;Exports &lt;code&gt;this&lt;/code&gt; for chaining&lt;/p&gt;</em></div>
 						</div>
 						<div class="signature panel panel-default">
@@ -1320,13 +1315,12 @@ a DELETE statement should delete from.</p>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.columns = function columns () {
-  var args = flatten(arrayFromArguments.apply(null, arguments));
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.columns = function columns (...args) {
   var self = this;
 
   this._attributes.columns = null;
 
-  args.forEach(function (column) {
+  flatten(args).forEach((column) => {
     self.addColumn(column);
   });
 
@@ -1442,6 +1436,7 @@ a DELETE statement should delete from.</p>
   case 'OR':
   case 'no':
     this._attributes.whereBoolean = 'OR'; break;
+  // no default
   }
 
   return this;
@@ -1611,7 +1606,7 @@ query.where()</code></pre>
   // if we've got an array at this point, then we should parse it as if it were
   // a collection of possible conditions in an OR
   if (isArray(clause)) {
-    clause = flatten(clause).map(function (c) {
+    clause = flatten(clause).map((c) => {
       switch (typeof c) {
       case 'string': return c;
       case 'object': return self._processWhereObject(c, operator, modifier);
@@ -1698,9 +1693,7 @@ query.where()</code></pre>
   if (!operator) operator = '=';
 
   if (isArray(field)) {
-    return field.map(function (field) {
-      return self._processWhereCondition(field, value, operator, modifier);
-    });
+    return field.map((f) => self._processWhereCondition(f, value, operator, modifier));
   }
 
   // if value is an array, then we need to compare against multiple values
@@ -1708,14 +1701,14 @@ query.where()</code></pre>
     // if the operator is a plain equals, we should perform an IN() instead of multiple ORs
     if (operator === '=') {
       // process the values into bindings, and join the bindings inside an IN() clause
-      return field + ' IN (' + value.map(function (v) { return self.createBinding(v, modifier); }).join(',') + ')';
+      return field + ' IN (' + value.map((v) => self.createBinding(v, modifier)).join(',') + ')';
     } else if (operator === '!=') {
       // process the values into bindings, and join the bindings inside an IN() clause
-      return field + ' NOT IN (' + value.map(function (v) { return self.createBinding(v, modifier); }).join(',') + ')';
-    } else {
-      // process each value individually as a single condition and join the values in an OR
-      return value.map(function (value) { return self._processWhereCondition(field, value, operator, modifier); });
+      return field + ' NOT IN (' + value.map((v) => self.createBinding(v, modifier)).join(',') + ')';
     }
+    // process each value individually as a single condition and join the values in an OR
+    return value.map((v) => self._processWhereCondition(field, v, operator, modifier));
+
   }
 
   return [ field, operator, self.createBinding(value, modifier) ].join(' ');
@@ -1762,7 +1755,7 @@ query.where()</code></pre>
   if (!operator) operator = '=';
 
   var self = this;
-  clause = Object.keys(clause).map(function (field) {
+  clause = Object.keys(clause).map((field) => {
     // if the object contains a 'not' key, all subsequent keys parsed will be negations.
     if (field === 'not' && clause[field] === true) {
       if (operator === '=') operator = '!=';
@@ -1772,7 +1765,7 @@ query.where()</code></pre>
     return self._processWhereCondition(field, clause[field], operator, modifier);
   });
 
-  clause = flatten(clause).filter(function (d) { return d; });
+  clause = flatten(clause).filter((d) => d);
 
   if (clause.length === 1) {
     return clause[0];
@@ -2071,10 +2064,8 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.orderBy = function orderBy () {
-  var args = flatten(arrayFromArguments.apply(null, arguments));
-
-  this._attributes.orderBy = args;
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.orderBy = function orderBy (...args) {
+  this._attributes.orderBy = flatten(args);
 
   return this;
 };</code></pre>
@@ -2109,10 +2100,8 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.groupBy = function groupBy () {
-  var args = flatten(arrayFromArguments.apply(null, arguments));
-
-  this._attributes.groupBy = args;
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.groupBy = function groupBy (...args) {
+  this._attributes.groupBy = flatten(args);
 
   return this;
 };</code></pre>
@@ -2274,14 +2263,16 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
   if (!isDefined(clause)) throw new Error('You must define a field to set.');
 
   if (typeof clause === 'object') {
-    Object.keys(clause).forEach(function (field) {
+    Object.keys(clause).forEach((field) => {
       self.set(field, clause[field], value);
     });
     return this;
   }
 
   // if we received a value, create a set clause
-  if (typeof value !== 'undefined') {
+  if (typeof value === 'undefined') {
+    this._attributes.set.push(clause);
+  } else {
     var column = clause;
     if (value && typeof value === 'object' && typeof value.raw === 'string') {
       clause = clause + ' = ' + value.raw;
@@ -2301,8 +2292,6 @@ Accepts either an array of <code>columns</code>, or multiple <code>column</code>
       this._attributes.setKeys[column] = this._attributes.set.length;
       this._attributes.set.push(clause);
     }
-  } else {
-    this._attributes.set.push(clause);
   }
 
   return this;
@@ -2381,7 +2370,7 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
     }
 
     row = {};
-    columns.forEach(function (column, i) {
+    columns.forEach((column, i) => {
       row[column] = data[i];
     });
 
@@ -2389,7 +2378,7 @@ Example: <code>INSERT INTO user SET firstname=?, lastname=?</code></p>
   } else if (typeof data === 'object') {
     columns = Object.keys(data);
 
-    columns.forEach(function (column) {
+    columns.forEach((column) => {
       self.addColumn(column, true);
     });
 
@@ -2529,11 +2518,11 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
         clause.table = clause.table.clone().as(clause.alias);
       }
       stack.push(this._mergeSubquery(clause.table));
-    } else if (typeof clause.table !== 'string') {
-      throw new TypeError('The join table name is not a string.');
-    } else {
+    } else if (typeof clause.table === 'string') {
       stack.push(clause.table);
       if (clause.alias) stack.push(clause.alias);
+    } else {
+      throw new TypeError('The join table name is not a string.');
     }
 
     if (clause.using) {
@@ -2711,12 +2700,12 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
   var self = this;
 
   if (isArray(ons)) {
-    ons = ons.map(function (d) { return self._processJoinOns(d); });
+    ons = ons.map((d) => self._processJoinOns(d));
   }
 
   if (typeof ons === 'object' && !isArray(ons)) {
     var not = false;
-    ons = Object.keys(ons).map(function (field) {
+    ons = Object.keys(ons).map((field) => {
       var value = ons[field];
 
       // if the object contains a 'not' key, all subsequent keys parsed will be negations.
@@ -2727,7 +2716,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
       // if value is an array, perform an IN() on the values
       if (isArray(value)) {
-        value = value.map(function (d) { return self.createBinding(d); });
+        value = value.map((d) => self.createBinding(d));
         return [ field, not ? 'NOT IN' : 'IN', '(', value.join(', '), ')' ].join(' ');
 
       // if value is a string or a number, process as if a normal pairing of columns
@@ -2749,7 +2738,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
   }
 
   // remove any undefined or empty string values
-  ons = ons.filter(function (d) { return d; });
+  ons = ons.filter((d) => d);
 
   return ons.join(' ' + onBoolean + ' ');
 };</code></pre>
@@ -2819,7 +2808,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
   return {
     query: queryString,
-    data: queryData
+    data: queryData,
   };
 };</code></pre>
 							</div>
@@ -2857,7 +2846,7 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 
   return {
     where: wheres,
-    data: this._collectNamedParameters(wheres.join(' '))
+    data: this._collectNamedParameters(wheres.join(' ')),
   };
 };</code></pre>
 							</div>
@@ -2888,10 +2877,10 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeSubquery = function _mergeSubquery (query) {
-  if (!isQueryizeObject(query)) throw new TypeError('Provided subquery is not a queryize object.');
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeSubquery = function _mergeSubquery (subquery) {
+  if (!isQueryizeObject(subquery)) throw new TypeError('Provided subquery is not a queryize object.');
 
-  var q = query._buildSubquery();
+  var q = subquery._buildSubquery();
 
   Object.assign(this._attributes.dataBindings, q.data);
 
@@ -2925,10 +2914,10 @@ query.join('orders', {alias: 'o', on: {'o.client_id':'c.id'})
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeCompoundWhere = function _mergeCompoundWhere (query) {
-  if (!isQueryizeObject(query)) throw new TypeError('Provided compound where is not a queryize object.');
+								<pre class="panel-body prettyprint"><code class="language-javascript">query._mergeCompoundWhere = function _mergeCompoundWhere (subquery) {
+  if (!isQueryizeObject(subquery)) throw new TypeError('Provided compound where is not a queryize object.');
 
-  var q = query._buildCompoundWhere();
+  var q = subquery._buildCompoundWhere();
 
   Object.assign(this._attributes.dataBindings, q.data);
 
@@ -3067,7 +3056,9 @@ This is not recommended and should only be used for debugging purposes.</p>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query._buildWhereBoolean = function _buildWhereBoolean () {
   return ' ' + (this._attributes.whereBoolean && this._attributes.whereBoolean.trim() || 'AND') + ' ';
-};</code></pre>
+};
+
+query._builders = builders;</code></pre>
 							</div>
 						</div>
 					</div>
@@ -3101,14 +3092,14 @@ This is not recommended and should only be used for debugging purposes.</p>
 
   if (typeof useBoundParameters === 'undefined') useBoundParameters = this._attributes.useBoundParameters;
 
-  var query = builders[this._attributes.builder].call(this);
+  var q = builders[this._attributes.builder].call(this);
 
-  if (typeof query === 'string') {
-    return this._convertNamedParameters(query, useBoundParameters);
-  } else {
-    if (typeof query !== 'object' || !query.query) throw new Error('INTERNAL ERROR: Query builder returned unrecognized output.');
-    return query;
+  if (typeof q === 'string') {
+    return this._convertNamedParameters(q, useBoundParameters);
   }
+  if (typeof q !== 'object' || !q.query) throw new Error('INTERNAL ERROR: Query builder returned unrecognized output.');
+  return q;
+
 };</code></pre>
 							</div>
 						</div>
@@ -3143,7 +3134,7 @@ If useBoundParameters is turned off, it replaces the placeholders with their esc
   var data = [];
   var self = this;
 
-  queryString = queryString.replace(/({{\w*}})/g, function (match, name) {
+  queryString = queryString.replace(/({{\w*}})/g, (match, name) => {
     if (self._attributes.dataBindings[name] === undefined) throw new Error('The data binding ' + name + ' could not be found.');
 
     data.push(self._attributes.dataBindings[name]);
@@ -3187,7 +3178,7 @@ If useBoundParameters is turned off, it replaces the placeholders with their esc
   var data = {};
   var self = this;
 
-  (queryString.match(/({{\w*}})/g) || []).forEach(function (name) {
+  (queryString.match(/({{\w*}})/g) || []).forEach((name) => {
     // Subqueries might reference data bound to the parent query, so it's ok if a value doesn't exist
     if (self._attributes.dataBindings[name] !== undefined) {
       data[name] = self._attributes.dataBindings[name];
@@ -3200,105 +3191,103 @@ If useBoundParameters is turned off, it replaces the placeholders with their esc
 						</div>
 					</div>
 				
-					<div id="methodqueryexec" style="position:relative;top:-60px;"></div>
+					<div id="propertyqueryeval" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
-						<div class="page-header"><h2>query.exec <small></small></h2></div>
+						<div class="page-header"><h2>query.eval <small></small></h2></div>
 					
-						<p>Compiles the MySQL query and runs it using the provided connection or connection pool from node-mysql or node-mysql2.<br />
-If the connection provided is a node-mysql2 connection, then the query will be executed as a prepared statement (connection.execute).</p>
+						<p>Compiles the MySQL query and executes it using <code>queryize.evalFunction</code>, returning a promise.<br />
+If no eval function has been defined, the promise resolves with a tuple of the query string and data array.</p>
 						<h3>Usage:</h3>
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">query.exec(connection, [options], [callback])</div></div>
+							<div class="panel-heading"><div class="panel-title">query.eval(args)</div></div>
 							<ol class="list-group">
 								<li class="list-group-item">
-									<strong>connection</strong> Object
+									<strong>args</strong> mixed
 									
-									<p>node-mysql(2) connection(Pool)</p>
-								</li>
-								<li class="list-group-item">
-									<strong>options</strong> Object
-									<em>Optional </em>
-									<p>Options object to be passed to <code>connection.query</code> with the query string and data mixed in.</p>
-								</li>
-								<li class="list-group-item">
-									<strong>callback</strong> Function
-									<em>Optional </em>
-									<p>Callback function to be invoked when the query completes.</p>
+									<p>Any options to be passed to the evalFunction</p>
 								</li>
 							</ol>
-							<pre class="panel-body prettyprint"><code class="language-javascript">var connection = require('mysql').createConnection('mysql://dev@localhost/testdb');</code></pre>
-							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used with callback
-queryize()
+							<pre class="panel-body prettyprint"><code class="language-javascript">// pool is a mysql2/promise connection pool
+queryize.evalFunction = (q, d, options) => pool.query(q, d, options);
+const query = queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname');
+query.eval(options).then((result) => console.log(result))</code></pre>
+							<pre class="panel-body prettyprint"><code class="language-javascript">// using with async/await
+queryize.evalFunction = (q, d, options) => pool.query(q, d, options);
+const result = await queryize()
   .select()
   .from('employees')
   .orderBy('lastname', 'firstname')
-  .exec(connection, function (err, employees) {
-    if (err) console.error(err);
-    else console.log(employees);
-  });</code></pre>
-							<pre class="panel-body prettyprint"><code class="language-javascript">// query exec used as promise
-queryize()
-  .select()
-  .from('employees')
-  .orderBy('lastname', 'firstname')
-  .exec(connection)
-    .then(function (employees) {
-      console.log(employees);
-    })
-    .catch(function (err) {
-      console.error(err);
-    });</code></pre>
-							<pre class="panel-body prettyprint"><code class="language-javascript">// insert query exec with insert id
-queryize()
-  .insert({
-    name: 'John Doe',
-    birthdate: new Date('1992-05-20')
-  })
-  .into('employees')
-  .exec(connection)
-    .then(function (response) {
-      console.log(response.insertId);
-    });</code></pre>
-							<div class="panel-footer"><strong>Returns: </strong> nodeMysqlQuery <em class="pull-right">&lt;p&gt;Returns a promise extended node-mysql(2) query emitter.&lt;/p&gt;</em></div>
+  .eval(options);</code></pre>
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
 						</div>
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodqueryexec + .piece .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#propertyqueryeval + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">query.exec = function exec (connection, options, callback) {
-  var q = this.compile();
-  if (this._attributes.debugEnabled) console.log(q); // eslint-disable-line no-console
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.eval = async function evaluate (...args) {
+  const { query: q, data } = this.compile();
+  if (this._attributes.debugEnabled) console.log({ query: q, data }); // eslint-disable-line no-console
 
-  // if the second argument is a callback, remap the arguments
-  if (!callback && typeof options === 'function') {
-    callback = options;
-    options = null;
+  if (typeof this._evalFunction !== 'function') return [ q, data ];
+  return await this._evalFunction(q, data, ...args);
+};</code></pre>
+							</div>
+						</div>
+					</div>
+				
+					<div id="methodquerythen" style="position:relative;top:-60px;"></div>
+					<div class="piece  ">
+						<div class="page-header"><h2>query.then <small></small></h2></div>
+					
+						<p>Compiles the MySQL query and executes it using <code>queryize.evalFunction</code>, returning a promise.<br />
+If no eval function has been defined, the promise resolves with a tuple of the query string and data array.</p>
+						<h3>Usage:</h3>
+						<div class="signature panel panel-default">
+							<div class="panel-heading"><div class="panel-title">query.then(resolved, rejected)</div></div>
+							<ol class="list-group">
+								<li class="list-group-item">
+									<strong>resolved</strong> function
+									
+									<p>Function to execute when the evaluation completes</p>
+								</li>
+								<li class="list-group-item">
+									<strong>rejected</strong> function
+									
+									<p>Function to execute if the evaluation fails</p>
+								</li>
+							</ol>
+							<pre class="panel-body prettyprint"><code class="language-javascript">// pool is a mysql2/promise connection pool
+queryize.evalFunction = (q, d) => pool.query(q, d);
+const query = queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname');
+query.then((result) => console.log(result))</code></pre>
+							<pre class="panel-body prettyprint"><code class="language-javascript">// using with async/await
+queryize.evalFunction = (q, d) => pool.query(q, d);
+const result = await queryize()
+  .select()
+  .from('employees')
+  .orderBy('lastname', 'firstname');</code></pre>
+							<div class="panel-footer"><strong>Returns: </strong> Promise <em class="pull-right"></em></div>
+						</div>
 
-  // if the second argument is an options object, wrap it and apply our query & data to it.
-  } else if (typeof options === 'object') {
-    options = Object.assign({}, options, {
-      sql: q.query,
-      values: q.data
-    });
-  }
 
-  if (typeof connection.query !== 'function') {
-    pcb(new TypeError('Connection object is not a mysql or mysql2 connection or pool.'));
-    return pcb.promise;
-  }
-
-  var pcb = proxmis(callback);
-
-  if (options) {
-    connection.query(options, pcb);
-  } else {
-    connection.query(q.query, q.data, pcb);
-  }
-
-  return pcb.promise;
+						<div class="codeview panel panel-default">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquerythen + .piece .panel-collapse">
+								<i class="ico-embed"></i> View Code
+							</div>
+							<div class="panel-collapse collapse">
+								<pre class="panel-body prettyprint"><code class="language-javascript">query.then = function then (...args) {
+  const p = this.eval();
+  if (args.length) return p.then(...args);
+  return p;
 };</code></pre>
 							</div>
 						</div>
@@ -3324,7 +3313,7 @@ queryize()
 							</div>
 							<div class="panel-collapse collapse">
 								<pre class="panel-body prettyprint"><code class="language-javascript">query.export = function exportAttributes () {
-  return clone(this._attributes, true);
+  return clonedeep(this._attributes, true);
 };</code></pre>
 							</div>
 						</div>
@@ -3347,12 +3336,7 @@ queryize()
 
 var archiveCompleted = a.clone()
   .update()
-  .set('status', 'archived');
-
-findCompleted.exec(connection, function (results) {
-  // do something with the results and then...
-  archiveCompleted.exec(connection);
-});</code></pre>
+  .set('status', 'archived');</code></pre>
 							<div class="panel-footer"><strong>Returns: </strong> query <em class="pull-right"></em></div>
 						</div>
 
@@ -3369,14 +3353,14 @@ findCompleted.exec(connection, function (results) {
 						</div>
 					</div>
 				
-					<div id="methodtoString" style="position:relative;top:-60px;"></div>
+					<div id="methodquerytoString" style="position:relative;top:-60px;"></div>
 					<div class="piece  ">
-						<div class="page-header"><h2>toString <small></small></h2></div>
+						<div class="page-header"><h2>query.toString <small></small></h2></div>
 					
 						<p>Compiles the query without bound parameters, escaping data in-line with the query.</p>
 						<h3>Usage:</h3>
 						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">toString()</div></div>
+							<div class="panel-heading"><div class="panel-title">query.toString()</div></div>
 							<ol class="list-group">
 							</ol>
 							<pre class="panel-body prettyprint"><code class="language-javascript">var q = queryize()
@@ -3389,7 +3373,7 @@ findCompleted.exec(connection, function (results) {
 
 
 						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#methodtoString + .piece .panel-collapse">
+							<div class="panel-heading" data-toggle="collapse" data-target="#methodquerytoString + .piece .panel-collapse">
 								<i class="ico-embed"></i> View Code
 							</div>
 							<div class="panel-collapse collapse">
@@ -3529,131 +3513,6 @@ findCompleted.exec(connection, function (results) {
 						</div>
 					</div>
 				
-					<div id="functionflatten" style="position:relative;top:-60px;"></div>
-					<div class="piece private ">
-						<div class="page-header"><h2>flatten <small></small></h2></div>
-					
-						<p>Flattens a nested array into a single level array</p>
-						<h3>Usage:</h3>
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">flatten(input, [includingObjects])</div></div>
-							<ol class="list-group">
-								<li class="list-group-item">
-									<strong>input</strong> Array
-									
-									<p>The top level array to flatten</p>
-								</li>
-								<li class="list-group-item">
-									<strong>includingObjects</strong> boolean
-									<em>Optional  (Default: false)</em>
-									<p>If an object is encountered and this argument is truthy, the object will also be flattened by its property values.</p>
-								</li>
-							</ol>
-							<div class="panel-footer"><strong>Returns: </strong> Array <em class="pull-right"></em></div>
-						</div>
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#functionflatten + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">function flatten (input, includingObjects) {
-  var result = [];
-
-  function descend (level) {
-    if (isArray(level)) {
-      level.forEach(descend);
-    } else if (typeof level === 'object' && includingObjects) {
-      Object.keys(level).forEach(function (key) {
-        descend(level[key]);
-      });
-    } else {
-      result.push(level);
-    }
-  }
-
-  descend(input);
-
-  return result;
-}</code></pre>
-							</div>
-						</div>
-					</div>
-				
-					<div id="functionmysqlDate" style="position:relative;top:-60px;"></div>
-					<div class="piece private ">
-						<div class="page-header"><h2>mysqlDate <small></small></h2></div>
-					
-						<p>Formats a Date object into a MySQL DATETIME</p>
-						<h3>Usage:</h3>
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">mysqlDate(date)</div></div>
-							<ol class="list-group">
-								<li class="list-group-item">
-									<strong>date</strong> Date
-									
-									<p>[description]</p>
-								</li>
-							</ol>
-							<div class="panel-footer"><strong>Returns: </strong> string <em class="pull-right">&lt;p&gt;[description]&lt;/p&gt;</em></div>
-						</div>
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#functionmysqlDate + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">function mysqlDate (input) {
-  var date = new Date(input.getTime());
-  date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
-
-  var y = date.getFullYear();
-  var m = ('0' + (date.getMonth() + 1)).substr(-2);
-  var d = ('0' + date.getDate()).substr(-2);
-  var h = ('0' + date.getHours()).substr(-2);
-  var i = ('0' + date.getMinutes()).substr(-2);
-  var s = ('0' + date.getSeconds()).substr(-2);
-
-  return y + '-' + m + '-' + d + ' ' + h + ':' + i + ':' + s;
-}</code></pre>
-							</div>
-						</div>
-					</div>
-				
-					<div id="functionarrayFromArguments" style="position:relative;top:-60px;"></div>
-					<div class="piece private ">
-						<div class="page-header"><h2>arrayFromArguments <small></small></h2></div>
-					
-						<p>Helper function to convert arguments to an array without triggering de-optimization in V8<br />
-MUST be called via .apply</p>
-						<h3>Usage:</h3>
-						<div class="signature panel panel-default">
-							<div class="panel-heading"><div class="panel-title">arrayFromArguments()</div></div>
-							<ol class="list-group">
-							</ol>
-							<div class="panel-footer"><strong>Returns: </strong> Array.&lt;mixed&gt; <em class="pull-right"></em></div>
-						</div>
-
-
-						<div class="codeview panel panel-default">
-							<div class="panel-heading" data-toggle="collapse" data-target="#functionarrayFromArguments + .piece .panel-collapse">
-								<i class="ico-embed"></i> View Code
-							</div>
-							<div class="panel-collapse collapse">
-								<pre class="panel-body prettyprint"><code class="language-javascript">function arrayFromArguments () {
-  var len = arguments.length;
-  var args = new Array(len);
-  for (var i = 0; i < len; ++i) {
-    args[i] = arguments[i];
-  }
-  return args;
-}</code></pre>
-							</div>
-						</div>
-					</div>
-				
 				</div>
 			</div>
 
@@ -3662,7 +3521,23 @@ MUST be called via .apply</p>
 		<div  id="changelog" class="changelog-header"><h2 class="container">Change Log</h2></div>
 		<div class="changelog">
 			<div class="container">
-				<h1>2.1.0 / 2017-12-07</h1>
+				<h1>3.0.0 / 2019-07-08</h1>
+<ul>
+<li>
+<p>BREAKING CHANGES:</p>
+<ul>
+<li>No longer supports Node versions prior to 8.12</li>
+<li><code>query.exec</code> has now been removed my default and is no longer supported.</li>
+</ul>
+</li>
+<li>
+<p>New: Added <code>query.eval([options])</code> and <code>query.then()</code>, which executes the query using a method defined on <code>queryize.evalFunction</code> and returns a promise</p>
+</li>
+<li>
+<p>Dependencies: Bluebird, proxmis and Lodash have been removed.</p>
+</li>
+</ul>
+<h1>2.1.0 / 2017-12-07</h1>
 <ul>
 <li>Added support for INSERT IGNORE via the <code>insertIgnore</code> function.</li>
 </ul>
@@ -3813,10 +3688,10 @@ part of the promise extension, this made it impossible to receive a row emitter 
 		</footer>
 
 
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
-		<script src="http://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/prettify.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prettify/r298/run_prettify.js"></script>
 
 		<script>
 		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
