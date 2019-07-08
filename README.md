@@ -3,10 +3,10 @@
 A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.
 
 [![NPM version](https://img.shields.io/npm/v/queryize.svg)](http://badge.fury.io/js/queryize)
-[![Licensed MIT](https://img.shields.io/npm/l/queryize.svg)](https://github.com/ChiperSoft/QueryizeJS/blob/master/LICENSE.txt)
-[![Nodejs 4+](https://img.shields.io/badge/node.js-%3E=_4%20LTS-brightgreen.svg)](http://nodejs.org)
+[![Licensed MIT](https://img.shields.io/npm/l/queryize.svg)](https://github.com/Twipped/QueryizeJS/blob/master/LICENSE.txt)
+[![Nodejs 8+](https://img.shields.io/badge/node.js-%3E=_8%20LTS-brightgreen.svg)](http://nodejs.org)
 [![Downloads](http://img.shields.io/npm/dm/queryize.svg)](http://npmjs.org/queryize)
-[![Build Status](https://img.shields.io/travis/ChiperSoft/QueryizeJS.svg)](https://travis-ci.org/ChiperSoft/QueryizeJS)
+[![Build Status](https://img.shields.io/travis/Twipped/QueryizeJS.svg)](https://travis-ci.org/Twipped/QueryizeJS)
 
 ##Installation
 
