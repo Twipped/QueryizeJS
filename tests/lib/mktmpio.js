@@ -18,16 +18,16 @@ exports.create = function () {
 	}).delay(500);
 };
 
-exports.populate = function () {
-	return mysql.createConnection({
+exports.populate = async function () {
+	const connection = await mysql.createConnection({
 		host: current.host,
 		port: current.port,
 		user: 'root',
 		password: current.password,
-	}).then((connection) =>
-		Promise.each(schema, (sql) => connection.query(sql))
-			.then(() => connection.end())
-	);
+	});
+
+	await Promise.each(schema, (sql) => connection.query(sql));
+	await connection.end();
 };
 
 exports.destroy = function () {

@@ -7,7 +7,9 @@ var queryize = require('../../');
 
 var pool;
 
-test('mysql integration', (t) => mktmpio.create().then((db) => {
+test('mysql integration', async (t) => {
+	const db = await mktmpio.create();
+
 	t.comment(`Database created: --user=root --password=${db.password} --host=${db.host} --port=${db.port}`);
 
 	pool = mysql.createPool({
@@ -18,26 +20,37 @@ test('mysql integration', (t) => mktmpio.create().then((db) => {
 		database: 'test_data',
 	});
 
-	t.tearDown(() => new Promise((resolve) => {
-		t.comment('Disconnecting');
-		pool.end(resolve);
-	})
-		.then(() => mktmpio.destroy())
-		.then(() => t.comment('Database destroyed')));
+	t.tearDown(async () => {
+		await new Promise((resolve) => {
+			t.comment('Disconnecting');
+			pool.end(resolve);
+		});
 
-	return mktmpio.populate().then(() => {
-		t.comment('Database populated');
-
-		t.test('simple select', (t2) => queryize
-			.select('first_name', 'last_name')
-			.from('employees')
-			.limit(1)
-			.orderBy('emp_no')
-			.exec(pool)
-			.then((results) => {
-				t2.deepEqual([].concat(results), [
-					{ first_name: 'Georgi', last_name: 'Facello' },
-				]);
-			}));
+		await mktmpio.destroy();
+		t.comment('Database destroyed');
 	});
-}));
+
+	await mktmpio.populate();
+
+	t.comment('Database populated');
+
+	const q = queryize
+		.select('first_name', 'last_name')
+		.from('employees')
+		.limit(1)
+		.orderBy('emp_no');
+
+	q._evalFunction = (query, data) => new Promise((resolve, reject) => {
+		pool.query(query, data, (err, result) => (
+			err ? reject(err) : resolve(result)
+		));
+	});
+
+	t.test('simple select', async (t2) => {
+		const results = await q.eval();
+		t2.deepEqual([].concat(results), [
+			{ first_name: 'Georgi', last_name: 'Facello' },
+		]);
+	});
+
+});
