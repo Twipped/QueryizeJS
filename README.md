@@ -26,7 +26,7 @@ var select = require('queryize').select;
 var query = select();
 ```
 
-**Visit [queryizejs.com](http://queryizejs.com/) for documentation.**
+**[View Documentation](https://twipped.github.io/QueryizeJS/)**
 
 ## Examples
 
