@@ -1,4 +1,4 @@
-#queryize.js
+# queryize.js
 
 A no-frills chainable/fluent interface for constructing mutable MySQL queries with data binding/escapement.
 
@@ -8,11 +8,11 @@ A no-frills chainable/fluent interface for constructing mutable MySQL queries wi
 [![Downloads](http://img.shields.io/npm/dm/queryize.svg)](http://npmjs.org/queryize)
 [![Build Status](https://img.shields.io/travis/Twipped/QueryizeJS.svg)](https://travis-ci.org/Twipped/QueryizeJS)
 
-##Installation
+## Installation
 
 NPM: `npm install queryize`
 
-##Usage
+## Usage
 
 In Node or another CommonJS environment:
 
@@ -28,7 +28,7 @@ var query = select();
 
 **Visit [queryizejs.com](http://queryizejs.com/) for documentation.**
 
-##Examples
+## Examples
 
 ```js
 var select = require('queryize').select;
@@ -77,7 +77,7 @@ var q = queryize()
 //q.data contains  ['John Doe', 'user@example.com', 1]
 ```
 
-##Running Unit Tests
+## Running Unit Tests
 
 From inside the repository root, run `npm install` to install the node-tap dependency.
 
